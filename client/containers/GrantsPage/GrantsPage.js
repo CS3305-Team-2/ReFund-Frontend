@@ -1,7 +1,6 @@
 import React, { Component} from 'react';
 import styles from './GrantsPage.scss';
 import cx from 'classnames';
-import '../../components/GrantsListItem/GrantsListItem';
 import GrantsListItem from '../../components/GrantsListItem/GrantsListItem';
 
 const fundedGrants = [
@@ -92,15 +91,19 @@ class GrantsPage extends Component {
 	render() {
     const state = this.state;
     const activeTab = styles.activeTab;
-    console.log(state.activeTab)
+
     const grants = this.getGrants();
 		return (
-			<div className={cx('container', styles.container)}>
+			<div className={styles.container}>
         <div className={styles.root}>
+
+          {/* Heading */}
           <div className={styles.header}>
             <div className={styles.title}>Funding Calls</div>
             <div className={styles.desc}></div>
           </div>
+
+          {/* Tabs Section */}
           <div className={styles.tabs}>
             <div 
               className={cx(styles.tab, { [activeTab]: state.activeTab == 'unfunded'}) }   
@@ -115,6 +118,8 @@ class GrantsPage extends Component {
               Already Funded
             </div>
           </div>
+
+          {/* Grants List */}
           <div className={styles.grants}>
           {grants}
           </div>

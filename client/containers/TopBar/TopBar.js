@@ -1,6 +1,7 @@
 import React, { Component} from 'react';
 import styles from './TopBar.scss';
 import cx from 'classnames';
+import { Link } from 'react-router-dom';
 
 class TopBar extends Component {
 	constructor(props) {
@@ -18,10 +19,13 @@ class TopBar extends Component {
 							</div>
 							<div className="flex-grow-1">
 								<div className={cx(styles.nav)}>
-									<div className={cx(styles.navLink, styles.activeLink)}>Home</div>
-									<div className={styles.navLink}>About</div>
-									<div className={styles.navLink}>Sign Up</div>
-									<div className={styles.navLink}>Sign In</div>
+									<Link to="/home"><div className={styles.navLink}>Home</div></Link>
+									<Link to="/grants/"><div className={styles.navLink}>Grants List</div></Link>
+									<Link to="/grant/"><div className={styles.navLink}>Grant Detail</div></Link>
+									<Link to="/users/"><div className={styles.navLink}>Users</div></Link>
+									<Link to="/user/"><div className={styles.navLink}>User Profile</div></Link>
+									<Link to="/projects/"><div className={styles.navLink}>Projects</div></Link>
+									<Link to="/project/"><div className={styles.navLink}>Project Detail</div></Link>
 								</div>
 							</div>
 						</div>

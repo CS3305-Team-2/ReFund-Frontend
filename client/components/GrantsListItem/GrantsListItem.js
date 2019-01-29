@@ -12,7 +12,6 @@ class GrantsListItem extends Component {
 	
 	render() {
     const state = this.state;
-    console.log(this.props);
     const grant = this.props.grant;
     
 		return (

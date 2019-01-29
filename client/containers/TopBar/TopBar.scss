@@ -5,9 +5,6 @@
   z-index: 4000;
 }
 
-.container {
-}
-
 .title{
   font-size: 1.4rem;
   font-weight: 900;
@@ -19,8 +16,6 @@
   cursor: pointer;
   margin-left: 0.5rem;
   color: #003C68;
-  //border-radius: 50%;
-  //border: 1px solid #339966;
   margin-right: 0.5rem;
 }
 
@@ -28,7 +23,6 @@
   position: absolute;
   right: 0;
 }
-
 
 .logoContainer {
 
@@ -47,7 +41,7 @@
 
 .navLink {
   display: inline-block;
-  margin-right: 1rem;
+  margin-right: 0.25rem;
   color: #003C68;
   cursor: pointer;
   padding: 0.25rem 0.5rem;
