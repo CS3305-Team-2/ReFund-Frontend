@@ -8,8 +8,11 @@ https://nodejs.org/en/download/
 clone this repo into a local directory
 
 in that directory run:
+
 npm install
+
 npm run start
+
 then go to http://localhost:8080. (it may be a slightly different address but it will tell you.
 
 git is confusing to use at first read this.
