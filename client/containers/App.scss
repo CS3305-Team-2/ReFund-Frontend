@@ -1,0 +1,10 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.contentRoot {
+  padding-top: 2rem;
+  flex-grow: 1;
+}

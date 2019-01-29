@@ -1,0 +1,40 @@
+.root {
+
+}
+
+.header {
+  padding-bottom: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.title {
+  color: #00A79A;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.desc {
+  color: #031b4e;
+}
+
+/* green - #00A79A, blue - #003C68*/
+
+.tabs {
+  display: flex;
+}
+
+.tab {
+  padding: 0.5rem;
+  background: #f9f9f9;
+  color: rgba(3,27,78,0.6);
+  font-weight: bold;
+  border-radius: 2px;
+  border-bottom: 2px solid #f9f9f9;
+  cursor: pointer;
+}
+
+.activeTab {
+  color: #031b4e;
+  border-bottom: 2px solid #00A79A;
+
+}

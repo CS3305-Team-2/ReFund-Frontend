@@ -1,0 +1,59 @@
+.topBar {
+  width: 100%;
+  background: #fff;
+  border-bottom: 1px solid #00A79A;
+  z-index: 4000;
+}
+
+.container {
+}
+
+.title{
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: #003C68;
+}
+
+.icon {
+  font-size: 32px; 
+  cursor: pointer;
+  margin-left: 0.5rem;
+  color: #003C68;
+  //border-radius: 50%;
+  //border: 1px solid #339966;
+  margin-right: 0.5rem;
+}
+
+.profileIcon {
+  position: absolute;
+  right: 0;
+}
+
+
+.logoContainer {
+
+  width: 120px;
+}
+
+.logo {
+  height: auto;
+  width: 100%;
+  display: block;
+}
+
+.nav {
+  float: right;
+}
+
+.navLink {
+  display: inline-block;
+  margin-right: 1rem;
+  color: #003C68;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+}
+
+.activeLink {
+  border-bottom: 2px solid #003C68;
+}
+/* green - #00A79A, blue - #003C68*/
