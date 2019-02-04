@@ -1,0 +1,51 @@
+.root {
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  width: 30%;
+  background: #fff;
+}
+
+.container {
+  background: #f6f6f6;
+  padding: 0.5rem;
+  box-shadow: 0 0 11px rgba(33, 33, 33, 0.2);
+  cursor: pointer;
+}
+
+.details {
+  display: flex;
+  color: #444;
+}
+
+.left {
+
+}
+
+.label {
+
+}
+
+.right {
+
+}
+
+.title {
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-bottom: 0.25rem;
+  color: #031b4e;
+}
+
+.desc {
+  color: #444;
+}
+/* green - #00A79A, blue - #003C68*/
+
+.detail {
+  white-space: nowrap;
+}
+
+.description {
+  padding: 0.25rem 0rem;
+  line-height: 1.2;
+}

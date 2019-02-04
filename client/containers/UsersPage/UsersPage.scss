@@ -9,3 +9,56 @@ green - #00A79A, blue - #003C68
   font-weight: bold;
   color: #00A79A;
 }
+
+.root {
+
+}
+
+.header {
+  padding-bottom: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.title {
+  color: #00A79A;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.desc {
+  color: #031b4e;
+}
+
+.users {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.search {
+  height: 36px;
+
+}
+
+.select {
+  height: 100%;
+  margin-right: 0.5rem; 
+  border-radius: 2px;
+  border: 1px solid #eee;
+}
+
+.searchInput {
+  height: 100%;
+  border-radius: 2px;
+  border: 1px solid #eee;
+  margin-right: 0.5rem;
+}
+
+.searchButton {
+  padding: 0.5rem;
+  background: #f9f9f9;
+  color: rgb(3,27,78);
+  font-weight: bold;
+  border-radius: 2px;
+  border:none;
+  cursor: pointer;
+}
