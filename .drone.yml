@@ -1,0 +1,7 @@
+pipeline:
+  build:
+    image: node
+    commands:
+      - sudo apt-get install -y scp
+      - npm i
+      - npm run webpack   
