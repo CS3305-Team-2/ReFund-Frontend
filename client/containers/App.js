@@ -9,6 +9,7 @@ import { Route, Link, Switch } from 'react-router-dom';
 import ProjectDetail from './ProjectDetail/ProjectDetail';
 import GrantDetail from './GrantDetail/GrantDetail';
 import HomePage from './HomePage/HomePage';
+import LoginPage from './LoginPage/LoginPage';
 
 class App extends Component {
     constructor(props){
@@ -23,6 +24,7 @@ class App extends Component {
           <div className={styles.contentRoot}>
             <div className="container">
               <Switch>
+                <Route path="/login" component={LoginPage} />
                 <Route path="/grants/:id" component={GrantsPage} />
                 <Route path="/user" component={UserProfile} />
                 <Route path="/users/" component={UsersPage} />

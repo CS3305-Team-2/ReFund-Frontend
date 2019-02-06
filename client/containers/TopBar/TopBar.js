@@ -20,6 +20,7 @@ class TopBar extends Component {
 							<div className="flex-grow-1">
 								<div className={cx(styles.nav)}>
 									<Link to="/home"><div className={styles.navLink}>Home</div></Link>
+									<Link to="/login"><div className={styles.navLink}>Login</div></Link>
 									<Link to="/grants/"><div className={styles.navLink}>Grants List</div></Link>
 									<Link to="/grant/"><div className={styles.navLink}>Grant Detail</div></Link>
 									<Link to="/users/"><div className={styles.navLink}>Users</div></Link>
