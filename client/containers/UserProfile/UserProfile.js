@@ -1,6 +1,8 @@
 import React, { Component} from 'react';
 import styles from './UserProfile.scss';
 import cx from 'classnames';
+import Collapse from '@material-ui/core/Collapse';
+import ExpandIcon from '@material-ui/icons/KeyboardArrowRight';
 
 const profile_data = {
     first_name: 'Donagh',
@@ -18,7 +20,8 @@ const profile_data = {
 class UserProfile extends Component {
 	constructor(props) {
 		super(props);
-		this.state = { // Have an edit mode for changing (must check if own profile)
+    this.state = { // Have an edit mode for changing (must check if own profile)
+
     }
   }
 
@@ -27,7 +30,22 @@ class UserProfile extends Component {
       <li>{key.replace(/_/g, " ")}: {profile_data[key]}</li> // Also capitalize char at start (and after _?) (and acronyms?)
     ))
   }*/
+
+  expandInfo(section) {
+    this.setState(prevState => ({[section]: !prevState[section]}))
+  }
   
+  expandIcon(section) {
+    const arrowStyle = {
+      fontSize:'24px', 
+      cursor:'pointer',
+      color: '#00A79A',
+      transition: 'transform 0.3s'
+    }
+    if (this.state[section]) arrowStyle.transform = 'rotate(90deg)';
+    return <ExpandIcon style={arrowStyle} />;
+  }
+
 	render() {
     const state = this.state;
     const props = this.props;
@@ -36,180 +54,300 @@ class UserProfile extends Component {
     //const profile = this.getProfile();
     
 		return (
-			<div>
-        {/* 
-          CSS Example. When adding a class remember to use "className" not "class".
-          e.g <div className={styles.exampleClass}> </div>
-          Then in the .scss file. write the css class exampleClass
-
-          If you want to use multiple classes. use the 'cx' library I've imported at the top
-          how to use: 'https://github.com/JedWatson/classnames'
-          <div className={cx(styles.exampleClass, styles.exampleClass2)}> </div>
-        */}
+			<div className={styles.root}>
         <div className={styles.exampleClass}>
           Users Profile Page
         </div>
 
         <div>
-          {/* Add in data like so. e.g for a user: add in their name with {user.name} into a div */}
-          {/*profile*/}
-          
           <h1>General Information</h1>
-          <ul>
-            <li>First name: {profile_data.first_name}</li>
-            <li>Last name: {profile_data.surname}</li>
-            <li>Job title: {profile_data.job_title}</li>
-            <li>Prefix: {profile_data.prefix}</li>
-            <li>Suffix: {profile_data.suffix}</li>
-            <li>Phone: {profile_data.phone}</li>
-            <li>Phone extension: {profile_data.phone_extension}</li>
-            <li>Email: {profile_data.email}</li>
-            <li>ORCID: {profile_data.orcid}</li>
-          </ul>
+          <div className={styles.profileSections}>
+            <div className={styles.section}>
+              <li className={styles.sectionItem}>First name: {profile_data.first_name}</li>
+              <li className={styles.sectionItem}>Last name: {profile_data.surname}</li>
+              <li className={styles.sectionItem}>Job title: {profile_data.job_title}</li>
+              <li className={styles.sectionItem}>Prefix: {profile_data.prefix}</li>
+              <li className={styles.sectionItem}>Suffix: {profile_data.suffix}</li>
+              <li className={styles.sectionItem}>Phone: {profile_data.phone}</li>
+              <li className={styles.sectionItem}>Phone extension: {profile_data.phone_extension}</li>
+              <li className={styles.sectionItem}>Email: {profile_data.email}</li>
+              <li className={styles.sectionItem}>ORCID: {profile_data.orcid}</li>
+            </div>
+          </div>
 
           <h1>Research Profile Information</h1>
-          <ul>
-            <li>Education information
-              <ul>
-                <li>Degree: </li>
-                <li>Field of study: </li>
-                <li>Institution: </li>
-                <li>Location: </li>
-                <li>Year of degree award: </li>
-              </ul>
-            </li>
-            <li>Employment
-              <ul>
-                <li>Institution/company: </li>
-                <li>Location: </li>
-                <li>Years: </li>
-              </ul>
-            </li>
-            <li>Professional societies (membership)
-              <ul>
-                <li>Start date: </li>
-                <li>End date: </li>
-                <li>Name of society: </li>
-                <li>Type of membership: </li>
-                <li>Status: </li>
-              </ul>
-            </li>
-            <li>Distinctions/awards
-              <ul>
-                <li>Year: </li>
-                <li>Awarding body: </li>
-                <li>Details: </li>
-                <li>Team member name: </li>
-              </ul>
-            </li>
-            <li>Funding diversification
-              <ul>
-                <li>Start date: </li>
-                <li>End date: </li>
-                <li>Amount: </li>
-                <li>Funding body: </li>
-                <li>Funding programme: </li>
-                <li>Status: </li>
-                <li>Primary attribution: </li>
-              </ul>
-            </li>
-            <li>Team members
-              <ul>
-                <li>Arrival date: </li>
-                <li>Departure date: </li>
-                <li>Name: </li>
-                <li>Position: </li>
-                <li>Primary attribution: </li>
-              </ul>
-            </li>
-            <li>Impacts
-              <ul>
-                <li>Impact title: </li>
-                <li>Impact category: </li>
-                <li>Primary beneficiary: </li>
-                <li>Primary attribution: </li>
-              </ul>
-            </li>
-            <li>Innovation and Commercialisation
-              <ul>
-                <li>Year: </li>
-                <li>Type: </li>
-                <li>Title: </li>
-                <li>Primary attribution: </li>
-              </ul>
-            </li>
-            <li>Publications
-              <ul>
-                <li>Publication year: </li>
-                <li>Publication type: </li>
-                <li>Title: </li>
-                <li>Journal/conference name: </li>
-                <li>Publication status: </li>
-                <li>DOI: </li>
-                <li>Primary attribution: </li>
-              </ul>
-            </li>
-            <li>Presentations
-              <ul>
-                <li>Year: </li>
-                <li>Title: </li>
-                <li>Event type: </li>
-                <li>Organising body: </li>
-                <li>Location: </li>
-                <li>Primary attribution: </li>
-              </ul>
-            </li>
-            <li>Academic collaborations
-              <ul>
-                <li>Start date: </li>
-                <li>End date: </li>
-                <li>Name of institution: </li>
-                <li>Department within institution: </li>
-                <li>Location: </li>
-                <li>Name of collaborator: </li>
-                <li>Primary goal of collaboration: </li>
-                <li>Frequency of interaction: </li>
-                <li>Primary attribution: </li>
-              </ul>
-            </li>
-            <li>Non-academic collaborations
-              <ul>
-                <li>Start date: </li>
-                <li>End date: </li>
-                <li>Name of institution: </li>
-                <li>Department within institution: </li>
-                <li>Location: </li>
-                <li>Name of collaborator: </li>
-                <li>Primary goal of collaboration: </li>
-                <li>Frequency of interaction: </li>
-                <li>Primary attribution: </li>
-              </ul>
-            </li>
-            <li>Conferences/workshops/seminars organised
-              <ul>
-                <li>Start date: </li>
-                <li>End date: </li>
-                <li>Title: </li>
-                <li>Event type: </li>
-                <li>Role: </li>
-                <li>Location: </li>
-                <li>Primary attribution: </li>
-              </ul>
-            </li>
-            <li>Communications overview
-              <ul>
-                <li>Year: </li>
-                <li>Number of public lectures/demonstrations: </li>
-                <li>Number of visits: </li>
-                <li>Number of media interactions: </li>
-              </ul>
-            </li>
-            <li>SFI funding ratio
-              <ul>
-                <li>Year: </li>
-                <li>Percentafe of annual spend from SFI: </li>
-              </ul>
-            </li>
+          <div className={styles.profileSections}>
+            <div
+              onClick={() => this.expandInfo('education')}
+              className={styles.sectionHeader}
+            >
+              <div className={styles.sectionHeading}>Education</div>
+              {this.expandIcon('education')}
+            </div>
+            <Collapse in={this.state.education} timeout="auto" unmountOnExit>
+              <div className={styles.section}>
+                <li className={styles.sectionItem}>Degree: </li>
+                <li className={styles.sectionItem}>Field of study: </li>
+                <li className={styles.sectionItem}>Institution: </li>
+                <li className={styles.sectionItem}>Location: </li>
+                <li className={styles.sectionItem}>Year of degree award: </li>
+              </div>
+            </Collapse>
+
+
+            <div
+              onClick={() => this.expandInfo('employment')}
+              className={styles.sectionHeader}
+            >
+              <div className={styles.sectionHeading}>Employment</div>
+              {this.expandIcon('employment')}
+            </div>
+            <Collapse in={this.state.employment} timeout="auto" unmountOnExit>
+              <div className={styles.section}>
+                <li className={styles.sectionItem}>Institution/company:</li>
+                <li className={styles.sectionItem}>Location: </li>
+                <li className={styles.sectionItem}>Years: </li>
+              </div>
+            </Collapse>
+
+            <div
+              onClick={() => this.expandInfo('societies')}
+              className={styles.sectionHeader}
+            >
+              <div className={styles.sectionHeading}>Professional societies (membership)</div>
+              {this.expandIcon('societies')}
+            </div>
+            <Collapse in={this.state.societies} timeout="auto" unmountOnExit>
+              <div className={styles.section}>
+                <li className={styles.sectionItem}>Start date: </li>
+                <li className={styles.sectionItem}>End date: </li>
+                <li className={styles.sectionItem}>Name of society: </li>
+                <li className={styles.sectionItem}>Type of membership: </li>
+                <li className={styles.sectionItem}>Status: </li>
+              </div>
+            </Collapse>
+
+            <div
+              onClick={() => this.expandInfo('awards')}
+              className={styles.sectionHeader}
+            >
+              <div className={styles.sectionHeading}>Distinctions/awards</div>
+              {this.expandIcon('awards')}
+            </div>
+            <Collapse in={this.state.awards} timeout="auto" unmountOnExit>
+              <div className={styles.section}>
+                <li className={styles.sectionItem}>Year: </li>
+                <li className={styles.sectionItem}>Awarding Body: </li>
+                <li className={styles.sectionItem}>Details: </li>
+                <li className={styles.sectionItem}>Team member name: </li>
+              </div>
+            </Collapse>
+
+            <div
+              onClick={() => this.expandInfo('funding')}
+              className={styles.sectionHeader}
+            >
+              <div className={styles.sectionHeading}>Funding diversification</div>
+              {this.expandIcon('funding')}
+            </div>
+            <Collapse in={this.state.funding} timeout="auto" unmountOnExit>
+              <div className={styles.section}>
+                <li className={styles.sectionItem}>Start date: </li>
+                <li className={styles.sectionItem}>End date: </li>
+                <li className={styles.sectionItem}>Amount: </li>
+                <li className={styles.sectionItem}>Funding body: </li>
+                <li className={styles.sectionItem}>Funding programme: </li>
+                <li className={styles.sectionItem}>Status: </li>
+                <li className={styles.sectionItem}>Primary attribution: </li>
+              </div>
+            </Collapse>
+
+            <div
+              onClick={() => this.expandInfo('team')}
+              className={styles.sectionHeader}
+            >
+              <div className={styles.sectionHeading}>Team Members</div>
+              {this.expandIcon('team')}
+            </div>
+            <Collapse in={this.state.team} timeout="auto" unmountOnExit>
+              <div className={styles.section}>
+                <li className={styles.sectionItem}>Arrival date: </li>
+                <li className={styles.sectionItem}>Departure date: </li>
+                <li className={styles.sectionItem}>Name: </li>
+                <li className={styles.sectionItem}>Position: </li>
+                <li className={styles.sectionItem}>Primary attribution: </li>
+              </div>
+            </Collapse>
+
+
+            <div
+              onClick={() => this.expandInfo('impacts')}
+              className={styles.sectionHeader}
+            >
+              <div className={styles.sectionHeading}>Impacts</div>
+              {this.expandIcon('impacts')}
+            </div>
+            <Collapse in={this.state.impacts} timeout="auto" unmountOnExit>
+              <div className={styles.section}>
+                <li className={styles.sectionItem}>Impact title: </li>
+                <li className={styles.sectionItem}>Impact category: </li>
+                <li className={styles.sectionItem}>Primary beneficiary: </li>
+                <li className={styles.sectionItem}>Primary attribution: </li>
+              </div>
+            </Collapse>
+
+            <div
+              onClick={() => this.expandInfo('innovation')}
+              className={styles.sectionHeader}
+            >
+              <div className={styles.sectionHeading}>Innovation and Commercialisation</div>
+              {this.expandIcon('innovation')}
+            </div>
+            <Collapse in={this.state.innovation} timeout="auto" unmountOnExit>
+              <div className={styles.section}>
+                <li className={styles.sectionItem}>Year: </li>
+                <li className={styles.sectionItem}>Type: </li>
+                <li className={styles.sectionItem}>Title: </li>
+                <li className={styles.sectionItem}>Primary attribution: </li>
+              </div>
+            </Collapse>
+
+            <div
+              onClick={() => this.expandInfo('publications')}
+              className={styles.sectionHeader}
+            >
+              <div className={styles.sectionHeading}>Publications</div>
+              {this.expandIcon('publications')}
+            </div>
+            <Collapse in={this.state.publications} timeout="auto" unmountOnExit>
+              <div className={styles.section}>
+                <li className={styles.sectionItem}>Publication year: </li>
+                <li className={styles.sectionItem}>Publication type: </li>
+                <li className={styles.sectionItem}>Title: </li>
+                <li className={styles.sectionItem}>Journal/conference name: </li>
+                <li className={styles.sectionItem}>Publication status: </li>
+                <li className={styles.sectionItem}>DOI: </li>
+                <li className={styles.sectionItem}>Primary attribution: </li>
+              </div>
+            </Collapse>
+
+            <div
+              onClick={() => this.expandInfo('presentations')}
+              className={styles.sectionHeader}
+            >
+              <div className={styles.sectionHeading}>Presentations</div>
+              {this.expandIcon('presentations')}
+            </div>
+            <Collapse in={this.state.presentations} timeout="auto" unmountOnExit>
+              <div className={styles.section}>
+                <li className={styles.sectionItem}>Year: </li>
+                <li className={styles.sectionItem}>Title: </li>
+                <li className={styles.sectionItem}>Event type: </li>
+                <li className={styles.sectionItem}>Organising body: </li>
+                <li className={styles.sectionItem}>Location: </li>
+                <li className={styles.sectionItem}>Primary attribution: </li>
+              </div>
+            </Collapse>
+
+            <div
+              onClick={() => this.expandInfo('academicCollabs')}
+              className={styles.sectionHeader}
+            >
+              <div className={styles.sectionHeading}>Academic collaborations</div>
+              {this.expandIcon('academicCollabs')}
+            </div>
+            <Collapse in={this.state.academicCollabs} timeout="auto" unmountOnExit>
+              <div className={styles.section}>
+                <li className={styles.sectionItem}>Start date: </li>
+                <li className={styles.sectionItem}>End date: </li>
+                <li className={styles.sectionItem}>Name of institution: </li>
+                <li className={styles.sectionItem}>Department within institution: </li>
+                <li className={styles.sectionItem}>Location: </li>
+                <li className={styles.sectionItem}>Name of collaborator: </li>
+                <li className={styles.sectionItem}>Primary goal of collaboration: </li>
+                <li className={styles.sectionItem}>Frequency of interaction: </li>
+                <li className={styles.sectionItem}>Primary attribution: </li>
+              </div>
+            </Collapse>
+
+            <div
+              onClick={() => this.expandInfo('nonAcademicCollabs')}
+              className={styles.sectionHeader}
+            >
+              <div className={styles.sectionHeading}>Non-Academic collaborations</div>
+              {this.expandIcon('nonAcademicCollabs')}
+            </div>
+            <Collapse in={this.state.nonAcademicCollabs} timeout="auto" unmountOnExit>
+              <div className={styles.section}>
+                <li className={styles.sectionItem}>Start date: </li>
+                <li className={styles.sectionItem}>End date: </li>
+                <li className={styles.sectionItem}>Name of institution: </li>
+                <li className={styles.sectionItem}>Department within institution: </li>
+                <li className={styles.sectionItem}>Location: </li>
+                <li className={styles.sectionItem}>Name of collaborator: </li>
+                <li className={styles.sectionItem}>Primary goal of collaboration: </li>
+                <li className={styles.sectionItem}>Frequency of interaction: </li>
+                <li className={styles.sectionItem}>Primary attribution: </li>
+              </div>
+            </Collapse>
+            
+
+            <div
+              onClick={() => this.expandInfo('conferences')}
+              className={styles.sectionHeader}
+            >
+              <div className={styles.sectionHeading}>Conferences/workshops/seminars organised</div>
+              {this.expandIcon('conferences')}
+            </div>
+            <Collapse in={this.state.conferences} timeout="auto" unmountOnExit>
+              <div className={styles.section}>
+                <li className={styles.sectionItem}>Start date: </li>
+                <li className={styles.sectionItem}>End date: </li>
+                <li className={styles.sectionItem}>Name of institution: </li>
+                <li className={styles.sectionItem}>Department within institution: </li>
+                <li className={styles.sectionItem}>Location: </li>
+                <li className={styles.sectionItem}>Name of collaborator: </li>
+                <li className={styles.sectionItem}>Primary goal of collaboration: </li>
+                <li className={styles.sectionItem}>Frequency of interaction: </li>
+                <li className={styles.sectionItem}>Primary attribution: </li>
+              </div>
+            </Collapse>
+
+            <div
+              onClick={() => this.expandInfo('comms')}
+              className={styles.sectionHeader}
+            >
+              <div className={styles.sectionHeading}>Communications overview</div>
+              {this.expandIcon('comms')}
+            </div>
+            <Collapse in={this.state.comms} timeout="auto" unmountOnExit>
+              <div className={styles.section}>
+                <li className={styles.sectionItem}>Year: </li>
+                <li className={styles.sectionItem}>Number of public lectures/demonstrations: </li>
+                <li className={styles.sectionItem}>Number of visits: </li>
+                <li className={styles.sectionItem}>Number of media interactions: </li>
+              </div>
+            </Collapse>
+
+            <section>
+              <div
+                onClick={() => this.expandInfo('fundingratio')}
+                className={styles.sectionHeader}
+              >
+                <div className={styles.sectionHeading}>SFI funding ratio</div>
+                {this.expandIcon('fundingratio')}
+              </div>
+              <Collapse in={this.state.fundingratio} timeout="auto" unmountOnExit>
+                <div className={styles.section}>
+                  <li className={styles.sectionItem}>Year: </li>
+                  <li className={styles.sectionItem}>Percentage of annual spend from SFI: </li>
+                </div>
+              </Collapse>
+            </section>
+          </div>
+
+
+            {/* What's this?
             <li>Education and public
               <ul>
                 <li>Name of project: </li>
@@ -220,8 +358,7 @@ class UserProfile extends Component {
                 <li>Target geograpical area: </li>
                 <li>Primary attribution: </li>
               </ul>
-            </li>
-          </ul>
+            </li>*/}
 
         </div>
 			</div>

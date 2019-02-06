@@ -1,8 +1,13 @@
 /* 
 The SFI color scheme to use.
 green - #00A79A, blue - #003C68
+031b4e
 */
 
+.root {
+  max-width: 600px;
+  /* margin: 0 auto; */
+}
 .exampleClass {
   font-size: 1.5rem;
   font-weight: bold;
@@ -12,4 +17,44 @@ green - #00A79A, blue - #003C68
 h1 {
   font-size: 1.2rem;
   font-weight: bold;
+  color: #031b4e;
+}
+
+.profileSections {
+  box-shadow: 0 0 11px rgba(33, 33, 33, 0.2);
+  margin-bottom: 1rem;
+}
+
+.sectionHeader {
+  padding: 0.5rem;
+  border-bottom: 1px solid #00A79A;
+  cursor: pointer;
+  background: #f6f6f6;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sectionHeading {
+  font-size: 1.2rem;
+  color: #031b4e;
+  font-weight: 500;
+}
+
+
+.sectionHeader:hover {
+  background: #eee;
+}
+
+.sectionHeading {
+
+}
+
+.section {
+  background: #f6f6f6;
+  padding: 1rem;
+}
+
+.sectionItem {
+  padding: 0.25rem 0;
 }
