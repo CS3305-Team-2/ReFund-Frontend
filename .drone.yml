@@ -6,7 +6,7 @@ pipeline:
       - apt-get install -y openssh-client sshpass
       - npm i
       - npm run webpack
-      - sshpass -p $${SSH_PASS} scp -o StrictHostKeyChecking=no -v -r /drone/src/github.com/CS3305-Team-2/ReFund-Frontend/dist/* $${SSH_LOGIN}@leela.netsoc.co:$${SSH_FOLDER} 
+      - sshpass -p $${SSH_PASS} scp -o StrictHostKeyChecking=no -v -r /drone/src/github.com/CS3305-Team-2/ReFund-Frontend/dist/* $${SSH_LOGIN}@leela.netsoc.co:/home/users/strum355/public_html/refund
       - sshpass -p $${SSH_PASS} ssh -o StrictHostKeyChecking=no -t $${SSH_LOGIN}@leela.netsoc.co 'cd /home/users/strum355/public_html/refund; and chmod 644 *'
     secrets: [ ssh_login, ssh_pass ]
     when:
