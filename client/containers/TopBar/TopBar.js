@@ -14,21 +14,19 @@ class TopBar extends Component {
 		return (
 			<div className={styles.topBar}>
 					<div className={cx('container', styles.container)}>
-						<div className="row p-2 align-items-center">
+						<div className="row p-2 align-items-center justify-content-center">
 							<div className={styles.logoContainer}>
 								<img src={logo} className={styles.logo} />
 							</div>
+							{localStorage.getItem("user") ?
 							<div className="flex-grow-1">
 								<div className={cx(styles.nav)}>
 									<Link to="/home"><div className={styles.navLink}>Home</div></Link>
-									<Link to="/login"><div className={styles.navLink}>Login</div></Link>
 									<Link to="/users/"><div className={styles.navLink}>Users</div></Link>
-									<Link to="/grants/"><div className={styles.navLink}>Grants List</div></Link>
-									<Link to="/grant/"><div className={styles.navLink}>Grant Detail</div></Link>
+									<Link to="/grants/"><div className={styles.navLink}>Funding Calls</div></Link>
 									<Link to="/projects/"><div className={styles.navLink}>Projects</div></Link>
-									<Link to="/project/"><div className={styles.navLink}>Project Detail</div></Link>
 								</div>
-							</div>
+								</div> : <div/> }
 						</div>
 					</div>
 			</div>

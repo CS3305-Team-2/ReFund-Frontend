@@ -3,12 +3,13 @@ import styles from './LoginPage.scss';
 import cx from 'classnames';
 import axios from 'axios';
 import {apiUrl} from '../../config';
+import { withRouter } from "react-router-dom";
 
 class LoginPage extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-      email: '',
+      orcid: '',
       password: ''
     }
 
@@ -17,7 +18,7 @@ class LoginPage extends Component {
   
   submitLogin() {
     const {
-      email,
+      orcid,
       password
     } = this.state;
     // console.log('Loggin In. email: ' + email + ', pass: ' + password)
@@ -25,6 +26,18 @@ class LoginPage extends Component {
       email,
       password
     })*/
+    const formData = new FormData();
+    formData.set("orcid", orcid);
+    formData.set("password", password);
+
+    axios.post(apiUrl + '/login', formData).then((res)=>{
+      console.log(res.status, res.body, res.data, res.headers)
+      const user = res.data;
+      localStorage.setItem("user", JSON.stringify(user));
+      this.props.history.push("/home");
+    }).catch(e => {console.log(e)});
+
+
   }
 
 	render() {
@@ -39,12 +52,12 @@ class LoginPage extends Component {
         <div className={styles.loginContainer}>
           <div className={styles.title}>Login</div>
           <div className={styles.inputContainer}>
-            <label className={styles.inputLabel}>Email</label>
+            <label className={styles.inputLabel}>Orcid</label>
             <input 
               type="text" 
               className={styles.textInput} 
               value={state.email}
-              onChange={(evt)=>this.setState({email: evt.target.value})}
+              onChange={(evt)=>this.setState({orcid: evt.target.value})}
             />
           </div>
           <div className={styles.inputContainer}>
@@ -68,4 +81,4 @@ class LoginPage extends Component {
 ;	}
 }
 
-export default LoginPage;
+export default withRouter(LoginPage);
