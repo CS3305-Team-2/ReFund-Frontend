@@ -2,6 +2,7 @@ import React, { Component} from 'react';
 import styles from './TopBar.scss';
 import cx from 'classnames';
 import { Link } from 'react-router-dom';
+import logo from '../../img/sfi_logo.svg';
 
 class TopBar extends Component {
 	constructor(props) {
@@ -15,7 +16,7 @@ class TopBar extends Component {
 					<div className={cx('container', styles.container)}>
 						<div className="row p-2 align-items-center">
 							<div className={styles.logoContainer}>
-								<img src="/static/sfi_logo.svg" className={styles.logo} />
+								<img src={logo} className={styles.logo} />
 							</div>
 							<div className="flex-grow-1">
 								<div className={cx(styles.nav)}>

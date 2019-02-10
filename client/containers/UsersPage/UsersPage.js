@@ -124,7 +124,7 @@ class UsersPage extends Component {
     let userList = state.users.slice();
 
     const { searchType, searchTerm } = state;
-    if (searchTerm != null && searchTerm.length > 1) userList = this.searchFilter(userList, searchType, searchTerm);
+    if (searchTerm != null) userList = this.searchFilter(userList, searchType, searchTerm);
 
     let userListItems = this.getUsers(userList);
 
