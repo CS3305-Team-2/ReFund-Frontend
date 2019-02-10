@@ -21,10 +21,9 @@ class TopBar extends Component {
 								<div className={cx(styles.nav)}>
 									<Link to="/home"><div className={styles.navLink}>Home</div></Link>
 									<Link to="/login"><div className={styles.navLink}>Login</div></Link>
+									<Link to="/users/"><div className={styles.navLink}>Users</div></Link>
 									<Link to="/grants/"><div className={styles.navLink}>Grants List</div></Link>
 									<Link to="/grant/"><div className={styles.navLink}>Grant Detail</div></Link>
-									<Link to="/users/"><div className={styles.navLink}>Users</div></Link>
-									<Link to="/user/"><div className={styles.navLink}>User Profile</div></Link>
 									<Link to="/projects/"><div className={styles.navLink}>Projects</div></Link>
 									<Link to="/project/"><div className={styles.navLink}>Project Detail</div></Link>
 								</div>

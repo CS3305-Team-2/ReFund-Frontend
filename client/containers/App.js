@@ -26,7 +26,7 @@ class App extends Component {
               <Switch>
                 <Route path="/login" component={LoginPage} />
                 <Route path="/grants/:id" component={GrantsPage} />
-                <Route path="/user" component={UserProfile} />
+                <Route path="/user/:id" component={UserProfile} />
                 <Route path="/users/" component={UsersPage} />
                 <Route path="/project" component={ProjectDetail} />
                 <Route path="/projects" component={ProjectListPage} />

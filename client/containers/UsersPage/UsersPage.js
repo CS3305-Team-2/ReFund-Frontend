@@ -1,7 +1,10 @@
 import React, { Component} from 'react';
 import styles from './UsersPage.scss';
-import cx from 'classnames';
+import { Link } from 'react-router-dom';
 import UserListItem from '../../components/UsersListItem/UsersListItem';
+import axios from 'axios';
+import { apiUrl } from '../../config';
+import displayFriendly from '../../utils/displayFriendly'
 
 // Create mock data to use
 const users = [
@@ -68,11 +71,22 @@ class UsersPage extends Component {
 		super(props);
 		this.state = {
       searchVal: '',
-      searchType: 'Name',
+      searchType: 'firstName',
       searchTerm: null,
+      filterOptions: ['firstName', 'lastName', 'jobTitle'],
+      users: [],
     }
 
     this.search = this.search.bind(this);
+  }
+
+  componentDidMount() {
+    axios.get(apiUrl + '/users').then(
+      res => {
+        console.log(res.data);
+        this.setState({users: res.data });
+      }
+    );
   }
   
   getUsers(users) {
@@ -81,32 +95,33 @@ class UsersPage extends Component {
     // users is the user list at the top of this page
     return users.map((user)=>{
       // Finish the UserListItem component. Found in /components. 
-      return <UserListItem user={user} /> // Each <UserListItem shows an user in the list of users this page shows.
+      return (
+        <Link to={`/user/${user.id}`} className={styles.userLink}><UserListItem user={user} /></Link>
+      ); // Each <UserListItem shows an user in the list of users this page shows.
     });
   }
 
   search() {
-    this.setState({})
+    this.setState(prevState => ({searchTerm: prevState.searchVal}));
   }
 
   searchFilter(users, searchType, searchTerm) {
-    let type = searchType.toLowerCase();
     let term = searchTerm.toLowerCase();
 
     let results = [];
+
     users.slice().forEach(user => {
-      console.log(user[type], term);
-      if (user[type].toLowerCase().includes(term)) results.push(user);
+      if (user[searchType].toLowerCase().includes(term)) results.push(user);
     });
 
     return results;
   }
-	
+  
+
 	render() {
     const state = this.state;
-    console.log(state);
     const activeTab = styles.activeTab;
-    let userList = users.slice();
+    let userList = state.users.slice();
 
     const { searchType, searchTerm } = state;
     if (searchTerm != null && searchTerm.length > 1) userList = this.searchFilter(userList, searchType, searchTerm);
@@ -117,19 +132,14 @@ class UsersPage extends Component {
       stuff: 'example stuff'
     }
   
+    const filterOptions = state.filterOptions.map((option)=>{
+      return (
+        <option>{displayFriendly(option)}</option>
+      )
+    });
+
 		return (
 			<div>
-        {/* 
-          CSS Example. When adding a class remember to use "className" not "class".
-          e.g <div className={styles.exampleClass}> </div>
-          Then in the .scss file. write the css class exampleClass
-
-          If you want to use multiple classes. use the 'cx' library I've imported at the top
-          how to use: 'https://github.com/JedWatson/classnames'
-          <div className={cx(styles.exampleClass, styles.exampleClass2)}> </div>
-        */}
-
-
         <div className={styles.header}>
           <div className={styles.title}>Researchers</div>
           <div className={styles.desc}></div>
@@ -138,21 +148,21 @@ class UsersPage extends Component {
         <div className={styles.search}>
           <select 
             className={styles.select} 
-            value={this.state.searchType}
-            onChange={(evt) => this.setState({searchType: evt.target.value})}
+            selected
+            value={displayFriendly(searchType)}
+            onChange={(evt) => this.setState({searchType: state.filterOptions[evt.target.selectedIndex]})}
           >
-
-            <option>Name</option>
-            <option>Institution</option>
+            {filterOptions}
           </select>
           <input 
             className={styles.searchInput}
             type="text" 
+            onKeyPress={(e)=> { if (e.key == 'Enter') this.search(); }}
             onChange={(evt)=>this.setState({searchVal: evt.target.value})} value={this.state.searchVal}
           />
           <button 
             className={styles.searchButton}
-            onClick={() => this.setState(prevState => ({searchTerm: prevState.searchVal}))}
+            onClick={this.search}
           >Search</button>
         </div>
 

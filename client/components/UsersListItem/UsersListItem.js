@@ -23,7 +23,7 @@ class UsersListItem extends Component {
 		return (
 			<div className={styles.root}>
 				<div className={styles.container}>
-					<div className={styles.title}>{user.name}</div>
+					<div className={styles.title}>{user.firstName} {user.lastName}</div>
 					<div className={styles.details}>
 						<div className={styles.left}>
 							<div className={styles.description}>{user.jobTitle}</div>

@@ -1,0 +1,53 @@
+/* 
+The SFI color scheme to use.
+green - #00A79A, blue - #003C68
+031b4e
+*/
+
+
+.sectionHeader {
+  padding: 0.5rem;
+  border-bottom: 1px solid #00A79A;
+  cursor: pointer;
+  background: #f6f6f6;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sectionHeading {
+  font-size: 1.2rem;
+  color: #031b4e;
+  font-weight: 500;
+}
+
+
+.sectionHeader:hover {
+  background: #eee;
+}
+
+.sectionHeading {
+
+}
+
+.section {
+  background: #f6f6f6;
+  padding: 1rem;
+}
+
+.entry {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+  border-left: 1px solid #00A79A;
+  padding: 0 0.25rem;;
+}
+
+.entryItem {
+  padding: 0rem;
+  margin-right: 0.5rem;
+}
+
+.entryVal {
+  font-weight: 500;
+}

@@ -1,35 +1,30 @@
 import React, { Component} from 'react';
-import styles from './UserProfile.scss';
+import axios from 'axios';
 import cx from 'classnames';
 import Collapse from '@material-ui/core/Collapse';
 import ExpandIcon from '@material-ui/icons/KeyboardArrowRight';
-
-const profile_data = {
-    first_name: 'Donagh',
-    surname: 'Casey',
-    job_title: 'Developer',
-    prefix: 'Mr',
-    suffix: 'Jr',
-    phone: '0851234567',
-    phone_extension: '61',
-    email: 'donagh@email.com',
-    orcid: 'https://orcid.org/0000-0001-2345-6789'
-}
-
+import styles from './UserProfile.scss';
+import { apiUrl } from '../../config';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import ProfileField from '../../components/ProfileField/ProfileField';
 
 class UserProfile extends Component {
 	constructor(props) {
 		super(props);
     this.state = { // Have an edit mode for changing (must check if own profile)
-
+      loaded: false
     }
   }
 
-  /*getProfile() {
-    return Object.keys(profile_data).map((key) => (
-      <li>{key.replace(/_/g, " ")}: {profile_data[key]}</li> // Also capitalize char at start (and after _?) (and acronyms?)
-    ))
-  }*/
+  componentDidMount() {
+    const id = this.props.match.params.id;
+    axios.get(apiUrl + `/users/${id}`).then(
+      res => {
+        console.log(res.data);
+        this.setState({ user: res.data, loaded: true });
+      }
+    );
+  }
 
   expandInfo(section) {
     this.setState(prevState => ({[section]: !prevState[section]}))
@@ -46,87 +41,51 @@ class UserProfile extends Component {
     return <ExpandIcon style={arrowStyle} />;
   }
 
+  getProfileCard(user) {
+    return (
+      <>
+        <h1>General Information</h1>
+        <div className={styles.profileSections}>
+          <div className={styles.section}>
+            <li className={styles.sectionItem}>First name: {user.firstName}</li>
+            <li className={styles.sectionItem}>Last name: {user.lastName}</li>
+            <li className={styles.sectionItem}>Job title: {user.jobTitle}</li>
+            <li className={styles.sectionItem}>title: {user.title}</li>
+            <li className={styles.sectionItem}>Suffix: {user.suffix}</li>
+            <li className={styles.sectionItem}>Phone: {user.phoneNumber}</li>
+            <li className={styles.sectionItem}>Email: {user.email}</li>
+            <li className={styles.sectionItem}>ORCID: {user.orcid}</li>
+          </div>
+        </div>
+      </>
+    )
+  }
+
 	render() {
     const state = this.state;
     const props = this.props;
+    const { user, loaded } = state;
 
-    //const profile = profile;
-    //const profile = this.getProfile();
+
+    if (!loaded) return <div>Loading</div>;
     
 		return (
 			<div className={styles.root}>
         <div className={styles.exampleClass}>
           Users Profile Page
         </div>
-
+        {!loaded ? <CircularProgress />:
+          this.getProfileCard(user)
+        }
         <div>
-          <h1>General Information</h1>
-          <div className={styles.profileSections}>
-            <div className={styles.section}>
-              <li className={styles.sectionItem}>First name: {profile_data.first_name}</li>
-              <li className={styles.sectionItem}>Last name: {profile_data.surname}</li>
-              <li className={styles.sectionItem}>Job title: {profile_data.job_title}</li>
-              <li className={styles.sectionItem}>Prefix: {profile_data.prefix}</li>
-              <li className={styles.sectionItem}>Suffix: {profile_data.suffix}</li>
-              <li className={styles.sectionItem}>Phone: {profile_data.phone}</li>
-              <li className={styles.sectionItem}>Phone extension: {profile_data.phone_extension}</li>
-              <li className={styles.sectionItem}>Email: {profile_data.email}</li>
-              <li className={styles.sectionItem}>ORCID: {profile_data.orcid}</li>
-            </div>
-          </div>
-
           <h1>Research Profile Information</h1>
           <div className={styles.profileSections}>
-            <div
-              onClick={() => this.expandInfo('education')}
-              className={styles.sectionHeader}
-            >
-              <div className={styles.sectionHeading}>Education</div>
-              {this.expandIcon('education')}
-            </div>
-            <Collapse in={this.state.education} timeout="auto" unmountOnExit>
-              <div className={styles.section}>
-                <li className={styles.sectionItem}>Degree: </li>
-                <li className={styles.sectionItem}>Field of study: </li>
-                <li className={styles.sectionItem}>Institution: </li>
-                <li className={styles.sectionItem}>Location: </li>
-                <li className={styles.sectionItem}>Year of degree award: </li>
-              </div>
-            </Collapse>
 
-
-            <div
-              onClick={() => this.expandInfo('employment')}
-              className={styles.sectionHeader}
-            >
-              <div className={styles.sectionHeading}>Employment</div>
-              {this.expandIcon('employment')}
-            </div>
-            <Collapse in={this.state.employment} timeout="auto" unmountOnExit>
-              <div className={styles.section}>
-                <li className={styles.sectionItem}>Institution/company:</li>
-                <li className={styles.sectionItem}>Location: </li>
-                <li className={styles.sectionItem}>Years: </li>
-              </div>
-            </Collapse>
-
-            <div
-              onClick={() => this.expandInfo('societies')}
-              className={styles.sectionHeader}
-            >
-              <div className={styles.sectionHeading}>Professional societies (membership)</div>
-              {this.expandIcon('societies')}
-            </div>
-            <Collapse in={this.state.societies} timeout="auto" unmountOnExit>
-              <div className={styles.section}>
-                <li className={styles.sectionItem}>Start date: </li>
-                <li className={styles.sectionItem}>End date: </li>
-                <li className={styles.sectionItem}>Name of society: </li>
-                <li className={styles.sectionItem}>Type of membership: </li>
-                <li className={styles.sectionItem}>Status: </li>
-              </div>
-            </Collapse>
-
+            <ProfileField heading="Education" data={user.educations} />
+            <ProfileField heading="Employment" data={user.employments} />
+            <ProfileField heading="Professional Societies" data={user.societyMemberships} />
+            <ProfileField heading="Awards" data={user.awards} />
+            
             <div
               onClick={() => this.expandInfo('awards')}
               className={styles.sectionHeader}
@@ -361,7 +320,8 @@ class UserProfile extends Component {
             </li>*/}
 
         </div>
-			</div>
+        
+      </div>
 		)
 ;	}
 }
