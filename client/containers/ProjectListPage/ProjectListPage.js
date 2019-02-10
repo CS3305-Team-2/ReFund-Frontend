@@ -2,7 +2,7 @@ import React, { Component} from 'react';
 import styles from './ProjectListPage.scss';
 import cx from 'classnames';
 import ProjectListItem from '../../components/ProjectListItem/ProjectListItem';
-
+import { Link } from 'react-router-dom';
 
 // Create mock data to use
 const projects = [
@@ -51,7 +51,7 @@ class ProjectListPage extends Component {
     // projects is the project list at the top of this page
     return projects.map((project)=>{
       // Finish the <ProjectListItem />  component. Found in /components. 
-      return <ProjectListItem project={project} /> // Each <ProjectListItem shows an user in the list of users this page shows.
+      return <Link to={`/project/`} className={styles.userLink}><ProjectListItem project={project} /></Link> // Each <ProjectListItem shows an user in the list of users this page shows.
     });
   }
 
