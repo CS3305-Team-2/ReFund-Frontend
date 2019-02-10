@@ -21,11 +21,8 @@ class LoginPage extends Component {
       orcid,
       password
     } = this.state;
-    // console.log('Loggin In. email: ' + email + ', pass: ' + password)
-    /*axios.post(apiUrl + '/login', {
-      email,
-      password
-    })*/
+
+    
     const formData = new FormData();
     formData.set("orcid", orcid);
     formData.set("password", password);
@@ -37,15 +34,11 @@ class LoginPage extends Component {
       this.props.history.push("/home");
     }).catch(e => {console.log(e)});
 
-
   }
 
 	render() {
     const state = this.state;
     const props = this.props;
-
-    const grant = grant;
-
 
 		return (
 			<div>
@@ -63,7 +56,7 @@ class LoginPage extends Component {
           <div className={styles.inputContainer}>
             <label className={styles.inputLabel}>Password</label>
             <input 
-              type="text" 
+              type="password" 
               className={styles.textInput} 
               value={state.password}
               onChange={(evt)=>this.setState({password: evt.target.value})}
