@@ -60,7 +60,6 @@ class ProfileField extends Component {
     const state = this.state;
     const props = this.props;
 
-    console.log('pf', props);
     const { heading, data } = props;
 
     const dataFields = this.dataFields(data);
