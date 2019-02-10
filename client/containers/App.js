@@ -34,6 +34,7 @@ class App extends Component {
                 <Route path="/grant" component={GrantDetail} />
                 <Route path="/grants" component={GrantsPage} />
                 <PrivateRoute exact path="/home" component={HomePage} />
+                <Route path="/" component={LoginPage} />
               </Switch>
             </div>
           </div>
