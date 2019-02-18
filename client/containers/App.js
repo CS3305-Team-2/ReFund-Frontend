@@ -11,6 +11,9 @@ import GrantDetail from './GrantDetail/GrantDetail';
 import HomePage from './HomePage/HomePage';
 import LoginPage from './LoginPage/LoginPage';
 import PrivateRoute from '../components/PrivateRoute/PrivateRoute';
+import ResearchCenterList from './ResearchCenterList/ResearchCenterListPage';
+import ResearchCenterPage from './ResearchCenterPage/ResearchCenterPage';
+
 
 class App extends Component {
     constructor(props){
@@ -33,6 +36,8 @@ class App extends Component {
                 <Route path="/projects" component={ProjectListPage} />
                 <Route path="/grant" component={GrantDetail} />
                 <Route path="/grants" component={GrantsPage} />
+                <Route path="/researchCenter" component={ResearchCenterPage} />
+                <Route path="/researchCenters" component={ResearchCenterList} />
                 <PrivateRoute exact path="/home" component={HomePage} />
                 <Route path="/" component={LoginPage} />
               </Switch>
