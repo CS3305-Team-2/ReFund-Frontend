@@ -3,7 +3,7 @@ import styles from './ResearchCenterStaff.scss';
 import cx from 'classnames';
 
 
-class ResearchCenterItem extends Component {
+class ResearchCenterStaffItem extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
