@@ -89,7 +89,7 @@ class UserProfile extends Component {
           </button>
         </div>
         {!loaded ? <CircularProgress />:
-          this.getProfileCard(profile)
+          this.getProfileCard(user)
         }
         <div>
           <h1>Research Profile Information</h1>
