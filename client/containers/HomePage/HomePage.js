@@ -2,18 +2,13 @@ import React, { Component} from 'react';
 import styles from './HomePage.scss';
 import cx from 'classnames';
 import { Link, withRouter } from 'react-router-dom';
+import Notifications from '../../components/Notifications/Notifications';
 
 class HomePage extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
     }
-    this.logout = this.logout.bind(this);
-  }
-
-  logout() {
-    localStorage.removeItem("user");
-    this.props.history.push("/login");
   }
   
 	render() {
@@ -26,23 +21,16 @@ class HomePage extends Component {
 		return (
 			<div>
 
-        <div className={styles.exampleClass}>
+        <div className={styles.welcome}>
           Welcome {user.firstName}
         </div>
 
-        <div>
-        <div className={styles.nav}>
-            <Link to="/users/"><div className={styles.navLink}>View Users</div></Link>
-            <Link to="/grants/"><div className={styles.navLink}>View Funding Calls</div></Link>
-            <Link to="/projects/"><div className={styles.navLink}>View Projects</div></Link>
-            <Link to="/researchCenters/"><div className={styles.navLink}>Research Centers</div></Link>
+
+
+        <div className={styles.adjacentContainer}>
+          <div className={styles.notificationContainer}>
+            <Notifications />
           </div>
-        </div>
-        <div className={styles.buttonContainer}>
-            <div 
-              className={styles.loginButton}
-              onClick={this.logout}
-            >Logout</div>
         </div>
 
 			</div>

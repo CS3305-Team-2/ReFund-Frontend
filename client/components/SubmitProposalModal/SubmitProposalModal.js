@@ -1,9 +1,9 @@
 import React, { Component} from 'react';
-import styles from './CreateGrantModal.scss';
+import styles from './SubmitProposalModal.scss';
 import cx from 'classnames';
 import Close from '@material-ui/icons/Close';
 
-class CreateGrantModal extends Component {
+class SubmitProposalModal extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -63,9 +63,9 @@ class CreateGrantModal extends Component {
           style={rootStyle}
         >
         <Close className={styles.closeButton} onClick={this.props.onClose}/>
-        <div className={styles.title}>Create Grant</div>
+        <div className={styles.title}>Apply for Grant</div>
         <div className={styles.inputContainer}>
-          <label className={styles.inputLabel}>Title</label>
+          <label className={styles.inputLabel}>Proposal Title</label>
           <input 
             type="text" 
             className={styles.textInput} 
@@ -73,39 +73,16 @@ class CreateGrantModal extends Component {
           />
         </div>
         <div className={styles.inputContainer}>
-          <label className={styles.inputLabel}>Description</label>
-          <textarea 
-            type="text" 
-            className={styles.textInput} 
-            onChange={(evt)=>this.updateForm('description', evt.target.value)}
-          />
-        </div>
-        <div className={styles.inputContainer}>
-          <label className={styles.inputLabel}>Deadline</label>
+          <label className={styles.inputLabel}>Researchers</label>
           <input 
             type="text" 
             className={styles.textInput} 
-            onChange={(evt)=>this.updateForm('deadline', evt.target.value)}
+            placeholder="Enter emails of researchers "
+            onChange={(evt)=>this.updateForm('researchers', evt.target.value)}
           />
         </div>
         <div className={styles.inputContainer}>
-          <label className={styles.inputLabel}>Duration</label>
-          <input 
-            type="text" 
-            className={styles.textInput} 
-            onChange={(evt)=>this.updateForm('duration', evt.target.value)}
-          />
-        </div>
-        <div className={styles.inputContainer}>
-          <label className={styles.inputLabel}>Amount</label>
-          <input 
-            type="number" 
-            className={styles.textInput} 
-            onChange={(evt)=> this.updateForm('amount', evt.target.value)}
-          />
-        </div>
-        <div className={styles.inputContainer}>
-          <label className={styles.inputLabel}>Proposal Template</label>
+          <label className={styles.inputLabel}>Upload Proposal</label>
           <input 
             type="file" 
             className={styles.textInput} 
@@ -116,7 +93,7 @@ class CreateGrantModal extends Component {
           <div 
             className={styles.loginButton}
             onClick={this.createGrant}
-          >Create</div>
+          >Submit</div>
         </div>
         <div className={cx(styles.validationMessage, {[styles.showError]: this.state.showError })}>
           *All Fields are mandatory
@@ -127,4 +104,4 @@ class CreateGrantModal extends Component {
 ;	}
 }
 
-export default CreateGrantModal;
+export default SubmitProposalModal;
