@@ -25,6 +25,7 @@ class TopBar extends Component {
 									<Link to="/users/"><div className={styles.navLink}>Users</div></Link>
 									<Link to="/grants/"><div className={styles.navLink}>Funding Calls</div></Link>
 									<Link to="/projects/"><div className={styles.navLink}>Projects</div></Link>
+									<Link to="/researchCenters/"><div className={styles.navLink}>Research Centers</div></Link>
 								</div>
 								</div> : <div/> }
 						</div>

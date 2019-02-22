@@ -17,11 +17,11 @@ class GrantsListItem extends Component {
 		return (
 			<div className={styles.root}>
         <div className={styles.title}>{grant.title}</div>
-        <div className={styles.grant}>
-          <div className={styles.left}>
+        <div className={cx('row', styles.grant)}>
+          <div className={cx('col-9', styles.left)}>
             <div className={styles.description}>{grant.description}</div>
           </div>
-          <div className={styles.right}>
+          <div className={cx('col-3', styles.right)}>
             <div className={styles.detail}><span className={styles.label}>Deadline - </span>{grant.deadline}</div>
             <div className={styles.detail}><span className={styles.label}>Duration - </span>{grant.duration}</div>
             <div className={styles.detail}><span className={styles.label}>Amount - </span>€{grant.amount}</div>

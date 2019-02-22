@@ -35,6 +35,7 @@ class HomePage extends Component {
             <Link to="/users/"><div className={styles.navLink}>View Users</div></Link>
             <Link to="/grants/"><div className={styles.navLink}>View Funding Calls</div></Link>
             <Link to="/projects/"><div className={styles.navLink}>View Projects</div></Link>
+            <Link to="/researchCenters/"><div className={styles.navLink}>Research Centers</div></Link>
           </div>
         </div>
         <div className={styles.buttonContainer}>

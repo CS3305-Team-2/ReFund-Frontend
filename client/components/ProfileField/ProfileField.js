@@ -28,6 +28,7 @@ class ProfileField extends Component {
   }
 
   dataFields(data) {
+    console.log('df', data);
     let dataArr = data;
     if (!Array.isArray(data)) dataArr = [data];
     const entries = [];

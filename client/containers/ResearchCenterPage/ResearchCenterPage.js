@@ -6,64 +6,64 @@ import { func } from 'prop-types';
 
 const staffMembs = [
   {
-    title:"example1"
+    title:"John Ferguson"
   },
   {
-    title:"example2"
+    title:"Chris Hayes"
   },
   {
-    title:"example3"
+    title:"Jesse Eisinger"
   },
   {
-    title:"example4"
+    title:"Tressie McMillian"
   },
   {
-    title:"example5"
+    title:"Stacey Abrams"
   },
   {
-    title:"example6"
+    title:"Joanne Hill"
   },
   {
-    title:"example7"
+    title:"Jonah Brown"
   },
   {
-    title:"example8"
+    title:"Micheal Tester"
   },
   {
-    title:"example9"
+    title:"Eric Ries"
   },
   {
-    title:"example10"
+    title:"Alex Wagner"
   },
   {
-    title:"example11"
+    title:"Amy Chua"
   }
 ]
 
 const projects = [
   {
-    title:"example1"
+    title:"Project A"
   },
   {
-    title:"example2"
+    title:"Project B"
   },
   {
-    title:"example3"
+    title:"Project C"
   },
   {
-    title:"example4"
+    title:"Project D"
   },
   {
-    title:"example5"
+    title:"Project E"
   },
   {
-    title:"example6"
+    title:"Project F"
   },
   {
-    title:"example7"
+    title:"Project G"
   },
   {
-    title:"example8"
+    title:"Project H"
   }
 ]
 
@@ -162,13 +162,31 @@ class ResearchCenter extends Component {
               {/* Add in data like so. e.g for a user: add in their name with {user.name} into a div */}
               <h1>Description</h1>
               {rc.Desc}
+              <div>
               <div className={styles.staff}>
-              <h1 className={styles.header}><button className={styles.lbutton} onClick={()=>this.decreaseStaff()} >&larr;</button>staff<button className={styles.rbutton} onClick={()=>this.increaseStaff()}>&rarr;</button></h1>
-              {staffListItems}
+                <div className={styles.header}>
+                  <button className={styles.lbutton} onClick={()=>this.decreaseStaff()} >
+                    &larr;
+                  </button>
+                  <h1>staff</h1>
+                  <button className={styles.rbutton} onClick={()=>this.increaseStaff()}>
+                    &rarr;
+                  </button>
+                </div>
+                {staffListItems}
               </div>
               <div className={styles.projects}>
-              <h1 className={styles.header}><button className={styles.lbutton} onClick={()=>this.decreaseProjects()} >&larr;</button>Projects<button className={styles.rbutton} onClick={()=>this.increaseProjects()}>&rarr;</button></h1>
-              {projectItems}
+                <div className={styles.header}>
+                  <button className={styles.lbutton} onClick={()=>this.decreaseProjects()} >
+                    &larr;
+                  </button>
+                  <h1>Projects</h1>
+                  <button className={styles.rbutton} onClick={()=>this.increaseProjects()}>
+                  &rarr;
+                  </button>
+                </div>
+                {projectItems}
+              </div>
               </div>
             </div>
 			    </div>

@@ -9,8 +9,8 @@ class LoginPage extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-      orcid: '',
-      password: ''
+      orcid: '0000-0000-0000-0001',
+      password: 'hihowareyou'
     }
 
     this.submitLogin = this.submitLogin.bind(this);
@@ -26,9 +26,10 @@ class LoginPage extends Component {
     const formData = new FormData();
     formData.set("orcid", orcid);
     formData.set("password", password);
-
+    console.log(orcid, password);
     axios.post(apiUrl + '/login', formData).then((res)=>{
-      console.log(res.status, res.body, res.data, res.headers)
+      // console.log(res.status, res.body, res.data, res.headers)
+      console.log(res);
       const user = res.data;
       localStorage.setItem("user", JSON.stringify(user));
       this.props.history.push("/home");
@@ -49,7 +50,7 @@ class LoginPage extends Component {
             <input 
               type="text" 
               className={styles.textInput} 
-              value={state.email}
+              value={state.orcid}
               onChange={(evt)=>this.setState({orcid: evt.target.value})}
             />
           </div>
@@ -70,8 +71,8 @@ class LoginPage extends Component {
           </div>
         </div>
 			</div>
-		)
-;	}
+		);
+  }
 }
 
 export default withRouter(LoginPage);
