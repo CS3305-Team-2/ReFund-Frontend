@@ -1,8 +1,16 @@
 .topBar {
   width: 100%;
   background: #fff;
-  border-bottom: 1px solid #00A79A;
+  border-bottom: 1px solid #eee;
   z-index: 4000;
+  height: 60px;
+}
+
+.container {
+  height: 100%;
+}
+.row {
+  height: 100%;
 }
 
 .title{
@@ -24,30 +32,70 @@
   right: 0;
 }
 
-.logoContainer {
-
-  width: 120px;
+.logoContainer { 
+  height: 100%;
+  padding: 0.25rem;
 }
 
 .logo {
-  height: auto;
-  width: 100%;
+  height: 100%;
+  width: auto;
   display: block;
 }
 
+
+/* green - #00A79A, blue - #003C68*/
+
+
+
 .nav {
+  display: flex;
   float: right;
+  align-items: center;
+  height: 100%;
 }
 
 .navLink {
-  display: inline-block;
-  margin-right: 0.25rem;
   color: #003C68;
   cursor: pointer;
   padding: 0.25rem 0.5rem;
+  display: flex;
+  transition: all .15s ease-in-out;
+  font-weight: 500;
+  height: 100%;
+  align-items: center;
+}
+
+.navLink:hover {
+  color: #003C68;
+  border-bottom: 2px solid #003C68;
 }
 
 .activeLink {
   border-bottom: 2px solid #003C68;
 }
-/* green - #00A79A, blue - #003C68*/
+
+.navText {
+  margin-top: 10px;
+  white-space: nowrap;
+}
+
+
+.buttonContainer {
+}
+
+.loginButton {
+  padding: 0.25rem 0.5rem;
+  background: rgb(0, 167, 154);
+  color: #fff;
+  font-weight: bold;
+  border-radius: 2px;
+  cursor: pointer;
+  margin-top:10px;
+  margin-left: 0.5rem 
+}
+
+
+.loginButton:hover {
+  background: rgba(0, 167, 154, 0.6);
+}

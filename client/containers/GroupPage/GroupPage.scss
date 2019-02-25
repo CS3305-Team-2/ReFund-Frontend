@@ -1,0 +1,43 @@
+.root {
+
+}
+.GroupsMain{
+  text-align:center;
+}
+.GroupsMain .header{
+  margin: auto;
+}
+.GroupsMain .header input {
+  padding: 10px;
+  font-size: 16px;
+}
+.GroupsMain button {
+  color: #494949 !important;
+  text-transform: uppercase;
+  background: #ffffff;
+  padding: 10px;
+  border: 2px solid #494949 !important;
+  display: inline-block;
+}
+.GroupsMain button:hover {
+  color: #ffffff !important;
+  background: #00A79A;
+  border-color: #00A79A !important;
+  transition: all 0.4s ease 0s;
+  border-radius: 10px;
+}
+
+.GroupsMain li{
+  border: .5px solid black;
+  border-radius: 20%;
+  margin: auto;
+  text-align: center;
+  width:50%;
+}
+.GroupsMain li h1{
+  padding:2px;
+}
+.GroupsMain li p{
+  padding: .5px;
+  width: 100%;
+}

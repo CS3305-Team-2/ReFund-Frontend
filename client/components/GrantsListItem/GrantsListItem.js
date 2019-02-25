@@ -8,7 +8,16 @@ class GrantsListItem extends Component {
 		this.state = {
       activeTab: 'unfunded',
     }
-	}
+  }
+  
+  proposalButton() {
+    if (false) return <div />; // If logged out
+    return (
+      <div className={cx(styles.applyButton)} onClick={this.props.onApply}>
+        Apply
+      </div>
+    )
+  }
 	
 	render() {
     const state = this.state;
@@ -16,12 +25,15 @@ class GrantsListItem extends Component {
     
 		return (
 			<div className={styles.root}>
-        <div className={styles.title}>{grant.title}</div>
-        <div className={styles.grant}>
-          <div className={styles.left}>
+        <div className="row mb-2">
+        <div className={cx('col flex-grow-1', styles.title)}>{grant.title}</div>
+        {this.proposalButton()}
+        </div>
+        <div className={cx('row', styles.grant)}>
+          <div className={cx('col-12', styles.left)}>
             <div className={styles.description}>{grant.description}</div>
           </div>
-          <div className={styles.right}>
+          <div className={cx('col-12', styles.right)}>
             <div className={styles.detail}><span className={styles.label}>Deadline - </span>{grant.deadline}</div>
             <div className={styles.detail}><span className={styles.label}>Duration - </span>{grant.duration}</div>
             <div className={styles.detail}><span className={styles.label}>Amount - </span>€{grant.amount}</div>

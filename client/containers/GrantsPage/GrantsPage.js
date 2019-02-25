@@ -2,6 +2,8 @@ import React, { Component} from 'react';
 import styles from './GrantsPage.scss';
 import cx from 'classnames';
 import GrantsListItem from '../../components/GrantsListItem/GrantsListItem';
+import CreateGrantModal from '../../components/CreateGrantModal/CreateGrantModal';
+import SubmitProposalModal from '../../components/SubmitProposalModal/SubmitProposalModal';
 
 const fundedGrants = [
   {
@@ -78,16 +80,38 @@ class GrantsPage extends Component {
 		super(props);
 		this.state = {
       activeTab: 'unfunded',
+      modalOpen: false,
+      proposalModalOpen: false,
     }
+
+    this.toggleModal = this.toggleModal.bind(this);
+    this.onCreateGrant = this.onCreateGrant.bind(this);
   }
   
   getGrants() {
     let grants = this.state.activeTab == 'unfunded' ? availableGrants : fundedGrants;
     return grants.map((grant)=>{
-      return <GrantsListItem grant={grant} />
+      return <GrantsListItem grant={grant} onApply={() => this.toggleModal('proposalModalOpen')}/>
     });
   }
-	
+
+  toggleModal(modalType) {
+    const bodyClass = document.body.className;
+    if (bodyClass.includes(' modal-open')) {
+      document.body.className = bodyClass.replace(' modal-open', '');
+      this.setState({[modalType]: false });
+    } else {
+      document.body.className += ' modal-open';
+      this.setState({[modalType]: true});
+    }
+  }
+
+  onCreateGrant(grant) {
+    console.log('creating grant');
+    availableGrants.push(grant);
+    this.toggleModal();
+  }
+
 	render() {
     const state = this.state;
     const activeTab = styles.activeTab;
@@ -96,26 +120,37 @@ class GrantsPage extends Component {
 		return (
 			<div className={styles.container}>
         <div className={styles.root}>
-
+            <CreateGrantModal 
+              open={this.state.modalOpen}
+              onClose={() => this.toggleModal('modalOpen')}
+              onCreateGrant={this.onCreateGrant}
+            />
+            <SubmitProposalModal 
+              open={this.state.proposalModalOpen}
+              onClose={() => this.toggleModal('proposalModalOpen')}
+              onCreateGrant={this.onCreateGrant}
+            />
           {/* Heading */}
           <div className={styles.header}>
             <div className={styles.title}>Funding Calls</div>
-            <div className={styles.desc}></div>
+            <div className={styles.button}
+              onClick={() => this.toggleModal('modalOpen')}
+            >Create Funding Call</div>
           </div>
 
           {/* Tabs Section */}
           <div className={styles.tabs}>
-            <div 
+            <div
               className={cx(styles.tab, { [activeTab]: state.activeTab == 'unfunded'}) }   
               onClick={()=>this.setState({activeTab: 'unfunded'})}
             >
-              Taking Applications
+              Open Calls 
             </div>
             <div 
               className={cx(styles.tab, { [activeTab]: state.activeTab == 'funded'})}
               onClick={()=>this.setState({activeTab: 'funded'})}            
             >
-              Already Funded
+              Closed Calls
             </div>
           </div>
 

@@ -9,8 +9,14 @@ import { Route, Link, Switch } from 'react-router-dom';
 import ProjectDetail from './ProjectDetail/ProjectDetail';
 import GrantDetail from './GrantDetail/GrantDetail';
 import HomePage from './HomePage/HomePage';
-import LoginPage from './LoginPage/LoginPage';
+import LoginPage from './LoginPage/LoginPage2';
 import PrivateRoute from '../components/PrivateRoute/PrivateRoute';
+import HostInstitutionList from './HostInstitutionList/HostInstitutionListPage';
+import HostInstitutionPage from './HostInstitutionPage/HostInstitutionPage';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faAtom, faFlask } from '@fortawesome/free-solid-svg-icons';
+library.add(faAtom, faFlask);
+import GroupPage from './GroupPage/GroupPage';
 
 class App extends Component {
     constructor(props){
@@ -23,9 +29,12 @@ class App extends Component {
         <div className={styles.root}>
           <TopBar />
           <div className={styles.contentRoot}>
-            <div className="container">
+            <Switch>
+              <Route path="/login" component={LoginPage} />
+              <Route exact path="/" component={LoginPage} />
+            </Switch>
+            <div className="container" style={{paddingTop: '1rem'}}>
               <Switch>
-                <Route path="/login" component={LoginPage} />
                 <Route path="/grants/:id" component={GrantsPage} />
                 <Route path="/user/:id" component={UserProfile} />
                 <Route path="/users/" component={UsersPage} />
@@ -33,8 +42,10 @@ class App extends Component {
                 <Route path="/projects" component={ProjectListPage} />
                 <Route path="/grant" component={GrantDetail} />
                 <Route path="/grants" component={GrantsPage} />
+                <Route path="/hostInstitution" component={HostInstitutionPage} />
+                <Route path="/hostInstitutions" component={HostInstitutionList} />
+                <Route path="/group" component={GroupPage} />
                 <PrivateRoute exact path="/home" component={HomePage} />
-                <Route path="/" component={LoginPage} />
               </Switch>
             </div>
           </div>

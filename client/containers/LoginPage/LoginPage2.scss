@@ -1,0 +1,203 @@
+/* 
+The SFI color scheme to use.
+green - #00A79A, blue - #003C68
+*/
+
+
+.section {
+  padding: 2rem 0;
+}
+
+.content {
+  max-width: 960px;
+}
+
+.whiteSection {
+  background: #fff;
+  color: #444;
+}
+
+.darkSection {
+  background: #003C68;
+  color: #fff;
+}
+
+.heading {
+  text-transform: uppercase;
+  font-family: 'Roboto';
+  font-size: 1.65rem;
+  font-weight: bold;
+  color: inherit;
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.detailContainer {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+
+.mainText {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.headerText {
+  font-size: 1.3rem;
+  font-weight: 500;
+}
+
+
+.displayContainer {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 2rem 0;
+}
+
+.copy {
+  display: flex;
+  align-items: center;
+}
+
+.phoneContainer {
+
+}
+
+.phoneCopy {
+
+}
+
+.phone {
+  max-width: auto;
+  height: 350px;
+}
+
+
+
+.heading {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #00A79A;
+}
+/* green - #00A79A, blue - #003C68  - dark 031b4e*/
+
+
+
+
+.toAnimate {
+  transform: scale(0);
+}
+
+.rotateAnimation {
+  animation: rotate45 0.35s linear forwards;
+}
+
+@keyframes rotate45 {
+  from { transform: rotate(0deg) scale(0);  }
+  to   { transform: rotate(45deg) scale(1); }
+}
+
+.ringSquare {
+  transform: translateX(-75px);
+  opacity: 0;
+}
+
+.ringSquareRight {
+  transform: translateX(75px);
+  opacity: 0;
+}
+
+.ringSquareAnimation {
+  animation: ringSquareAnimation 0.35s forwards;
+}
+
+.ringSquareAnimationRight {
+  animation: ringSquareAnimationRight 0.35s forwards;
+}
+
+/*
+@keyframes ringSquareAnimation {
+  from { transform: rotate(0deg) opacity(0);}
+  to   { transform: rotate(45deg) opacity(1); }
+}*/
+
+
+@keyframes ringSquareAnimation {
+  0%   { transform: translateX(-75px); opacity: 0;}
+  25%  { transform: translateX(-30px); opacity: 0.6;}
+  50%  { transform: translateX(-15px); opacity: 0.8;}
+  75%  { transform: translateX(-5px); opacity: 0.95;}
+  100% { transform: translateX(0px); opacity: 1;}
+}
+
+@keyframes ringSquareAnimationRight {
+  0%   { transform: translateX(75px); opacity: 0;}
+  25%  { transform: translateX(30px); opacity: 0.6;}
+  50%  { transform: translateX(15px); opacity: 0.8;}
+  75%  { transform: translateX(5px); opacity: 0.95;}
+  100% { transform: translateX(0px); opacity: 1;}
+}
+
+.headerSectionAnimation {
+  animation: headerSectionAnimation 0.35s forwards;
+  animation-delay: 0s;
+}
+
+@keyframes headerSectionAnimation {
+  from { opacity: 0;}
+  to   { opacity: 1;}
+}
+
+
+
+
+.visualContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.outerRing {
+  border-radius: 50%;
+  border: 1px solid #00A79A;
+  padding: 0.5rem;
+}
+
+.ring {
+  border-radius: 50%;
+  border: 1px solid #00A79A;
+  padding: 1.5rem;
+}
+
+.square {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.cornerDark {
+  width: 40px;
+  height: 40px;
+  background: rgba(0, 167, 154, 0.5);
+}
+
+.cornerLight {
+  width: 40px;
+  height: 40px;
+  background: rgb(0, 167, 154);
+}
+/* green - #00A79A, blue - #003C68  - dark 031b4e*/
+
+
+.smallSquare {
+  width: 60px;
+  height: 60px;
+}
+
+.smallCorner {
+  width: 30px;
+  height: 30px;
+}
