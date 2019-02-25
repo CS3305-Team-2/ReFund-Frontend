@@ -16,6 +16,7 @@ import ResearchCenterPage from './ResearchCenterPage/ResearchCenterPage';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faAtom, faFlask } from '@fortawesome/free-solid-svg-icons';
 library.add(faAtom, faFlask);
+import GroupPage from './GroupPage/GroupPage';
 
 class App extends Component {
     constructor(props){
@@ -43,6 +44,7 @@ class App extends Component {
                 <Route path="/grants" component={GrantsPage} />
                 <Route path="/researchCenter" component={ResearchCenterPage} />
                 <Route path="/researchCenters" component={ResearchCenterList} />
+                <Route path="/group" component={GroupPage} />
                 <PrivateRoute exact path="/home" component={HomePage} />
               </Switch>
             </div>
