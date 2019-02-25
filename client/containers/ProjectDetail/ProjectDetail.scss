@@ -35,3 +35,17 @@ h1{
 li{
   list-style: none;
 }
+
+.rbutton{
+  display:flex;
+  float:right;
+}
+
+.lbutton{
+  display:flex;
+  float: left;
+}
+
+.header{
+  justify-content: space-between;
+}

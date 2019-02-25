@@ -1,6 +1,9 @@
 import React, { Component} from 'react';
 import styles from './ProjectDetail.scss';
 import cx from 'classnames';
+import ReportItem from '../../components/ReportItem/ReportItem';
+import PrevReportItem from '../../components/PrevReportItem/PrevReportItem';
+
 
 const project = {
   title: 'Sample Title',
@@ -14,10 +17,86 @@ const project = {
   extra: 'email@email.com'
 }
 
+const reports = [
+  {
+    title:"update7",
+    details:"This is just example number 1 of an update that a researcher would make about a project with random text.It real sent your at. Amounted all shy set why followed declared. Repeated of endeavor mr position kindness offering ignorant so up. Simplicity are melancholy preference considered saw companions. Disposal on outweigh do speedily in on. Him ham although thoughts entirely drawings. Acceptance unreserved old admiration projection nay yet him. Lasted am so before on esteem vanity oh. ",
+    date:"20/02/2019",
+    pdf:null
+  },
+  {
+    title:"update6",
+    details:"This is just example number 2 of an update that a researcher would make about a project with random text.It real sent your at. Amounted all shy set why followed declared. Repeated of endeavor mr position kindness offering ignorant so up. Simplicity are melancholy preference considered saw companions. Disposal on outweigh do speedily in on. Him ham although thoughts entirely drawings. Acceptance unreserved old admiration projection nay yet him. Lasted am so before on esteem vanity oh. ",
+    date:"18/02/2019",
+    pdf:null
+  },
+  {
+    title:"update5",
+    details:"This is just example number 3 of an update that a researcher would make about a project with random text.It real sent your at. Amounted all shy set why followed declared. Repeated of endeavor mr position kindness offering ignorant so up. Simplicity are melancholy preference considered saw companions. Disposal on outweigh do speedily in on. Him ham although thoughts entirely drawings. Acceptance unreserved old admiration projection nay yet him. Lasted am so before on esteem vanity oh. ",
+    date:"16/02/2019",
+    pdf:"../../img/Lab_1.pdf"
+  },
+  {
+    title:"update4",
+    details:"This is just example number 4 of an update that a researcher would make about a project with random text.It real sent your at. Amounted all shy set why followed declared. Repeated of endeavor mr position kindness offering ignorant so up. Simplicity are melancholy preference considered saw companions. Disposal on outweigh do speedily in on. Him ham although thoughts entirely drawings. Acceptance unreserved old admiration projection nay yet him. Lasted am so before on esteem vanity oh. ",
+    date:"10/02/2019",
+    pdf:null
+  },
+  {
+    title:"update3",
+    details:"This is just example number 5 of an update that a researcher would make about a project with random text.It real sent your at. Amounted all shy set why followed declared. Repeated of endeavor mr position kindness offering ignorant so up. Simplicity are melancholy preference considered saw companions. Disposal on outweigh do speedily in on. Him ham although thoughts entirely drawings. Acceptance unreserved old admiration projection nay yet him. Lasted am so before on esteem vanity oh. ",
+    date:"08/02/2019",
+    pdf:null
+  },
+  {
+    title:"update2",
+    details:"This is just example number 6 of an update that a researcher would make about a project with random text.It real sent your at. Amounted all shy set why followed declared. Repeated of endeavor mr position kindness offering ignorant so up. Simplicity are melancholy preference considered saw companions. Disposal on outweigh do speedily in on. Him ham although thoughts entirely drawings. Acceptance unreserved old admiration projection nay yet him. Lasted am so before on esteem vanity oh. ",
+    date:"04/02/2019",
+    pdf:null
+  },
+  {
+    title:"update1",
+    details:"This is just example number 7 of an update that a researcher would make about a project with random text.It real sent your at. Amounted all shy set why followed declared. Repeated of endeavor mr position kindness offering ignorant so up. Simplicity are melancholy preference considered saw companions. Disposal on outweigh do speedily in on. Him ham although thoughts entirely drawings. Acceptance unreserved old admiration projection nay yet him. Lasted am so before on esteem vanity oh. ",
+    date:"01/02/2019",
+    pdf:null
+  },
+  
+]
+
 class ProjectDetail extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+      isPi:true,
+      user:"ExampleUser",
+      reportState:0
+    }
+  }
+
+  getReportItems(reports){
+    return reports.map((report)=>{
+      return <PrevReportItem report={report}/>
+    });
+  }
+
+  decreaseReportItems() {
+    if (this.state.reportState>0){
+      this.setState({reportState: this.state.reportState-1});
+    }
+  }
+  
+  increaseReportItems() {
+    if (this.state.reportState*5+5<reports.length){
+      this.setState({reportState: this.state.reportState+1});
+    }
+  }
+
+  generateReportForm(){
+    if (this.state.isPi){
+        return <ReportItem user={this.state.user}/>;
+    }
+    else{
+      return "";
     }
   }
   
@@ -40,8 +119,10 @@ class ProjectDetail extends Component {
     const staffItems = project.staff.map((staff) => <li>{staff}</li>);
 		const exampleData = {
       stuff: 'example stuff'
-		}
-		
+    }
+    
+    let report = this.generateReportForm();
+    let reportListItems = this.getReportItems(reports.slice(5*this.state.reportState,5*this.state.reportState+5));
 		return (
 			<div>
         {/* 
@@ -68,6 +149,17 @@ class ProjectDetail extends Component {
               {staffItems}
               <h1>Funding:</h1>
               {project.fundedRes}
+              <h1>Updates:</h1>
+              {reportListItems}
+              <button className={styles.lbutton} onClick={()=>this.decreaseReportItems()} >
+                &larr;
+              </button>
+              <button className={styles.rbutton} onClick={()=>this.increaseReportItems()}>
+                &rarr;
+              </button>
+              <div className={styles.rbutton}>
+                {report}
+              </div>
             </div>
 			    </div>
           <div className={styles.sideCol}>
