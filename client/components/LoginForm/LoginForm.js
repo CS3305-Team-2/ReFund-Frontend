@@ -5,7 +5,7 @@ class LoginForm extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-      orcid: '0000-0000-0000-0001',
+      email: 'john@ucc.ie',
       password: 'hihowareyou'
     }
     this.submitLogin = this.submitLogin.bind(this);
@@ -13,10 +13,10 @@ class LoginForm extends Component {
   
   submitLogin() {
     const {
-      orcid,
-      password
+        email,
+        password
     } = this.state;
-    this.props.onSubmit(orcid, password)
+    this.props.onSubmit(email, password)
   }
 
 	render() {
@@ -27,12 +27,12 @@ class LoginForm extends Component {
       <div className={styles.loginContainer}>
         <div className={styles.title}>Login</div>
         <div className={styles.inputContainer}>
-          <label className={styles.inputLabel}>Orcid</label>
+          <label className={styles.inputLabel}>Email</label>
           <input 
             type="text" 
             className={styles.textInput} 
-            value={state.orcid}
-            onChange={(evt)=>this.setState({orcid: evt.target.value})}
+            value={state.email}
+            onChange={(evt)=>this.setState({email: evt.target.value})}
           />
         </div>
         <div className={styles.inputContainer}>
