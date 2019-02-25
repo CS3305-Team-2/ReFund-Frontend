@@ -26,7 +26,7 @@ class TopBar extends Component {
         { value: 'Users', path: '/users' },
         { value: 'Grants', path: '/grants' },
         { value: 'Projects', path: '/projects' },
-        { value: 'Research Centers', path: '/researchCenters' },
+        { value: 'Host Institutions', path: '/hostInstitutions' },
       ];
     }
 

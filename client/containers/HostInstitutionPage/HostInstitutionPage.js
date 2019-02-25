@@ -1,7 +1,7 @@
 import React, { Component} from 'react';
-import styles from './ResearchCenterPage.scss';
+import styles from './HostInstitutionPage.scss';
 import cx from 'classnames';
-import ResearchCenterItem from '../../components/ResearchCenterStaff/ResearchCenterStaff';
+import HostInstitutionItem from '../../components/HostInstitutionStaff/HostInstitutionStaff';
 import { func } from 'prop-types';
 
 const staffMembs = [
@@ -68,7 +68,7 @@ const projects = [
 ]
 
 
-class ResearchCenter extends Component {
+class HostInstitution extends Component {
 	constructor(props) {
     super(props);
 		this.state = {
@@ -79,15 +79,13 @@ class ResearchCenter extends Component {
 
   getStaffItems(staffMembs){
     return staffMembs.map((staffMemb)=>{
-      // Finish the <ResearchCenterListItem />  component. Found in /components. 
-      return <ResearchCenterItem project={staffMemb} />
+      return <HostInstitutionItem project={staffMemb} />
     });
   }
 
   getProjectItems(projects){
     return projects.map((project)=>{
-      // Finish the <ResearchCenterListItem />  component. Found in /components. 
-      return <ResearchCenterItem project={project} />
+      return <HostInstitutionItem project={project} />
     });
   }
 
@@ -206,4 +204,4 @@ class ResearchCenter extends Component {
 ;	}
 }
 
-export default ResearchCenter;
+export default HostInstitution;

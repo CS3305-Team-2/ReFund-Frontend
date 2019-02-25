@@ -1,9 +1,9 @@
 import React, { Component} from 'react';
-import styles from './ResearchCenterStaff.scss';
+import styles from './HostInstitutionStaff.scss';
 import cx from 'classnames';
 
 
-class ResearchCenterStaffItem extends Component {
+class HostInstitutionStaff extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -30,4 +30,4 @@ class ResearchCenterStaffItem extends Component {
 ;	}
 }
 
-export default ResearchCenterStaffItem;
+export default HostInstitutionStaff;

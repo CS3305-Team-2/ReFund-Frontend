@@ -11,8 +11,8 @@ import GrantDetail from './GrantDetail/GrantDetail';
 import HomePage from './HomePage/HomePage';
 import LoginPage from './LoginPage/LoginPage2';
 import PrivateRoute from '../components/PrivateRoute/PrivateRoute';
-import ResearchCenterList from './ResearchCenterList/ResearchCenterListPage';
-import ResearchCenterPage from './ResearchCenterPage/ResearchCenterPage';
+import HostInstitutionList from './HostInstitutionList/HostInstitutionListPage';
+import HostInstitutionPage from './HostInstitutionPage/HostInstitutionPage';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faAtom, faFlask } from '@fortawesome/free-solid-svg-icons';
 library.add(faAtom, faFlask);
@@ -42,8 +42,8 @@ class App extends Component {
                 <Route path="/projects" component={ProjectListPage} />
                 <Route path="/grant" component={GrantDetail} />
                 <Route path="/grants" component={GrantsPage} />
-                <Route path="/researchCenter" component={ResearchCenterPage} />
-                <Route path="/researchCenters" component={ResearchCenterList} />
+                <Route path="/hostInstitution" component={HostInstitutionPage} />
+                <Route path="/hostInstitutions" component={HostInstitutionList} />
                 <Route path="/group" component={GroupPage} />
                 <PrivateRoute exact path="/home" component={HomePage} />
               </Switch>

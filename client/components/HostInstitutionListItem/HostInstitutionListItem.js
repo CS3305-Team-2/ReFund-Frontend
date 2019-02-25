@@ -1,9 +1,9 @@
 import React, { Component} from 'react';
-import styles from './ResearchCenterListItem.scss';
+import styles from './HostInstitutionListItem.scss';
 import cx from 'classnames';
 
 
-class ResearchCenterListItem extends Component {
+class HostInstitutionListItem extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -36,4 +36,4 @@ class ResearchCenterListItem extends Component {
 ;	}
 }
 
-export default ResearchCenterListItem;
+export default HostInstitutionListItem;
