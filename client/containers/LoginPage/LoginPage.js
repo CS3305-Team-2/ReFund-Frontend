@@ -9,24 +9,24 @@ class LoginPage extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-      orcid: '0000-0000-0000-0001',
-      password: 'hihowareyou'
-    }
+            email: '0000-0000-0000-0001',
+            password: 'hihowareyou'
+        }
 
-    this.submitLogin = this.submitLogin.bind(this);
-  }
+        this.submitLogin = this.submitLogin.bind(this);
+    }
   
   submitLogin() {
     const {
-      orcid,
+      email,
       password
     } = this.state;
 
     
     const formData = new FormData();
-    formData.set("orcid", orcid);
+    formData.set("email", email);
     formData.set("password", password);
-    console.log(orcid, password);
+    console.log(email, password);
     axios.post(apiUrl + '/login', formData).then((res)=>{
       // console.log(res.status, res.body, res.data, res.headers)
       console.log(res);
@@ -46,12 +46,12 @@ class LoginPage extends Component {
         <div className={styles.loginContainer}>
           <div className={styles.title}>Login</div>
           <div className={styles.inputContainer}>
-            <label className={styles.inputLabel}>Orcid</label>
+            <label className={styles.inputLabel}>Email</label>
             <input 
               type="text" 
               className={styles.textInput} 
-              value={state.orcid}
-              onChange={(evt)=>this.setState({orcid: evt.target.value})}
+              value={state.email}
+              onChange={(evt)=>this.setState({email: evt.target.value})}
             />
           </div>
           <div className={styles.inputContainer}>

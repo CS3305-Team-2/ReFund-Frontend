@@ -13,7 +13,7 @@ class LoginPage extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-      orcid: '0000-0000-0000-0001',
+            email: '0000-0000-0000-0001',
       password: 'hihowareyou'
     }
 
@@ -27,11 +27,11 @@ class LoginPage extends Component {
   }
 
 
-  submitLogin(orcid, password) {    
+  submitLogin(email, password) {    
     const formData = new FormData();
-    formData.set("orcid", orcid);
+    formData.set("email", email);
     formData.set("password", password);
-    console.log(orcid, password);
+    console.log(email, password);
     axios.post(apiUrl + '/login', formData).then((res)=>{
       // console.log(res.status, res.body, res.data, res.headers)
       console.log(res);
