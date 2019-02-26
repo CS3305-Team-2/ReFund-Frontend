@@ -17,6 +17,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faAtom, faFlask } from '@fortawesome/free-solid-svg-icons';
 library.add(faAtom, faFlask);
 import GroupPage from './GroupPage/GroupPage';
+import RegisterUser from './RegisterUser/RegisterUser';
 
 class App extends Component {
     constructor(props){
@@ -45,6 +46,7 @@ class App extends Component {
                 <Route path="/hostInstitution" component={HostInstitutionPage} />
                 <Route path="/hostInstitutions" component={HostInstitutionList} />
                 <Route path="/group" component={GroupPage} />
+                <Route path="/registerUser" component={RegisterUser} />
                 <PrivateRoute exact path="/home" component={HomePage} />
               </Switch>
             </div>
