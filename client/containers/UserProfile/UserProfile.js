@@ -15,100 +15,8 @@ class UserProfile extends Component {
 		super(props);
     this.state = {
       editing: false,
-      loaded: true,
-      user: {
-          "id": 1,
-          "firstName": "John",
-          "lastName": "Joe",
-          "email": "john@ucc.ie",
-          "password": "$2a$10$bMsk0129xRwtevQt.V4SUOQxVw.0bDYmI/S2YZaQpG6Is0S4COzly",
-          "jobTitle": "Builder at Insight",
-          "title": "Mr",
-          "suffix": "Sr",
-          "phoneNumber": "123123",
-          "phoneCountryCode": "+353",
-          "orcid": "0000-0000-0000-0001",
-          "type": {
-            "type": "researcher"
-          },
-          "educations": [
-            {
-              "educationIdentity": {
-                "educationId": 2,
-                "userId": 1
-              },
-              "degree": "PhD",
-              "field": "Computer Science",
-              "institution": "University College Cork",
-              "location": "Cork, Ireland",
-              "year": 1998
-            }
-          ],
-          "employments": [
-            {
-              "employmentIdentity": {
-                "employmentId": 3,
-                "userId": 1
-              },
-              "institution": "NUIG",
-              "location": "Galway",
-              "years": 20010
-            },
-            {
-              "employmentIdentity": {
-                "employmentId": 2,
-                "userId": 1
-              },
-              "institution": "CIT",
-              "location": "Cork",
-              "years": 2008
-            },
-            {
-              "employmentIdentity": {
-                "employmentId": 1,
-                "userId": 1
-              },
-              "institution": "UCC",
-              "location": "Cork",
-              "years": 2008
-            }
-          ],
-          "societyMemberships": [
-            {
-              "societyMembershipIdentity": {
-                "societyMembershipId": 2,
-                "userId": 1
-              },
-              "startDate": "2019-01-23 00:00:00.0",
-              "endDate": "2019-01-28 00:00:00.0",
-              "name": "Kebab man",
-              "type": "OCM",
-              "status": "Idk again"
-            },
-            {
-              "societyMembershipIdentity": {
-                "societyMembershipId": 1,
-                "userId": 1
-              },
-              "startDate": "2019-01-23 00:00:00.0",
-              "endDate": "2019-01-23 00:00:00.0",
-              "name": "Kebab",
-              "type": "Fiance",
-              "status": "Idk"
-            }
-          ],
-          "awards": [
-            {
-              "awardsIdentity": {
-                "awardsId": 1,
-                "userId": 1
-              },
-              "year": 2002,
-              "awardingBody": "Yes",
-              "details": "no thank u"
-            }
-          ]
-      }
+      loaded: false,
+      user: null,
     }
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -116,12 +24,12 @@ class UserProfile extends Component {
   componentDidMount() {
     const id = this.props.match.params.id;
     console.log('url', apiUrl + `/users/${id}`);
-    axios.get(apiUrl + `/users/${id}`, { 'Content-Type': 'application/json', }).then(
+    axios.get(apiUrl + `/users/${id}`, { withCredentials: true }).then(
       res => {
         console.log('fetched', res, res.data);
         let loaded = true;
         if (res.data === "") loaded = false
-        // this.setState({ user: res.data, loaded });
+        this.setState({ user: res.data, loaded });
       }
     ).catch(err => console.log(err));
   }
