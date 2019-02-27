@@ -27,7 +27,7 @@ class LoginPage extends Component {
     formData.set("email", email);
     formData.set("password", password);
     console.log(email, password);
-    axios.post(apiUrl + '/login', formData).then((res)=>{
+    axios.post(apiUrl + '/login', formData, {withCredentials: true}).then((res)=>{
       // console.log(res.status, res.body, res.data, res.headers)
       console.log(res);
       const user = res.data;

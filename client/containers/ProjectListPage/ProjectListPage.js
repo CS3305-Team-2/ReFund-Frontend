@@ -3,7 +3,7 @@ import styles from './ProjectListPage.scss';
 import cx from 'classnames';
 import ProjectListItem from '../../components/ProjectListItem/ProjectListItem';
 import { Link } from 'react-router-dom';
-
+import CreateProjectModal from '../../components/CreateProjectModal/CreateProjectModal';
 // Create mock data to use
 const projects = [
   {
@@ -45,6 +45,17 @@ class ProjectListPage extends Component {
     this.search = this.search.bind(this);
   }
   
+  toggleModal(modalType) {
+    const bodyClass = document.body.className;
+    if (bodyClass.includes(' modal-open')) {
+      document.body.className = bodyClass.replace(' modal-open', '');
+      this.setState({[modalType]: false });
+    } else {
+      document.body.className += ' modal-open';
+      this.setState({[modalType]: true});
+    }
+  }
+
   getProjects(projects) {
     // This will return a list of ProjectListItem components for each 'project' in the list at the top
 
@@ -91,9 +102,16 @@ class ProjectListPage extends Component {
 			<div>
         <div className={styles.header}>
           <div className={styles.title}>Projects</div>
-          <div className={styles.desc}></div>
+          <div className={styles.button}
+              onClick={() => this.toggleModal('modalOpen')}
+            >Create Project
+          </div>
         </div>
-
+        <CreateProjectModal 
+          open={this.state.modalOpen}
+          onClose={() => this.toggleModal('modalOpen')}
+          onCreateGrant={this.onCreateGrant}
+        />
         <div className={styles.search}>
           <select 
             className={styles.select} 
