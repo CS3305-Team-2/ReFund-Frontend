@@ -25,31 +25,31 @@ class App extends Component {
     }
 
     render() {
-      return (
-        <div className={styles.root}>
-          <TopBar />
-          <div className={styles.contentRoot}>
-            <Switch>
-              <Route path="/login" component={LoginPage} />
-              <Route exact path="/" component={LoginPage} />
-            </Switch>
-            <div className="container" style={{paddingTop: '1rem'}}>
-              <Switch>
-                <Route path="/grants/:id" component={GrantsPage} />
-                <Route path="/user/:id" component={UserProfile} />
-                <Route path="/users/" component={UsersPage} />
-                <Route path="/project" component={ProjectDetail} />
-                <Route path="/projects" component={ProjectListPage} />
-                <Route path="/grant" component={GrantDetail} />
-                <Route path="/grants" component={GrantsPage} />
-                <Route path="/hostInstitution" component={HostInstitutionPage} />
-                <Route path="/hostInstitutions" component={HostInstitutionList} />
-                <Route path="/group" component={GroupPage} />
-                <PrivateRoute exact path="/home" component={HomePage} />
-              </Switch>
+        return (
+            <div className={styles.root}>
+                <TopBar />
+                <div className={styles.contentRoot}>
+                    <Switch>
+                        <Route path="/login" component={LoginPage} />
+                        <Route exact path="/" component={LoginPage} />
+                    </Switch>
+                    <div className="container" style={{paddingTop: '1rem'}}>
+                        <Switch>
+                            <Route path="/grants/:id" component={GrantsPage} />
+                            <Route path="/user/:id" component={UserProfile} />
+                            <Route path="/users/" component={UsersPage} />
+                            <Route path="/project" component={ProjectDetail} />
+                            <Route path="/projects" component={ProjectListPage} />
+                            <Route path="/grant" component={GrantDetail} />
+                            <Route path="/grants" component={GrantsPage} />
+                            <Route path="/hostInstitution" component={HostInstitutionPage} />
+                            <Route path="/hostInstitutions" component={HostInstitutionList} />
+                            <Route path="/group" component={GroupPage} />
+                            <PrivateRoute exact path="/home" component={HomePage} />
+                        </Switch>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
         );
     }
 }

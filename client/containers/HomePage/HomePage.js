@@ -5,37 +5,33 @@ import { Link, withRouter } from 'react-router-dom';
 import Notifications from '../../components/Notifications/Notifications';
 
 class HomePage extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
+    constructor(props) {
+        super(props);
+        this.state = {
+        }
     }
-  }
   
-	render() {
-    const state = this.state;
-    const props = this.props;
+    render() {
+        const state = this.state;
+        const props = this.props;
 
-    const user = props.user;
-    console.log('homepage', props);
+        const user = props.user;
+        console.log('homepage', props);
 
-		return (
-			<div>
+        return (
+            <div>
+                <div className={styles.welcome}>
+                Welcome {user.firstName}
+                </div>
 
-        <div className={styles.welcome}>
-          Welcome {user.firstName}
-        </div>
-
-
-
-        <div className={styles.adjacentContainer}>
-          <div className={styles.notificationContainer}>
-            <Notifications />
-          </div>
-        </div>
-
-			</div>
-		)
-;	}
+                <div className={styles.adjacentContainer}>
+                    <div className={styles.notificationContainer}>
+                        <Notifications />
+                    </div>
+                </div>
+            </div>
+        );	
+    }
 }
 
 export default withRouter(HomePage);
