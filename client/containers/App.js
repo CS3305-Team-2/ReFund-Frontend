@@ -5,6 +5,7 @@ import GrantsPage from './GrantsPage/GrantsPage';
 import UsersPage from './UsersPage/UsersPage';
 import UserProfile from './UserProfile/UserProfile';
 import ProjectListPage from './ProjectListPage/ProjectListPage';
+import OrcidLogin from './LoginPage/OrcidLogin';
 import { Route, Link, Switch } from 'react-router-dom';
 import ProjectDetail from './ProjectDetail/ProjectDetail';
 import GrantDetail from './GrantDetail/GrantDetail';
@@ -35,6 +36,7 @@ class App extends Component {
                     </Switch>
                     <div className="container" style={{paddingTop: '1rem'}}>
                         <Switch>
+                            <Route path="/oauth" component={OrcidLogin} />
                             <Route path="/grants/:id" component={GrantsPage} />
                             <Route path="/user/:id" component={UserProfile} />
                             <Route path="/users/" component={UsersPage} />

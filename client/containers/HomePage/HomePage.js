@@ -18,11 +18,28 @@ class HomePage extends Component {
         const user = props.user;
         console.log('homepage', props);
 
+        const isOrcidLogin = localStorage.getItem("is-orcid-login") === "true"
+
+        let orcidLoginText = <></>
+        if (isOrcidLogin) {
+            orcidLoginText = <>
+                <div className={styles.subwelcome}>Please change your password. It has been set to <code>new-user-password</code> by default.</div>
+                <div className={styles.subwelcome}>You can now login with ORCID or with your Sesame details.</div>
+            </>
+        }
+
+        localStorage.removeItem("is-orcid-login")
+
         return (
             <div>
                 <div className={styles.welcome}>
                 Welcome {user.firstName}
                 </div>
+                <div className={styles.subwelcome}>
+                Email: {user.email}
+                </div>
+                
+                {orcidLoginText}
 
                 <div className={styles.adjacentContainer}>
                     <div className={styles.notificationContainer}>

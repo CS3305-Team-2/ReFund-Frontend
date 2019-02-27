@@ -8,6 +8,9 @@ const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
 
 
 module.exports = {
+  devServer: {
+    disableHostCheck: true,
+  },
   entry: './client/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
