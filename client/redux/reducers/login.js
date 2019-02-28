@@ -9,43 +9,43 @@ export const FETCH_LOGIN_SUCCESS = 'fetchLoginSuccess/login';
 export const LOGOUT = 'logout/login';
 
 const initialState = {
-  ui: {
-    loading: false,
-    error: '',
-  },
-  data: {
-    loggedIn: false,
-    user: null,
-  }
+    ui: {
+        loading: false,
+        error: '',
+    },
+    data: {
+        loggedIn: false,
+        user: null,
+    }
 };
 
 export default function loginReducer(state = initialState, {type, payload}) {
-  switch (type) {
+    switch (type) {
     case FETCH_LOGIN_REQUEST: {
-      return update(state, {
-        ui: {
-          loading: {$set: true},
-          error: {$set: ''}
-        }
-      })
+        return update(state, {
+            ui: {
+                loading: {$set: true},
+                error: {$set: ''}
+            }
+        })
     }
     case FETCH_LOGIN_FAILURE: {
-      return update(state, {
-        ui: {
-          loading: {$set: false},
-          error: {$set: payload}
-        }
-      });
+        return update(state, {
+            ui: {
+                loading: {$set: false},
+                error: {$set: payload}
+            }
+        });
     }
     case FETCH_LOGIN_SUCCESS: {
-      return {...initialState};
+        return {...initialState};
     }
     case LOGOUT: {
-      return {...initialState};
+        return {...initialState};
     }
-  }
+    }
 
-  return state;
+    return state;
 }
 
 export const updateEmail = simpleAction(UPDATE_EMAIL);
@@ -54,18 +54,18 @@ export const updatePassword = simpleAction(UPDATE_PASSWORD);
 const loginFailure = simpleAction(FETCH_LOGIN_FAILURE);
 
 export function submitLogin(orcid, password) {
-  return async (dispatch, getState) => {
-    dispatch({type: FETCH_LOGIN_REQUEST});
+    return async (dispatch, getState) => {
+        dispatch({type: FETCH_LOGIN_REQUEST});
 
 
-    try {
-      const formData = new FormData();
-      formData.set("orcid", orcid);
-      formData.set("password", password);
+        try {
+            const formData = new FormData();
+            formData.set("orcid", orcid);
+            formData.set("password", password);
 
-      const response = await axios.post('/prime/api/login', formData);
-      console.log(response.status, response.data);
-      /*if (response.data.error) {
+            const response = await axios.post('/prime/api/login', formData);
+            console.log(response.status, response.data);
+            /*if (response.data.error) {
         return dispatch(loginFailure(response.data.error));
       } else {
         dispatch(push('/'));
@@ -75,19 +75,19 @@ export function submitLogin(orcid, password) {
         })
       }*/
 
-    } catch (e) {
-      console.log(e);
-      return dispatch(loginFailure('Something went wrong'))
+        } catch (e) {
+            console.log(e);
+            return dispatch(loginFailure('Something went wrong'))
+        }
     }
-  }
 }
 
 export function logout() {
-  return async (dispatch) => {
-    axios.get('/prime/api/logout');
+    return async (dispatch) => {
+        axios.get('/prime/api/logout');
 
-    dispatch(push('/login'));
+        dispatch(push('/login'));
 
-    dispatch({type: LOGOUT});
-  }
+        dispatch({type: LOGOUT});
+    }
 }

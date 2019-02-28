@@ -1,8 +1,8 @@
 export default function simpleAction(type, payload) {
-  return (value) => {
-    return {
-      type,
-      payload: value,
+    return (value) => {
+        return {
+            type,
+            payload: value,
+        }
     }
-  }
 }
