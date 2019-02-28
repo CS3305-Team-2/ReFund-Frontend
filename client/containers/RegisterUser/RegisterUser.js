@@ -1,6 +1,7 @@
 import React, { Component} from 'react';
 import styles from './RegisterUser.scss';
 import { apiUrl } from '../../config';
+import axios from 'axios';
 
 class RegisterUser extends Component {
 
@@ -9,10 +10,13 @@ class RegisterUser extends Component {
     this.state = { // becomes part of url on submit (need to fix)
       email: '',
       password: '',
-      user_type: ''
+      user_type: '',
+      host_institution: '',
+      institutes: []
     }
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.getHostInstitutes();
   }
 
   handleSubmit(event) {
@@ -27,7 +31,16 @@ class RegisterUser extends Component {
     this.setState({
       [name]: target.value
     });
+    
+  }
 
+  getHostInstitutes() {
+    axios.get(apiUrl + '/hostInstitution').then(
+      res => {
+        //console.log('fetched', res, res.data);
+        this.setState({institutes: res.data})
+      }
+    ).catch(err => console.log(err));
   }
 
   render() {
@@ -39,8 +52,16 @@ class RegisterUser extends Component {
           <p>Confirm password: <input type="password" name="password_confirm"></input></p>
           <p>User type: <select name="user_type" value={this.state.user_type.value} onChange={this.handleChange}>
               <option defaultValue name="researcher" value="researcher">Researcher</option>
-              <option name="admin" value="admin">Administrator</option>
+              <option name="ro_admin" value="ro_admin">Research Office Administrator</option>
               <option name="sfi_admin" value="sfi_admin">SFI Administrator</option>
+            </select></p>
+          <p>Host institute: <select name="user_type" value={this.state.user_type.value} onChange={this.handleChange}>
+            {
+              this.state.institutes.map(function(inst) {
+                return <option key={inst.id}
+                  value={inst.id}>{inst.name}</option>;
+              })
+            }
             </select></p>
         </div>
 
