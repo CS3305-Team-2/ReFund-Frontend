@@ -55,7 +55,7 @@ class RegisterUser extends Component {
               <option name="ro_admin" value="ro_admin">Research Office Administrator</option>
               <option name="sfi_admin" value="sfi_admin">SFI Administrator</option>
             </select></p>
-          <p>Host institute: <select name="user_type" value={this.state.user_type.value} onChange={this.handleChange}>
+          <p>Host institute: <select name="host_institution" value={this.state.host_institution.value} onChange={this.handleChange}>
             {
               this.state.institutes.map(function(inst) {
                 return <option key={inst.id}
