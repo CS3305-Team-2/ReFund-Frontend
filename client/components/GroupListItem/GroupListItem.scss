@@ -3,14 +3,15 @@
     padding-left: 80;
     width: 250px;
   } 
-.theList li {
-    color: #333;
-    background-color:#f9f9f9;
-    padding: 15px;
-    margin-bottom: 15px;
-    border-radius: 5px;
-    list-style: none;
-  }
-  ul.theList {
-    padding: 15px;
-  }
+
+.header{
+  padding: 5px;
+  background: rgb(0, 167, 154);
+  color: white;
+  margin: 0;
+}
+
+.body{
+  padding-top: 10px;
+  background-color:#f9f9f9;
+}

@@ -7,7 +7,7 @@ class GroupPage extends Component {
         super(props);
 
         this.state ={
-            items: []
+            items: [],
         };
         this.addItem = this.addItem.bind(this);
     }

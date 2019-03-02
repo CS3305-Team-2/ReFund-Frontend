@@ -8,8 +8,12 @@ class GroupListItem extends Component {
             <p key={index}>{team}</p>
         );
         return <li key={item.key} className={styles.Item}>
-            <h1>{item.text}:</h1>
-            {groupItems}
+            <div className="card">
+                <h1 className="card-header" className={styles.header}>{item.text}</h1>
+                <div className="card-body" className={styles.body}>
+                    {groupItems}
+                </div>
+            </div>
         </li>
     }
     render() {
@@ -21,7 +25,6 @@ class GroupListItem extends Component {
                 <ul className={styles.theList}>
                     {listItems}
                 </ul>
-        
             </div>
         );
     }

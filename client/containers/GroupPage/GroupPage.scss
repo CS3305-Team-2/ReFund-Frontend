@@ -12,32 +12,21 @@
   font-size: 16px;
 }
 .GroupsMain button {
-  color: #494949 !important;
-  text-transform: uppercase;
-  background: #ffffff;
-  padding: 10px;
-  border: 2px solid #494949 !important;
-  display: inline-block;
+  padding: 0.5rem 1.25rem;
+  background: rgb(0, 167, 154);
+  color: #fff;
+  font-weight: bold;
+  border-radius: 2px;
+  cursor: pointer;
+  border-radius: 5px;
 }
 .GroupsMain button:hover {
-  color: #ffffff !important;
-  background: #00A79A;
-  border-color: #00A79A !important;
-  transition: all 0.4s ease 0s;
-  border-radius: 10px;
+  background: rgba(0, 167, 154, 0.6);
 }
 
 .GroupsMain li{
-  border: .5px solid black;
-  border-radius: 20%;
+  padding: 5px;
   margin: auto;
   text-align: center;
-  width:50%;
-}
-.GroupsMain li h1{
-  padding:2px;
-}
-.GroupsMain li p{
-  padding: .5px;
-  width: 100%;
+  width:70%;
 }
