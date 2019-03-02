@@ -9,14 +9,14 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import ProfileField from '../../components/ProfileField/ProfileField';
 
 
-
 class UserProfile extends Component {
 	constructor(props) {
 		super(props);
     this.state = {
       editing: false,
       loaded: false,
-      user: null,
+      user: null
+      //entries: [1,1,1,1,1,1,1,1,1,1,1,1]
     }
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -71,6 +71,30 @@ class UserProfile extends Component {
 
     handleSubmit(event) {
     // alert('Submitted');
+    }
+
+    addNewEntry(index, name) {
+        /*this.state.entries[0] += 1;
+        console.log(this.state.entries);
+        */
+        var node = document.createElement("div");
+        var elt = document.createTextNode(`${this.createElement(index)}`);
+        node.appendChild(elt);
+        document.getElementById(name).appendChild(node);
+    }
+
+    createElement(index) {
+        if (index === 0) {
+            return (
+                <div className={styles.section}>
+                    <p>Year: <input type="text" name="awards_year"></input></p>
+                    <p>Awarding Body: <input type="text" name="awards_awardingBody"></input></p>
+                    <p>Details: <input type="text" name="awards_details"></input></p>
+                    <p>Team member name: <input type="text" name="awards_teamMemberName"></input></p>
+                </div>
+            );
+            //return ("<div className={styles.section}><p>Year: <input type=\"text\" name=\"awards_year\"></input></p><p>Awarding Body: <input type=\"text\" name=\"awards_awardingBody\"></input></p><p>Details: <input type=\"text\" name=\"awards_details\"></input></p><p>Team member name: <input type=\"text\" name=\"awards_teamMemberName\"></input></p></div>");
+        }
     }
 
     render() {
@@ -353,14 +377,29 @@ class UserProfile extends Component {
                 </div>
                 <div>
                     <form onSubmit={this.handleSubmit}>
+
+
+
+
+
                         <div className={styles.sectionHeading}>Distinctions/Awards</div>
-                        <div className={styles.section}>
-                            <p>Year: <input type="text" name="awards_year"></input></p>
-                            <p>Awarding Body: <input type="text" name="awards_awardingBody"></input></p>
-                            <p>Details: <input type="text" name="awards_details"></input></p>
-                            <p>Team member name: <input type="text" name="awards_teamMemberName"></input></p>
+                        <div id="sec_awards">
+                            <div className={styles.section}>
+                                <p>Year: <input type="text" name="awards_year"></input></p>
+                                <p>Awarding Body: <input type="text" name="awards_awardingBody"></input></p>
+                                <p>Details: <input type="text" name="awards_details"></input></p>
+                                <p>Team member name: <input type="text" name="awards_teamMemberName"></input></p>
+                            </div>
                         </div>
-            
+                        <input type="button" name="btn_awards" value="Add new 'Distinctions/Awards' entry" onClick={()=>this.addNewEntry(0, "sec_awards")}></input>
+                        
+
+
+
+
+
+
+
                         <div className={styles.sectionHeading}>Funding Diversification</div>
                         <div className={styles.section}>
                             <p>Start date: <input type="date" name="funding_startDate"></input></p>

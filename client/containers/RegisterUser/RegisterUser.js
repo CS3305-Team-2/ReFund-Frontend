@@ -35,7 +35,7 @@ class RegisterUser extends Component {
   }
 
   getHostInstitutes() {
-    axios.get(apiUrl + '/hostInstitution').then(
+    axios.get(apiUrl + `/hostInstitution`).then(
       res => {
         //console.log('fetched', res, res.data);
         this.setState({institutes: res.data})
