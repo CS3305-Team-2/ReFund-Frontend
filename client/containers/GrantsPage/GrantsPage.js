@@ -4,6 +4,9 @@ import cx from 'classnames';
 import GrantsListItem from '../../components/GrantsListItem/GrantsListItem';
 import CreateGrantModal from '../../components/CreateGrantModal/CreateGrantModal';
 import SubmitProposalModal from '../../components/SubmitProposalModal/SubmitProposalModal';
+import {apiUrl} from '../../config';
+import axios from 'axios';
+
 
 const fundedGrants = [
   {
@@ -112,6 +115,24 @@ class GrantsPage extends Component {
     this.toggleModal();
   }
 
+  onSubmitProposal(proposalFile, proposal) {
+    const formData = new FormData();
+    formData.append("file", proposalFile);
+    formData.append("proposal", new Blob([JSON.stringify(proposal)], {
+      type: 'application/json'    
+    }));
+
+    console.log('submitting', proposalFile, proposal);
+    axios.post(apiUrl + '/proposal', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+    }
+    )
+    .then((res) => console.log(res.data))
+    .catch((e) => console.log(e.response));
+  }
+
 	render() {
     const state = this.state;
     const activeTab = styles.activeTab;
@@ -128,7 +149,7 @@ class GrantsPage extends Component {
             <SubmitProposalModal 
               open={this.state.proposalModalOpen}
               onClose={() => this.toggleModal('proposalModalOpen')}
-              onCreateGrant={this.onCreateGrant}
+              onSubmit={this.onSubmitProposal}
             />
           {/* Heading */}
           <div className={styles.header}>

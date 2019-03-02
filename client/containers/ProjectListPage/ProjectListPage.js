@@ -1,11 +1,16 @@
 import React, { Component} from 'react';
-import styles from './ProjectListPage.scss';
-import cx from 'classnames';
-import ProjectListItem from '../../components/ProjectListItem/ProjectListItem';
 import { Link } from 'react-router-dom';
+import cx from 'classnames';
+import axios from 'axios';
+import { apiUrl } from '../../config';
+import styles from './ProjectListPage.scss';
+import ProjectListItem from '../../components/ProjectListItem/ProjectListItem';
 import CreateProjectModal from '../../components/CreateProjectModal/CreateProjectModal';
+import getCurrentUser from '../../utils/getCurrentUser';
+
 // Create mock data to use
-const projects = [
+
+/*const projects = [
   {
     title: 'Project Name',
     description: 'Project Desc'
@@ -31,7 +36,7 @@ const projects = [
     description: 'Project Desc'
     // Etc add all the fields
   }
-]
+]*/
 
 class ProjectListPage extends Component {
 	constructor(props) {
@@ -40,9 +45,27 @@ class ProjectListPage extends Component {
       searchVal: '',
       searchType: 'Title',
       searchTerm: null,
+      projects: []
     }
 
     this.search = this.search.bind(this);
+    this.fetchProjects = this.fetchProjects.bind(this);
+    this.onCreateProject = this.onCreateProject.bind(this);
+  }
+
+  componentDidMount() {
+    this.fetchProjects();
+    // this.toggleModal('modalOpen');
+  }
+
+  fetchProjects() {
+    console.log('fetcing')
+    axios.get(apiUrl + '/project/associatedTo/1').then(
+      res => {
+        console.log('fetched', res.data);
+        this.setState({ projects: res.data });
+      }
+    );
   }
   
   toggleModal(modalType) {
@@ -76,27 +99,30 @@ class ProjectListPage extends Component {
 
     let results = [];
     users.slice().forEach(user => {
-      console.log(user[type], term);
       if (user[type].toLowerCase().includes(term)) results.push(user);
     });
 
     return results;
   }
-	
+
+  onCreateProject() {
+    console.log('onCREATE', this);
+    this.fetchProjects();
+    this.toggleModal('modalOpen');
+  }
+
 	render() {
     const state = this.state;
-    console.log(state);
     const activeTab = styles.activeTab;
-    let userList = projects.slice();
+    let projectList = this.state.projects.slice();
 
     const { searchType, searchTerm } = state;
-    if (searchTerm != null && searchTerm.length > 1) userList = this.searchFilter(userList, searchType, searchTerm);
+    if (searchTerm != null && searchTerm.length > 1) projectList = this.searchFilter(projectList, searchType, searchTerm);
 
-    let projectListItems = this.getProjects(userList);
+    let projectListItems = this.getProjects(projectList);
 
-    const exampleData = {
-      stuff: 'example stuff'
-    }
+    const currentUser = getCurrentUser();
+    console.log('projectlist', state);
   
 		return (
 			<div>
@@ -110,7 +136,8 @@ class ProjectListPage extends Component {
         <CreateProjectModal 
           open={this.state.modalOpen}
           onClose={() => this.toggleModal('modalOpen')}
-          onCreateGrant={this.onCreateGrant}
+          currentUser={currentUser}
+          onCreateProject={this.onCreateProject}
         />
         <div className={styles.search}>
           <select 
