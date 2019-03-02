@@ -18,6 +18,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faAtom, faFlask } from '@fortawesome/free-solid-svg-icons';
 library.add(faAtom, faFlask);
 import GroupPage from './GroupPage/GroupPage';
+import RegisterUser from './RegisterUser/RegisterUser';
 
 class App extends Component {
     constructor(props){
