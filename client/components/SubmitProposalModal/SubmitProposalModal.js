@@ -65,17 +65,16 @@ class SubmitProposalModal extends Component {
     })
   }
   
-	render() {
-    const state = this.state;
+    render() {
+        const state = this.state;
     
-    const open = this.props.open;
+        const open = this.props.open;
     
-    const rootStyle = {};
-    if (open) {
-      rootStyle.transform = 'translateY(0%)';
-      rootStyle.opacity = '1';
-    }
-
+        const rootStyle = {};
+        if (open) {
+            rootStyle.transform = 'translateY(0%)';
+            rootStyle.opacity = '1';
+        }
 
 
 		return (

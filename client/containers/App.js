@@ -5,6 +5,7 @@ import GrantsPage from './GrantsPage/GrantsPage';
 import UsersPage from './UsersPage/UsersPage';
 import UserProfile from './UserProfile/UserProfile';
 import ProjectListPage from './ProjectListPage/ProjectListPage';
+import OrcidLogin from './LoginPage/OrcidLogin';
 import { Route, Link, Switch } from 'react-router-dom';
 import ProjectDetail from './ProjectDetail/ProjectDetail';
 import GrantDetail from './GrantDetail/GrantDetail';
@@ -17,6 +18,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faAtom, faFlask } from '@fortawesome/free-solid-svg-icons';
 library.add(faAtom, faFlask);
 import GroupPage from './GroupPage/GroupPage';
+import RegisterUser from './RegisterUser/RegisterUser';
 
 class App extends Component {
     constructor(props){
@@ -25,31 +27,32 @@ class App extends Component {
     }
 
     render() {
-      return (
-        <div className={styles.root}>
-          <TopBar />
-          <div className={styles.contentRoot}>
-            <Switch>
-              <Route path="/login" component={LoginPage} />
-              <Route exact path="/" component={LoginPage} />
-            </Switch>
-            <div className="container" style={{paddingTop: '1rem'}}>
-              <Switch>
-                <Route path="/grants/:id" component={GrantsPage} />
-                <Route path="/user/:id" component={UserProfile} />
-                <Route path="/users/" component={UsersPage} />
-                <Route path="/project" component={ProjectDetail} />
-                <Route path="/projects" component={ProjectListPage} />
-                <Route path="/grant" component={GrantDetail} />
-                <Route path="/grants" component={GrantsPage} />
-                <Route path="/hostInstitution" component={HostInstitutionPage} />
-                <Route path="/hostInstitutions" component={HostInstitutionList} />
-                <Route path="/group" component={GroupPage} />
-                <PrivateRoute exact path="/home" component={HomePage} />
-              </Switch>
+        return (
+            <div className={styles.root}>
+                <TopBar />
+                <div className={styles.contentRoot}>
+                    <Switch>
+                        <Route path="/login" component={LoginPage} />
+                        <Route exact path="/" component={LoginPage} />
+                    </Switch>
+                    <div className="container" style={{paddingTop: '1rem'}}>
+                        <Switch>
+                            <Route path="/oauth" component={OrcidLogin} />
+                            <Route path="/grants/:id" component={GrantsPage} />
+                            <Route path="/user/:id" component={UserProfile} />
+                            <Route path="/users/" component={UsersPage} />
+                            <Route path="/project" component={ProjectDetail} />
+                            <Route path="/projects" component={ProjectListPage} />
+                            <Route path="/grant" component={GrantDetail} />
+                            <Route path="/grants" component={GrantsPage} />
+                            <Route path="/hostInstitution" component={HostInstitutionPage} />
+                            <Route path="/hostInstitutions" component={HostInstitutionList} />
+                            <Route path="/group" component={GroupPage} />
+                            <PrivateRoute exact path="/home" component={HomePage} />
+                        </Switch>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
         );
     }
 }

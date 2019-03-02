@@ -4,20 +4,20 @@ import cx from 'classnames';
 
 
 class ProjectListItem extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
+    constructor(props) {
+        super(props);
+        this.state = {
      
+        }
     }
-	}
 	
-	render() {
-    const state = this.state;
-    const props = this.props;
+    render() {
+        const state = this.state;
+        const props = this.props;
 
-    // The user data passed down from UsersPage component
-    const user = props.project;
-    // console.log(user); // Will print out the user. Delete when finished.
+        // The user data passed down from UsersPage component
+        const user = props.project;
+        // console.log(user); // Will print out the user. Delete when finished.
 
     
 		return (
@@ -31,9 +31,9 @@ class ProjectListItem extends Component {
 					</div>*/}
 				</div>
 
-			</div>
-		)
-;	}
+            </div>
+        );	
+    }
 }
 
 export default ProjectListItem;

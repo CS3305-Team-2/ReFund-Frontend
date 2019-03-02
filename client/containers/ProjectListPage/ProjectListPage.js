@@ -15,25 +15,25 @@ import getCurrentUser from '../../utils/getCurrentUser';
     title: 'Project Name',
     description: 'Project Desc'
     // Etc add all the fields
-  },  
-  {
-    title: 'Project Name 2',
-    description: 'Project Desc'
+    },  
+    {
+        title: 'Project Name 2',
+        description: 'Project Desc'
     // Etc add all the fields
-  },
-  {
-    title: 'Project Name 3',
-    description: 'Project Desc'
+    },
+    {
+        title: 'Project Name 3',
+        description: 'Project Desc'
     // Etc add all the fields
-  },
-  {
-    title: 'Project Name',
-    description: 'Project Desc'
+    },
+    {
+        title: 'Project Name',
+        description: 'Project Desc'
     // Etc add all the fields
-  },
-  {
-    title: 'Project Name',
-    description: 'Project Desc'
+    },
+    {
+        title: 'Project Name',
+        description: 'Project Desc'
     // Etc add all the fields
   }
 ]*/
@@ -82,20 +82,20 @@ class ProjectListPage extends Component {
   getProjects(projects) {
     // This will return a list of ProjectListItem components for each 'project' in the list at the top
 
-    // projects is the project list at the top of this page
-    return projects.map((project)=>{
-      // Finish the <ProjectListItem />  component. Found in /components. 
-      return <Link to={`/project/`} className={styles.userLink}><ProjectListItem project={project} /></Link> // Each <ProjectListItem shows an user in the list of users this page shows.
-    });
-  }
+        // projects is the project list at the top of this page
+        return projects.map((project)=>{
+            // Finish the <ProjectListItem />  component. Found in /components. 
+            return <Link to={`/project/`} className={styles.userLink}><ProjectListItem project={project} /></Link> // Each <ProjectListItem shows an user in the list of users this page shows.
+        });
+    }
 
-  search() {
-    this.setState({})
-  }
+    search() {
+        this.setState({})
+    }
 
-  searchFilter(users, searchType, searchTerm) {
-    let type = searchType.toLowerCase();
-    let term = searchTerm.toLowerCase();
+    searchFilter(users, searchType, searchTerm) {
+        let type = searchType.toLowerCase();
+        let term = searchTerm.toLowerCase();
 
     let results = [];
     users.slice().forEach(user => {
@@ -146,25 +146,25 @@ class ProjectListPage extends Component {
             onChange={(evt) => this.setState({searchType: evt.target.value})}
           >
 
-            <option>Title</option>
-          </select>
-          <input 
-            className={styles.searchInput}
-            type="text" 
-            onChange={(evt)=>this.setState({searchVal: evt.target.value})} value={this.state.searchVal}
-          />
-          <button 
-            className={styles.searchButton}
-            onClick={() => this.setState(prevState => ({searchTerm: prevState.searchVal}))}
-          >Search</button>
-        </div>
+                        <option>Title</option>
+                    </select>
+                    <input 
+                        className={styles.searchInput}
+                        type="text" 
+                        onChange={(evt)=>this.setState({searchVal: evt.target.value})} value={this.state.searchVal}
+                    />
+                    <button 
+                        className={styles.searchButton}
+                        onClick={() => this.setState(prevState => ({searchTerm: prevState.searchVal}))}
+                    >Search</button>
+                </div>
 
-        <div className={styles.users}>
-          {projectListItems}
-        </div>
-			</div>
-		)
-;	}
+                <div className={styles.users}>
+                    {projectListItems}
+                </div>
+            </div>
+        );	
+    }
 }
 
 export default ProjectListPage;
