@@ -7,6 +7,7 @@ import displayFriendly from '../../utils/displayFriendly';
 import { codeToArea } from '../../utils/nrpAreas';
 import toggleModal from '../../utils/toggleModal';
 import SubmitProposalModal from '../../components/SubmitProposalModal/SubmitProposalModal';
+import getCurrentUser from '../../utils/getCurrentUser';
 
 class ProjectDetail extends Component {
   constructor(props) {
@@ -61,12 +62,12 @@ class ProjectDetail extends Component {
   }
   
 
-  getProposal(proposal) {
+  getProposal(proposal, isProjectMember) {
     return (
       <>
         <div className={styles.headingContainer}>
           <div className={styles.heading}>{proposal.title}</div>
-          {this.getProposalControls()}
+          {isProjectMember ? this.getProposalControls() : ''}
         </div>
         <div className={styles.detail}><span className={styles.label}>Status - </span>{displayFriendly(proposal.status.toLowerCase())}</div>
         <div className={styles.detail}><span className={styles.label}>Duration (months) - </span>{proposal.duration}</div>
@@ -81,15 +82,6 @@ class ProjectDetail extends Component {
   }
 
   getReports() {
-    /*
-      challenges: "A lot of em"
-      id: 1
-      planDeviation: "No deviation"
-      plannedActivities: "yes"
-      projectId: 1
-      threeHighlights: "No highlights"
-      year: 2018
-    */
     return this.state.project.annualReport.map((report) => {
       return (
         <div className={styles.profileSections}>
@@ -120,6 +112,16 @@ class ProjectDetail extends Component {
     });
   }
 
+  isProjectMember(currentUser, project) {
+    const members = project.teamMembers;
+    for (let i = 0; i < members.length; i += 1) {
+      if (currentUser.id === members[i].userId) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   render() {
     const state = this.state;
     const props = this.props;
@@ -128,6 +130,9 @@ class ProjectDetail extends Component {
 
     const project = state.project;
     const proposal = project.proposal;
+    
+    const currentUser = getCurrentUser().user;
+    const isProjectMember = this.isProjectMember(currentUser, project)
 
     return (
       <div>
@@ -152,7 +157,7 @@ class ProjectDetail extends Component {
           <div className={styles.section}>
           { proposal ? 
             <>
-            {this.getProposal(proposal)}
+            {this.getProposal(proposal, isProjectMember)}
             <SubmitProposalModal 
               open={this.state.proposalModalOpen}
               onClose={() => this.toggleModal('proposalModalOpen')}
