@@ -13,15 +13,28 @@ class ProjectDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      form: {
+        year: '',
+        plannedActivities: '',
+        planDeviation: '',
+        threeHighlights: '',
+        challenges: ''
+      },
       staffState:0,
       projectState:0,
       loaded: false,
       proposalModalOpen: false,
     }
     this.toggleModal = this.toggleModal.bind(this);
+    this.updateForm = this.updateForm.bind(this);
+    this.postReport = this.postReport.bind(this);
   }
 
   componentDidMount() {
+    this.fetchProject();
+  }
+
+  fetchProject() {
     const id = this.props.match.params.id;      
     axios.get(apiUrl + `/project/${id}`).then(
       res => {
@@ -29,6 +42,12 @@ class ProjectDetail extends Component {
         this.setState({ project: res.data, loaded: true });
       }
     ).catch(e => console.log(e.response));
+  }
+
+  updateForm(key, value) {
+    const form = Object.assign({}, this.state.form);
+    form[key] = value;
+    this.setState({ form });
   }
 
   getProposalControls() {
@@ -40,12 +59,6 @@ class ProjectDetail extends Component {
         >
           Edit
         </div>
-        {/*<div 
-          className={styles.proposalDelete} 
-          onClick={() => this.updateProposal(proposal, 'delete', index)}
-        >
-          Delete
-        </div>*/}
       </div>
     );
   }
@@ -62,12 +75,13 @@ class ProjectDetail extends Component {
   }
   
 
-  getProposal(proposal, isProjectMember) {
+  getProposal(project, isProjectMember) {
+    const proposal = project.proposal;
     return (
       <>
         <div className={styles.headingContainer}>
           <div className={styles.heading}>{proposal.title}</div>
-          {isProjectMember ? this.getProposalControls() : ''}
+          {isProjectMember && project.status == 'DRAFT' ? this.getProposalControls() : ''}
         </div>
         <div className={styles.detail}><span className={styles.label}>Status - </span>{displayFriendly(proposal.status.toLowerCase())}</div>
         <div className={styles.detail}><span className={styles.label}>Duration (months) - </span>{proposal.duration}</div>
@@ -122,6 +136,82 @@ class ProjectDetail extends Component {
     return false;
   }
 
+  postReport() {
+    const form = Object.assign({}, this.state.form);
+    form.projectId = this.state.project.id;
+    console.log('report post', form);
+    axios.post(apiUrl + `/annualReport/`, form).then(
+      res => {
+        console.log('annualreport res', res.data);
+        location.reload();
+      }
+    ).catch(e => console.log(e.response));
+  }
+
+  createReport() {
+    return (
+      <div className={styles.section}>
+        <div className={styles.headingContainer}>
+          <div className={styles.heading}>Create Report</div>
+        </div>
+        <div className={styles.inputContainer}>
+          <label className={styles.inputLabel}>Year</label>
+          <input 
+            type="text" 
+            className={styles.textInput} 
+            onChange={(evt)=>this.updateForm('year', evt.target.value)}
+          />
+        </div>
+
+        <div className={styles.inputContainer}>
+          <label className={styles.inputLabel}>Planned Activities</label>
+          <textarea 
+            type="text" 
+            className={styles.textInput} 
+            onChange={(evt)=>this.updateForm('plannedActivities', evt.target.value)}
+          />
+        </div>
+
+        <div className={styles.inputContainer}>
+          <label className={styles.inputLabel}>Plan Deviation</label>
+          <textarea 
+            type="text" 
+            className={styles.textInput} 
+            onChange={(evt)=>this.updateForm('planDeviation', evt.target.value)}
+          />
+        </div>
+        <div className={styles.inputContainer}>
+          <label className={styles.inputLabel}>Three Highlights</label>
+          <textarea 
+            type="text" 
+            className={styles.textInput} 
+            onChange={(evt)=>this.updateForm('threeHighlights', evt.target.value)}
+          />
+        </div>
+
+        <div className={styles.inputContainer}>
+          <label className={styles.inputLabel}>Challenges</label>
+          <textarea 
+            type="text" 
+            className={styles.textInput} 
+            onChange={(evt)=>this.updateForm('challenges', evt.target.value)}
+          />
+        </div>
+        <div 
+          className={styles.submitReport} 
+          onClick={this.postReport}
+        >
+          Submit Report
+        </div>
+
+      </div>
+    );
+  }
+
+  proposalEdited() {
+    location.reload();
+  }
+
   render() {
     const state = this.state;
     const props = this.props;
@@ -157,12 +247,14 @@ class ProjectDetail extends Component {
           <div className={styles.section}>
           { proposal ? 
             <>
-            {this.getProposal(proposal, isProjectMember)}
+            {this.getProposal(project, isProjectMember)}
             <SubmitProposalModal 
               open={this.state.proposalModalOpen}
               onClose={() => this.toggleModal('proposalModalOpen')}
+              proposalEdited={this.proposalEdited}
               proposal={proposal}
               fileNotRequired
+              editMode
             />
             </>
           : <div >No Proposal Created</div>}
@@ -172,6 +264,7 @@ class ProjectDetail extends Component {
 
         <div className={styles.sectionHeading}>Reports</div>
         {this.getReports()}
+        {this.createReport()}
       </div>
     );	
   }
