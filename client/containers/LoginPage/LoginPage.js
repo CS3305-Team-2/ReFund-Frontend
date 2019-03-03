@@ -17,23 +17,23 @@ class LoginPage extends Component {
     }
   
     submitLogin() {
-        const {
-            email,
-            password
-        } = this.state;
+    const {
+        email,
+        password
+    } = this.state;
 
     
-        const formData = new FormData();
-        formData.set("email", email);
-        formData.set("password", password);
-        console.log(email, password);
-        axios.post(apiUrl + '/login', formData).then((res)=>{
-            // console.log(res.status, res.body, res.data, res.headers)
-            console.log(res);
-            const user = res.data;
-            localStorage.setItem("user", JSON.stringify(user));
-            this.props.history.push("/home");
-        }).catch(e => {console.log(e)});
+    const formData = new FormData();
+    formData.set("email", email);
+    formData.set("password", password);
+    console.log(email, password);
+    axios.post(apiUrl + '/login', formData, {withCredentials: true}).then((res)=>{
+      // console.log(res.status, res.body, res.data, res.headers)
+      console.log(res);
+      const user = res.data;
+      localStorage.setItem("user", JSON.stringify(user));
+      this.props.history.push("/home");
+    }).catch(e => {console.log(e)});
 
     }
 

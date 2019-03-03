@@ -24,7 +24,7 @@ class UserProfile extends Component {
   componentDidMount() {
     const id = this.props.match.params.id;
     console.log('url', apiUrl + `/users/${id}`);
-    axios.get(apiUrl + `/users/${id}`, { withCredentials: true }).then(
+    axios.get(apiUrl + `/users/${id}`).then(
       res => {
         console.log('fetched', res, res.data);
         let loaded = true;

@@ -20,16 +20,16 @@ class ProjectListItem extends Component {
         // console.log(user); // Will print out the user. Delete when finished.
 
     
-        return (
-            <div className={styles.root}>
-                <div className={styles.container}>
-                    <div className={styles.title}>{user.title}</div>
-                    <div className={styles.details}>
-                        <div className={styles.left}>
-                            <div className={styles.description}>{user.description}</div>
-                        </div>
-                    </div>
-                </div>
+		return (
+			<div className={styles.root}>
+				<div className={styles.container}>
+					<div className={styles.title}>{user.name}</div>
+					{/*<div className={styles.details}>
+						<div className={styles.left}>
+							<div className={styles.description}>{user.description}</div>
+						</div>
+					</div>*/}
+				</div>
 
             </div>
         );	

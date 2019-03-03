@@ -60,11 +60,17 @@
   padding: 0.5rem;
 }
 
+.proposalLink {
+  flex-grow: 1;
+}
 .proposalName {
   font-weight: 500;
   color: #444;
-  flex-grow: 1;
   cursor: pointer;
+}
+
+.proposalName:hover { 
+  text-decoration: underline;
 }
 
 .proposalApprove {
@@ -77,13 +83,44 @@
   margin-right: 0.5rem;
 }
 
+.proposalApprove:hover {
+  background: rgba(0, 167, 154, 0.8);
+}
+
+
 .proposalReject {
   padding: 0.25rem 0.5rem;
-  background: #e57373;
+  background: rgb(229, 115, 115);
+  color: #fff;
+  font-weight: bold;
+  border-radius: 2px;
+  cursor: pointer;
+  margin-right: 0.5rem;
+}
+
+.proposalReject:hover {
+  background: rgba(229, 115, 115, 0.8);
+}
+
+.proposalDelete {
+  padding: 0.25rem 0.5rem;
+  background: rgb(0, 0, 0);
   color: #fff;
   font-weight: bold;
   border-radius: 2px;
   cursor: pointer;
 }
 
+.proposalDelete:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
 
+.resultLabel {
+  padding: 0.25rem 0.5rem;
+  background: #1C9B5F;
+  color: #fff;
+  font-weight: bold;
+  border-radius: 2px;
+  cursor: pointer;
+  margin-right: 0.5rem;
+}

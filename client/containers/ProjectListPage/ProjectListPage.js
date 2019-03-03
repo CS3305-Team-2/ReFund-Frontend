@@ -1,105 +1,114 @@
 import React, { Component} from 'react';
-import styles from './ProjectListPage.scss';
-import cx from 'classnames';
-import ProjectListItem from '../../components/ProjectListItem/ProjectListItem';
 import { Link } from 'react-router-dom';
-
-// Create mock data to use
-const projects = [
-    {
-        title: 'Project Name',
-        description: 'Project Desc'
-    // Etc add all the fields
-    },  
-    {
-        title: 'Project Name 2',
-        description: 'Project Desc'
-    // Etc add all the fields
-    },
-    {
-        title: 'Project Name 3',
-        description: 'Project Desc'
-    // Etc add all the fields
-    },
-    {
-        title: 'Project Name',
-        description: 'Project Desc'
-    // Etc add all the fields
-    },
-    {
-        title: 'Project Name',
-        description: 'Project Desc'
-    // Etc add all the fields
-    }
-]
+import cx from 'classnames';
+import axios from 'axios';
+import { apiUrl } from '../../config';
+import styles from './ProjectListPage.scss';
+import ProjectListItem from '../../components/ProjectListItem/ProjectListItem';
+import CreateProjectModal from '../../components/CreateProjectModal/CreateProjectModal';
+import getCurrentUser from '../../utils/getCurrentUser';
 
 class ProjectListPage extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            searchVal: '',
-            searchType: 'Title',
-            searchTerm: null,
-        }
-
-        this.search = this.search.bind(this);
+	constructor(props) {
+		super(props);
+		this.state = {
+      searchVal: '',
+      searchType: 'Title',
+      searchTerm: null,
+      projects: []
     }
+
+    this.search = this.search.bind(this);
+    this.fetchProjects = this.fetchProjects.bind(this);
+    this.onCreateProject = this.onCreateProject.bind(this);
+  }
+
+  componentDidMount() {
+    this.fetchProjects();
+    // this.toggleModal('modalOpen');
+  }
+
+  fetchProjects() {
+    axios.get(apiUrl + '/project/associatedTo/1').then(
+      res => {
+        console.log('projects', res.data);
+        this.setState({ projects: res.data });
+      }
+    );
+  }
   
-    getProjects(projects) {
-    // This will return a list of ProjectListItem components for each 'project' in the list at the top
-
-        // projects is the project list at the top of this page
-        return projects.map((project)=>{
-            // Finish the <ProjectListItem />  component. Found in /components. 
-            return <Link to={`/project/`} className={styles.userLink}><ProjectListItem project={project} /></Link> // Each <ProjectListItem shows an user in the list of users this page shows.
-        });
+  toggleModal(modalType) {
+    const bodyClass = document.body.className;
+    if (bodyClass.includes(' modal-open')) {
+      document.body.className = bodyClass.replace(' modal-open', '');
+      this.setState({[modalType]: false });
+    } else {
+      document.body.className += ' modal-open';
+      this.setState({[modalType]: true});
     }
+  }
 
-    search() {
-        this.setState({})
-    }
+  getProjects(projects) {
+    return projects.map((project)=>{
+      return <Link to={`/project/${project.id}`} className={styles.userLink}><ProjectListItem project={project} /></Link> // Each <ProjectListItem shows an user in the list of users this page shows.
+    });
+  }
 
-    searchFilter(users, searchType, searchTerm) {
-        let type = searchType.toLowerCase();
-        let term = searchTerm.toLowerCase();
+  search() {
+    this.setState({})
+  }
 
-        let results = [];
-        users.slice().forEach(user => {
-            console.log(user[type], term);
-            if (user[type].toLowerCase().includes(term)) results.push(user);
-        });
+  searchFilter(users, searchType, searchTerm) {
+    let type = searchType.toLowerCase();
+    let term = searchTerm.toLowerCase();
 
-        return results;
-    }
-	
-    render() {
-        const state = this.state;
-        console.log(state);
-        const activeTab = styles.activeTab;
-        let userList = projects.slice();
+    let results = [];
+    users.slice().forEach(user => {
+      if (user[type].toLowerCase().includes(term)) results.push(user);
+    });
 
-        const { searchType, searchTerm } = state;
-        if (searchTerm != null && searchTerm.length > 1) userList = this.searchFilter(userList, searchType, searchTerm);
+    return results;
+  }
 
-        let projectListItems = this.getProjects(userList);
+  onCreateProject() {
+    console.log('onCREATE', this);
+    this.fetchProjects();
+    this.toggleModal('modalOpen');
+  }
 
-        const exampleData = {
-            stuff: 'example stuff'
-        }
-  
-        return (
-            <div>
-                <div className={styles.header}>
-                    <div className={styles.title}>Projects</div>
-                    <div className={styles.desc}></div>
-                </div>
+	render() {
+    const state = this.state;
+    const activeTab = styles.activeTab;
+    let projectList = this.state.projects.slice();
 
-                <div className={styles.search}>
-                    <select 
-                        className={styles.select} 
-                        value={this.state.searchType}
-                        onChange={(evt) => this.setState({searchType: evt.target.value})}
-                    >
+    const { searchType, searchTerm } = state;
+    if (searchTerm != null && searchTerm.length > 1) projectList = this.searchFilter(projectList, searchType, searchTerm);
+
+    let projectListItems = this.getProjects(projectList);
+
+    const currentUser = getCurrentUser();
+
+		return (
+			<div>
+        <div className={styles.header}>
+          <div className={styles.title}>Projects</div>
+          <div className={styles.button}
+              onClick={() => this.toggleModal('modalOpen')}
+            >Create Project
+          </div>
+        </div>
+        <CreateProjectModal 
+          open={this.state.modalOpen}
+          onClose={() => this.toggleModal('modalOpen')}
+          currentUser={currentUser}
+          onCreateProject={this.onCreateProject}
+        />
+        <div className={styles.search}>
+          <select 
+            className={styles.select} 
+            value={this.state.searchType}
+            onChange={(evt) => this.setState({searchType: evt.target.value})}
+          >
 
                         <option>Title</option>
                     </select>

@@ -1,0 +1,33 @@
+
+.heading {
+  font-weight: 500;
+  color: #444;
+}
+
+.teamMemberRow {
+  display: flex;
+  margin-bottom: 0.5rem;
+}
+
+.inputContainer {
+  flex-basis: 0;
+  flex-grow: 1;
+  margin-right: 0.5rem;
+}
+
+.memberSelect {
+  height: 100%;
+  width: 100%;
+  margin-right: 0.5rem; 
+  border-radius: 2px;
+  border: 1px solid #eee;
+}
+
+.memberOption {
+  padding: 0.25rem;
+}
+
+.addMember {
+  color: #444;
+  cursor: pointer;
+}
