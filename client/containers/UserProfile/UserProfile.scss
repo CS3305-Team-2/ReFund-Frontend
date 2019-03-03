@@ -41,13 +41,19 @@ h1 {
   font-weight: 500;
 }
 
+.projectHeading {
+  font-size: 1.4rem;
+  color: #031b4e;
+  font-weight: 500;
+}
+
+.projectBudget {
+  font-size: 1.1rem;
+  margin-bottom: 1em;
+}
 
 .sectionHeader:hover {
   background: #eee;
-}
-
-.sectionHeading {
-
 }
 
 .section {

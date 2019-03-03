@@ -11,7 +11,7 @@ class BottomBar extends Component {
     render() {
         console.log('topbar', this.props);
         return (
-            <div className={styles.topBar}>
+            <div className={styles.bottomBar}>
                 <div style={{padding: '1em', textAlign: 'left'}}>
                     <div>
                     Copyright &copy; 2019 Team 2

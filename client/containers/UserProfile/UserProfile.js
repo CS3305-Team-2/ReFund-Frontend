@@ -85,7 +85,11 @@ class UserProfile extends Component {
             stuff.push(
                 <div className={styles.profileSections} style={{padding: '2em'}}>
                     <Link to={`/projects/${projects[i].id}`} key={i} >
-                        <div className={styles.sectionHeading} style={{marginBottom: '1.3em'}}>{projects[i].name}</div>
+                        <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                            <div className={styles.projectHeading} style={{marginBottom: '0.7em'}}>{projects[i].name}</div>
+                            <div style={{fontWeight: 'bold'}}>Status: {projects[i].status}</div>
+                        </div>
+                        <div className={styles.projectBudget}>Budget: &euro;{projects[i].budget}</div>
                         <div>
                             {projects[i].description.split('\n').map(val => {
                                 return (
