@@ -7,36 +7,57 @@ import styles from './UserProfile.scss';
 import { apiUrl } from '../../config';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ProfileField from '../../components/ProfileField/ProfileField';
-
-
+import { Link } from 'react-router-dom';
+import {displayFriendlyUnderscore} from '../../utils/displayFriendly';
 
 class UserProfile extends Component {
 	constructor(props) {
-		super(props);
-    this.state = {
-      editing: false,
-      loaded: false,
-      user: null,
+        super(props);
+        let user = JSON.parse(localStorage.getItem("user"))
+        this.state = {
+            editing: false,
+            loaded: false,
+            user: null,
+            projects: [],
+            awards: user.awards,
+            fundings: [],
+            impacts: user.impact,
+            innovations: user.innovation,
+            publications: user.publication,
+            presentations: user.presentation,
+            academics: user.academicCollaborations,
+            nonAcademics: user.nonAcademicCollaborations,
+            /* conferences: user., */
+            communications: user.communicationOverview,
+            fundingRatio: user.sfiFundingRatio,
+        }
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.profilePage = this.profilePage.bind(this);
     }
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
 
-  componentDidMount() {
-    const id = this.props.match.params.id;
-    console.log('url', apiUrl + `/users/${id}`);
-    axios.get(apiUrl + `/users/${id}`).then(
-      res => {
-        console.log('fetched', res, res.data);
-        let loaded = true;
-        if (res.data === "") loaded = false
-        this.setState({ user: res.data, loaded });
-      }
-    ).catch(err => console.log(err));
-  }
+    componentDidMount() {
+        const id = this.props.match.params.id;
+        console.log('url', apiUrl + `/users/${id}`);
+        axios.get(apiUrl + `/users/${id}`)
+            .then(res => {
+                console.log('fetched', res, res.data.data);
+                let loaded = true;
+                if (res.data === "") loaded = false
+                this.setState({ user: res.data, loaded });
+            })
+            .catch(console.log);
 
-  expandInfo(section) {
-    this.setState(prevState => ({[section]: !prevState[section]}))
-  }
+        axios.get(apiUrl + `/project/associatedTo/${id}`)
+            .then(res => {
+                console.log('fetched', res, res.data);
+                this.setState({projects: res.data})
+            })
+            .catch(console.log)
+    }
+
+    expandInfo(section) {
+        this.setState(prevState => ({[section]: !prevState[section]}))
+    }
   
     expandIcon(section) {
         const arrowStyle = {
@@ -51,298 +72,389 @@ class UserProfile extends Component {
 
     getProfileCard(user) {
         return (
-      <>
-        <h1>General Information</h1>
-        <div className={styles.profileSections}>
-            <div className={styles.section}>
-                <li className={styles.sectionItem}>First name: {user.firstName}</li>
-                <li className={styles.sectionItem}>Last name: {user.lastName}</li>
-                <li className={styles.sectionItem}>Job title: {user.jobTitle}</li>
-                <li className={styles.sectionItem}>title: {user.title}</li>
-                <li className={styles.sectionItem}>Suffix: {user.suffix}</li>
-                <li className={styles.sectionItem}>Phone: {user.phoneNumber}</li>
-                <li className={styles.sectionItem}>Email: {user.email}</li>
-                <li className={styles.sectionItem}>ORCID: {user.orcid}</li>
-            </div>
-        </div>
-      </>
+            <>
+                <h1>General Information</h1>
+                <div className={styles.profileSections}>
+                    <div className={styles.section}>
+                        <li className={styles.sectionItem}>First name: {user.firstName}</li>
+                        <li className={styles.sectionItem}>Last name: {user.lastName}</li>
+                        <li className={styles.sectionItem}>Job title: {user.jobTitle}</li>
+                        <li className={styles.sectionItem}>title: {user.title}</li>
+                        <li className={styles.sectionItem}>Suffix: {user.suffix}</li>
+                        <li className={styles.sectionItem}>Phone: {user.phoneNumber}</li>
+                        <li className={styles.sectionItem}>Email: {user.email}</li>
+                        {user.type.type === "researcher" && 
+                            <li className={styles.sectionItem}>ORCID: {user.orcid}</li>
+                        }
+                    </div>
+                </div>
+            </>
         )
     }
 
+    getProjects(projects) {
+        let stuff = []
+        for(var i = 0; i < projects.length; i++) {
+            stuff.push(
+                <div className={styles.profileSections} style={{padding: '2em'}}>
+                    <Link to={`/projects/${projects[i].id}`} key={i} >
+                        <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                            <div className={styles.projectHeading} style={{marginBottom: '0.7em'}}>{projects[i].name}</div>
+                            <div style={{fontWeight: 'bold'}}>Status: {projects[i].status}</div>
+                        </div>
+                        <div className={styles.projectBudget}>Budget: &euro;{projects[i].budget}</div>
+                        <div>
+                            {projects[i].description.split('\n').map(val => {
+                                return (
+                                    <>
+                                        {val}
+                                        <br/>
+                                    </>
+                                )
+                            }
+                        )}</div>
+                    </Link>
+                </div>
+            )
+        }
+        return stuff
+    }
+
     handleSubmit(event) {
-    // alert('Submitted');
+        let user = JSON.parse(JSON.stringify(this.state.user))
+        user.awards = this.state.awards;
+        user.impact = this.state.impacts;
+        user.innovation = this.state.innovations;
+        user.publication = this.state.publications;
+        user.presentation = this.state.presentations;
+        user.academicCollaborations = this.state.academics;
+        user.nonAcademicCollaborations = this.state.nonAcademics;
+        user.communicationOverview = this.state.communications;
+        user.sfiFundingRatio = this.state.fundingRatio;
+        console.log(JSON.stringify(user, null, 2))
     }
 
     render() {
         const state = this.state;
         const props = this.props;
-        const { user, loaded } = state;
-
-        //let profile = {"id":1,"firstName":"John","lastName":"Joe","email":"john@ucc.ie","password":"$2a$10$bMsk0129xRwtevQt.V4SUOQxVw.0bDYmI/S2YZaQpG6Is0S4COzly","jobTitle":"Builder at Insight","title":"Mr","suffix":"Sr","phoneNumber":"123123","phoneCountryCode":"+353","orcid":"0000-0000-0000-0001","type":{"type":"researcher"},"educations":[{"educationIdentity":{"educationId":2,"userId":1},"degree":"PhD","field":"Computer Science","institution":"University College Cork","location":"Cork, Ireland","year":1998}],"employments":[{"employmentIdentity":{"employmentId":2,"userId":1},"institution":"CIT","location":"Cork","years":2008},{"employmentIdentity":{"employmentId":3,"userId":1},"institution":"NUIG","location":"Galway","years":20010},{"employmentIdentity":{"employmentId":1,"userId":1},"institution":"UCC","location":"Cork","years":2008}],"societyMemberships":[{"societyMembershipIdentity":{"societyMembershipId":1,"userId":1},"startDate":"2019-01-23 00:00:00.0","endDate":"2019-01-23 00:00:00.0","name":"Kebab","type":"Fiance","status":"Idk"},{"societyMembershipIdentity":{"societyMembershipId":2,"userId":1},"startDate":"2019-01-23 00:00:00.0","endDate":"2019-01-28 00:00:00.0","name":"Kebab man","type":"OCM","status":"Idk again"}],"awards":[{"awardsIdentity":{"awardsId":1,"userId":1},"year":2002,"awardingBody":"Yes","details":"no thank u"}]}
+        const { user, loaded, projects } = state;
 
         if (!loaded) return <div>Loading</div>;
-        console.log('user', user);
 
-        if (!state.editing) return (
+        if (!state.editing) {
+            return this.profilePage(loaded, user, projects);
+        } else {
+            return this.editingPage();
+        }
+    }
+
+    profilePage(loaded, user, projects) {
+        let isUser = JSON.parse(localStorage.getItem("user")).id == this.props.match.params.id;
+        return (
             <div className={styles.root}>
-                <div className={styles.exampleClass}>
-          Users Profile Page
-                </div>
-                <div className={styles.tabs}>
-                    <button onClick={()=>this.setState({editing: true})}>
-            Edit Profile
-                    </button>
-                </div>
-                {!loaded ? <CircularProgress />:
-                    this.getProfileCard(user)
-                }
-                <div>
-                    <h1>Research Profile Information</h1>
-                    <div className={styles.profileSections}>
-
-                        <ProfileField heading="Education" data={user.educations} />
-                        <ProfileField heading="Employment" data={user.employments} />
-                        <ProfileField heading="Professional Societies" data={user.societyMemberships} />
-                        <ProfileField heading="Awards" data={user.awards} />
-
-                        <div
-                            onClick={() => this.expandInfo('awards')}
-                            className={styles.sectionHeader}
-                        >
-                            <div className={styles.sectionHeading}>Distinctions/awards</div>
-                            {this.expandIcon('awards')}
+                {!loaded ? <CircularProgress />: (
+                    <>
+                        <div className={styles.exampleClass}>
+                            {user.firstName} {user.lastName}'s Profile Page
                         </div>
-                        <Collapse in={this.state.awards} timeout="auto" unmountOnExit>
-                            <div className={styles.section}>
-                                <li className={styles.sectionItem}>Year: </li>
-                                <li className={styles.sectionItem}>Awarding Body: </li>
-                                <li className={styles.sectionItem}>Details: </li>
-                                <li className={styles.sectionItem}>Team member name: </li>
-                            </div>
-                        </Collapse>
-
-                        <div
-                            onClick={() => this.expandInfo('funding')}
-                            className={styles.sectionHeader}
-                        >
-                            <div className={styles.sectionHeading}>Funding diversification</div>
-                            {this.expandIcon('funding')}
-                        </div>
-                        <Collapse in={this.state.funding} timeout="auto" unmountOnExit>
-                            <div className={styles.section}>
-                                <li className={styles.sectionItem}>Start date: </li>
-                                <li className={styles.sectionItem}>End date: </li>
-                                <li className={styles.sectionItem}>Amount: </li>
-                                <li className={styles.sectionItem}>Funding body: </li>
-                                <li className={styles.sectionItem}>Funding programme: </li>
-                                <li className={styles.sectionItem}>Status: </li>
-                                <li className={styles.sectionItem}>Primary attribution: </li>
-                            </div>
-                        </Collapse>
-
-                        <div
-                            onClick={() => this.expandInfo('team')}
-                            className={styles.sectionHeader}
-                        >
-                            <div className={styles.sectionHeading}>Team Members</div>
-                            {this.expandIcon('team')}
-                        </div>
-                        <Collapse in={this.state.team} timeout="auto" unmountOnExit>
-                            <div className={styles.section}>
-                                <li className={styles.sectionItem}>Arrival date: </li>
-                                <li className={styles.sectionItem}>Departure date: </li>
-                                <li className={styles.sectionItem}>Name: </li>
-                                <li className={styles.sectionItem}>Position: </li>
-                                <li className={styles.sectionItem}>Primary attribution: </li>
-                            </div>
-                        </Collapse>
-
-
-                        <div
-                            onClick={() => this.expandInfo('impacts')}
-                            className={styles.sectionHeader}
-                        >
-                            <div className={styles.sectionHeading}>Impacts</div>
-                            {this.expandIcon('impacts')}
-                        </div>
-                        <Collapse in={this.state.impacts} timeout="auto" unmountOnExit>
-                            <div className={styles.section}>
-                                <li className={styles.sectionItem}>Impact title: </li>
-                                <li className={styles.sectionItem}>Impact category: </li>
-                                <li className={styles.sectionItem}>Primary beneficiary: </li>
-                                <li className={styles.sectionItem}>Primary attribution: </li>
-                            </div>
-                        </Collapse>
-
-                        <div
-                            onClick={() => this.expandInfo('innovation')}
-                            className={styles.sectionHeader}
-                        >
-                            <div className={styles.sectionHeading}>Innovation and Commercialisation</div>
-                            {this.expandIcon('innovation')}
-                        </div>
-                        <Collapse in={this.state.innovation} timeout="auto" unmountOnExit>
-                            <div className={styles.section}>
-                                <li className={styles.sectionItem}>Year: </li>
-                                <li className={styles.sectionItem}>Type: </li>
-                                <li className={styles.sectionItem}>Title: </li>
-                                <li className={styles.sectionItem}>Primary attribution: </li>
-                            </div>
-                        </Collapse>
-
-                        <div
-                            onClick={() => this.expandInfo('publications')}
-                            className={styles.sectionHeader}
-                        >
-                            <div className={styles.sectionHeading}>Publications</div>
-                            {this.expandIcon('publications')}
-                        </div>
-                        <Collapse in={this.state.publications} timeout="auto" unmountOnExit>
-                            <div className={styles.section}>
-                                <li className={styles.sectionItem}>Publication year: </li>
-                                <li className={styles.sectionItem}>Publication type: </li>
-                                <li className={styles.sectionItem}>Title: </li>
-                                <li className={styles.sectionItem}>Journal/conference name: </li>
-                                <li className={styles.sectionItem}>Publication status: </li>
-                                <li className={styles.sectionItem}>DOI: </li>
-                                <li className={styles.sectionItem}>Primary attribution: </li>
-                            </div>
-                        </Collapse>
-
-                        <div
-                            onClick={() => this.expandInfo('presentations')}
-                            className={styles.sectionHeader}
-                        >
-                            <div className={styles.sectionHeading}>Presentations</div>
-                            {this.expandIcon('presentations')}
-                        </div>
-                        <Collapse in={this.state.presentations} timeout="auto" unmountOnExit>
-                            <div className={styles.section}>
-                                <li className={styles.sectionItem}>Year: </li>
-                                <li className={styles.sectionItem}>Title: </li>
-                                <li className={styles.sectionItem}>Event type: </li>
-                                <li className={styles.sectionItem}>Organising body: </li>
-                                <li className={styles.sectionItem}>Location: </li>
-                                <li className={styles.sectionItem}>Primary attribution: </li>
-                            </div>
-                        </Collapse>
-
-                        <div
-                            onClick={() => this.expandInfo('academicCollabs')}
-                            className={styles.sectionHeader}
-                        >
-                            <div className={styles.sectionHeading}>Academic collaborations</div>
-                            {this.expandIcon('academicCollabs')}
-                        </div>
-                        <Collapse in={this.state.academicCollabs} timeout="auto" unmountOnExit>
-                            <div className={styles.section}>
-                                <li className={styles.sectionItem}>Start date: </li>
-                                <li className={styles.sectionItem}>End date: </li>
-                                <li className={styles.sectionItem}>Name of institution: </li>
-                                <li className={styles.sectionItem}>Department within institution: </li>
-                                <li className={styles.sectionItem}>Location: </li>
-                                <li className={styles.sectionItem}>Name of collaborator: </li>
-                                <li className={styles.sectionItem}>Primary goal of collaboration: </li>
-                                <li className={styles.sectionItem}>Frequency of interaction: </li>
-                                <li className={styles.sectionItem}>Primary attribution: </li>
-                            </div>
-                        </Collapse>
-
-                        <div
-                            onClick={() => this.expandInfo('nonAcademicCollabs')}
-                            className={styles.sectionHeader}
-                        >
-                            <div className={styles.sectionHeading}>Non-Academic collaborations</div>
-                            {this.expandIcon('nonAcademicCollabs')}
-                        </div>
-                        <Collapse in={this.state.nonAcademicCollabs} timeout="auto" unmountOnExit>
-                            <div className={styles.section}>
-                                <li className={styles.sectionItem}>Start date: </li>
-                                <li className={styles.sectionItem}>End date: </li>
-                                <li className={styles.sectionItem}>Name of institution: </li>
-                                <li className={styles.sectionItem}>Department within institution: </li>
-                                <li className={styles.sectionItem}>Location: </li>
-                                <li className={styles.sectionItem}>Name of collaborator: </li>
-                                <li className={styles.sectionItem}>Primary goal of collaboration: </li>
-                                <li className={styles.sectionItem}>Frequency of interaction: </li>
-                                <li className={styles.sectionItem}>Primary attribution: </li>
-                            </div>
-                        </Collapse>
-            
-
-                        <div
-                            onClick={() => this.expandInfo('conferences')}
-                            className={styles.sectionHeader}
-                        >
-                            <div className={styles.sectionHeading}>Conferences/workshops/seminars organised</div>
-                            {this.expandIcon('conferences')}
-                        </div>
-                        <Collapse in={this.state.conferences} timeout="auto" unmountOnExit>
-                            <div className={styles.section}>
-                                <li className={styles.sectionItem}>Start date: </li>
-                                <li className={styles.sectionItem}>End date: </li>
-                                <li className={styles.sectionItem}>Name of institution: </li>
-                                <li className={styles.sectionItem}>Department within institution: </li>
-                                <li className={styles.sectionItem}>Location: </li>
-                                <li className={styles.sectionItem}>Name of collaborator: </li>
-                                <li className={styles.sectionItem}>Primary goal of collaboration: </li>
-                                <li className={styles.sectionItem}>Frequency of interaction: </li>
-                                <li className={styles.sectionItem}>Primary attribution: </li>
-                            </div>
-                        </Collapse>
-
-                        <div
-                            onClick={() => this.expandInfo('comms')}
-                            className={styles.sectionHeader}
-                        >
-                            <div className={styles.sectionHeading}>Communications overview</div>
-                            {this.expandIcon('comms')}
-                        </div>
-                        <Collapse in={this.state.comms} timeout="auto" unmountOnExit>
-                            <div className={styles.section}>
-                                <li className={styles.sectionItem}>Year: </li>
-                                <li className={styles.sectionItem}>Number of public lectures/demonstrations: </li>
-                                <li className={styles.sectionItem}>Number of visits: </li>
-                                <li className={styles.sectionItem}>Number of media interactions: </li>
-                            </div>
-                        </Collapse>
-
-                        <section>
-                            <div
-                                onClick={() => this.expandInfo('fundingratio')}
-                                className={styles.sectionHeader}
-                            >
-                                <div className={styles.sectionHeading}>SFI funding ratio</div>
-                                {this.expandIcon('fundingratio')}
-                            </div>
-                            <Collapse in={this.state.fundingratio} timeout="auto" unmountOnExit>
-                                <div className={styles.section}>
-                                    <li className={styles.sectionItem}>Year: </li>
-                                    <li className={styles.sectionItem}>Percentage of annual spend from SFI: </li>
+                        { !isUser ? <></> : (
+                                <div className={styles.tabs}>
+                                    <button onClick={()=>this.setState({editing: true})}>
+                                    Edit Profile
+                                    </button>
                                 </div>
-                            </Collapse>
-                        </section>
-                    </div>
+                            )
+                        }
+                        <div id={styles.profileWrapper}>
+                            <div id={styles.profileLeft}>
+                                <div>
+                                    { this.getProfileCard(user) }
+                                </div>
+                                <div>
+                                    <h1>Research Profile Information</h1>
+                                    <div className={styles.profileSections}>
+                                        <ProfileField heading="Education" data={user.educations} />
+                                        <ProfileField heading="Employment" data={user.employments} />
+                                        <ProfileField heading="Professional Societies" data={user.societyMemberships} />
+                                        <ProfileField heading="Awards" data={user.awards} />
+                                        <ProfileField heading="Impacts" data={user.impact} />
+                                        <ProfileField heading="Innovations" data={user.innovation} />
+                                        <ProfileField heading="Presentations" data={user.presentation} />
+                                        <ProfileField heading="Academic Collaborations" data={user.academicCollaborations} />
+                                        <ProfileField heading="Non-Academic Collaborations" data={user.nonAcademicCollaborations} />
 
-                    {/* What's this?
-            <li>Education and public
-              <ul>
-                <li>Name of project: </li>
-                <li>Start date: </li>
-                <li>End date: </li>
-                <li>Activity type: </li>
-                <li>Project type: </li>P
-                <li>Target geograpical area: </li>
-                <li>Primary attribution: </li>
-              </ul>
-            </li>*/}
+                                        <div onClick={() => this.expandInfo('conferences')} className={styles.sectionHeader}>
+                                            <div className={styles.sectionHeading}>Conferences/workshops/seminars organised</div>
+                                            {this.expandIcon('conferences')}
+                                        </div>
+                                        <Collapse in={this.state.conferences} timeout="auto" unmountOnExit>
+                                            <div className={styles.section}>
+                                                <li className={styles.sectionItem}>Start date: </li>
+                                                <li className={styles.sectionItem}>End date: </li>
+                                                <li className={styles.sectionItem}>Name of institution: </li>
+                                                <li className={styles.sectionItem}>Department within institution: </li>
+                                                <li className={styles.sectionItem}>Location: </li>
+                                                <li className={styles.sectionItem}>Name of collaborator: </li>
+                                                <li className={styles.sectionItem}>Primary goal of collaboration: </li>
+                                                <li className={styles.sectionItem}>Frequency of interaction: </li>
+                                                <li className={styles.sectionItem}>Primary attribution: </li>
+                                            </div>
+                                        </Collapse>
 
-                </div>
-        
+                                        <div onClick={() => this.expandInfo('comms')} className={styles.sectionHeader}>
+                                            <div className={styles.sectionHeading}>Communications overview</div>
+                                            {this.expandIcon('comms')}
+                                        </div>
+                                        <Collapse in={this.state.comms} timeout="auto" unmountOnExit>
+                                            <div className={styles.section}>
+                                                <li className={styles.sectionItem}>Year: </li>
+                                                <li className={styles.sectionItem}>Number of public lectures/demonstrations: </li>
+                                                <li className={styles.sectionItem}>Number of visits: </li>
+                                                <li className={styles.sectionItem}>Number of media interactions: </li>
+                                            </div>
+                                        </Collapse>
+
+                                        <section>
+                                            <div onClick={() => this.expandInfo('fundingratio')} className={styles.sectionHeader}>
+                                                <div className={styles.sectionHeading}>SFI funding ratio</div>
+                                                {this.expandIcon('fundingratio')}
+                                            </div>
+                                            <Collapse in={this.state.fundingratio} timeout="auto" unmountOnExit>
+                                                <div className={styles.section}>
+                                                    <li className={styles.sectionItem}>Year: </li>
+                                                    <li className={styles.sectionItem}>Percentage of annual spend from SFI: </li>
+                                                </div>
+                                            </Collapse>
+                                        </section>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id={styles.profileRight}>
+                                <h1>Projects</h1>
+                                { this.getProjects(projects) }
+                            </div>
+                        </div>
+                    </>
+                )}
             </div>
-        )
-        else return (
-            <div className={styles.root}>
+        );
+    }
+
+    editingPage() {
+        let awards = []
+        const updateState = (evt, item, field, int) => {
+            let x = this.state[item]
+            x[evt.target.getAttribute('data-key')][field] = int ? parseInt(evt.target.value) : evt.target.value
+            if (x[evt.target.getAttribute('data-key')]['userId'] == undefined) x[evt.target.getAttribute('data-key')]['userId'] = this.state.user.id;
+            this.setState({item: x})
+        }
+
+        this.state.awards.forEach((award, i) => {
+            awards.push(<>
+                <p>Year: 
+                    <input type="text" data-key={i} value={this.state.awards[i].year} onChange={(evt) => updateState(evt, 'awards', 'year', true)}></input>
+                </p>
+                <p>Awarding Body: 
+                    <input type="text" data-key={i} value={this.state.awards[i].awardingBody} onChange={(evt) => updateState(evt, 'awards', 'awardingBody')}></input>
+                </p>
+                <p>Details: 
+                    <input type="text" data-key={i} value={this.state.awards[i].details} onChange={(evt) => updateState(evt, 'awards', 'details')}></input>
+                </p>
+            </>)
+        })
+        
+        let impacts = []
+        this.state.impacts.forEach((impact, i) => {
+            impacts.push(<>
+                <p>Impact title: 
+                    <input type="text" data-key={i} value={this.state.impacts[i].title} onChange={(evt) => updateState(evt, 'impacts', 'title')}></input>
+                </p>
+                <p>Impact category: 
+                    <input type="text" data-key={i} value={this.state.impacts[i].category} onChange={(evt) => updateState(evt, 'impacts', 'category')}></input>
+                </p>
+                <p>Primary beneficiary: 
+                    <input type="text" value={this.state.impacts[i].primaryBeneficiary} onChange={(evt) => updateState(evt, 'impacts', 'primaryBeneficiary')}></input>
+                </p>
+                <p>Primary attribution: 
+                    <input type="text" value={this.state.impacts[i].primaryAttribution} onChange={(evt) => updateState(evt, 'impacts', 'primaryAttribution')}></input>
+                </p>
+            </>)
+        })
+
+        let innovations = []
+        this.state.innovations.forEach((innovation, i) => {
+            innovations.push(<>
+                <p>Year: 
+                    <input type="text" data-key={i} value={this.state.innovations[i].year} onChange={(evt) => updateState(evt, 'innovations', 'year', true)}></input>
+                </p>
+                <p>Type: 
+                    <input type="text" data-key={i} value={this.state.innovations[i].type} onChange={(evt) => updateState(evt, 'innovations', 'type')}></input>
+                </p>
+                <p>Title: 
+                    <input type="text" data-key={i} value={this.state.innovations[i].title} onChange={(evt) => updateState(evt, 'innovations', 'title')}></input>
+                </p>
+                <p>Primary attribution: 
+                    <input type="text" data-key={i} value={this.state.innovations[i].primaryAttribution} onChange={(evt) => updateState(evt, 'innovations', 'primaryAttribution')}></input>
+                </p> 
+            </>)
+        })
+
+        let publications = []
+        this.state.publications.forEach((pub, i) => {
+            publications.push(<>
+                <p>Publication type: 
+                    <select data-key={i} onChange={(evt) => updateState(evt, 'publications', 'type')} value={this.state.publications[i].type}>
+                        <option value="REFEREED_ORIGINAL_ARTICLE">Refereed Original Article</option>
+                        <option value="REFEREED_REVIEW_ARTICLE">Refereed Review Article</option>
+                        <option value="REFEREED_CONFERENCE_ARTICLE">Refereed Conference Article</option>
+                        <option value="BOOK">Book</option>
+                        <option value="TECHNICAL_REPORT">Technical Report</option>
+                    </select>
+                </p>    
+                <p>Title: 
+                    <input type="text" data-key={i} value={this.state.publications[i].title} onChange={(evt) => updateState(evt, 'publications', 'title')}></input>
+                </p>
+                <p>Journal/conference name: 
+                    <input type="text" data-key={i} value={this.state.publications[i].journalName} onChange={(evt) => updateState(evt, 'publications', 'journalName')}></input>
+                </p>
+                <p>Publication status: 
+                    <select data-key={i} onChange={(evt) => updateState(evt, 'publications', 'status')} value={this.state.publications[i].status}>
+                        <option value="PUBLISHED">Published</option>
+                        <option value="IN_PRESS">In Press</option>
+                    </select>
+                </p>
+                {/* <p>DOI: 
+                    <input type="text" data-key={i} value={this.state.publications[i].year} onChange={(evt) => updateState(evt, 'publications', 'year')}></input>
+                </p> */}
+                <p>Primary attribution: 
+                    <input type="text" data-key={i} value={this.state.publications[i].primaryAttribution}></input>
+                </p>
+            </>)
+        })
+
+        let presentations = []
+        this.state.presentations.forEach((pres, i) => {
+            presentations.push(<>
+                <p>Year: 
+                    <input type="text" data-key={i} value={this.state.presentations[i].year} onChange={(evt) => updateState(evt, 'presentations', 'year', true)}></input>
+                </p>
+                <p>Title: 
+                    <input type="text" data-key={i} value={this.state.presentations[i].title} onChange={(evt) => updateState(evt, 'presentations', 'title')}></input>
+                </p>
+                <p>Event type: 
+                    <select data-key={i} onChange={(evt) => updateState(evt, 'presentations', 'eventType')} value={this.state.presentations[i].eventType}>
+                        <option value="CONFERENCE">Conference</option>
+                        <option value="INVITED_SEMINAR">Invited Seminar</option>
+                        <option value="KEYNOTE">Keynote</option>
+                    </select>
+                </p>
+                <p>Organising body: 
+                    <input type="text" data-key={i} value={this.state.presentations[i].organisingBody} onChange={(evt) => updateState(evt, 'presentations', 'organisingBody')}></input>
+                </p>
+                <p>Location: 
+                    <input type="text" data-key={i} value={this.state.presentations[i].location} onChange={(evt) => updateState(evt, 'presentations', 'location')}></input>
+                </p>
+                <p>Primary attribution: 
+                    <input type="text" data-key={i} value={this.state.presentations[i].primaryAttribution} onChange={(evt) => updateState(evt, 'presentations', 'primaryAttribution')}></input>
+                </p>
+            </>)
+        })
+
+        let academicCollaborations = []
+        this.state.academics.forEach((acs, i) => {
+            academicCollaborations.push(<>
+                <p>Start date: 
+                    <input type="date" data-key={i} value={this.state.academics[i].startDate} onChange={(evt) => updateState(evt, 'academics', 'startDate')}></input>
+                </p>
+                <p>End date: 
+                    <input type="date" data-key={i} value={this.state.academics[i].endDate} onChange={(evt) => updateState(evt, 'academics', 'startDate')}></input>
+                </p>
+                <p>Name of institution: 
+                    <input type="text" data-key={i} value={this.state.academics[i].institutionName} onChange={(evt) => updateState(evt, 'academics', 'institutionName')}></input>
+                </p>
+                <p>Department within institution: 
+                    <input type="text" data-key={i} value={this.state.academics[i].institutionDepartment} onChange={(evt) => updateState(evt, 'academics', 'institutionDepartment')}></input>
+                </p>
+                <p>Location: 
+                    <input type="text" data-key={i} value={this.state.academics[i].location} onChange={(evt) => updateState(evt, 'academics', 'location')}></input>
+                </p>
+                <p>Name of collaborator: 
+                    <input type="text" data-key={i} value={this.state.academics[i].nameOfCollaborator} onChange={(evt) => updateState(evt, 'academics', 'nameOfCollaborator')}></input>
+                </p>
+                <p>Primary goal of collaboration: 
+                    <select data-key={i} onChange={(evt) => updateState(evt, 'academics', 'goalOfCollaboration')} value={this.state.academics[i].goalOfCollaboration}>
+                        <option value="ACCESS_TO_SOFTWARE_DATA_MATERIAL_EQUIPMENT">Access to Software Data Material Equipment</option>
+                        <option value="TRAINING_AND_CAREER_DEVELOPMENT">Training and Career Development</option>
+                        <option value="JOINT_PUBLICATION">Joint Publication</option>
+                        <option value="STARTUP_DEVELOPMENT">Startup Development</option>
+                        <option value="LICENSE_DEVELOPMENT">License Development</option>
+                        <option value="BUILDING_NETWORK_AND_RELATIONSHIPS">Building Networks and Relationships</option>
+                    </select>
+                </p>
+                <p>Frequency of interaction: 
+                    <input type="text" data-key={i} value={this.state.academics[i].interactionFrequency} onChange={(evt) => updateState(evt, 'academics', 'interactionFrequency')}></input>
+                </p>
+                <p>Primary attribution: 
+                    <input type="text" data-key={i} value={this.state.academics[i].primaryAttribution} onChange={(evt) => updateState(evt, 'academics', 'primaryAttribution')}></input>
+                </p>
+            </>)
+        })
+
+        let nonAcademicCollaborations = []
+        this.state.nonAcademics.forEach((acs, i) => {
+            nonAcademicCollaborations.push(<>
+                <p>Start date: 
+                    <input type="date" data-key={i} value={this.state.nonAcademics[i].startDate} onChange={(evt) => updateState(evt, 'nonAcademics', 'startDate')}></input>
+                </p>
+                <p>End date: 
+                    <input type="date" data-key={i} value={this.state.nonAcademics[i].endDate} onChange={(evt) => updateState(evt, 'nonAcademics', 'endDate')}></input>
+                </p>
+                <p>Name of institution: 
+                    <input type="text" data-key={i} value={this.state.nonAcademics[i].institutionName} onChange={(evt) => updateState(evt, 'nonAcademics', 'institutionName')}></input>
+                </p>
+                <p>Department within institution: 
+                    <input type="text" data-key={i} value={this.state.nonAcademics[i].institutionDepartment} onChange={(evt) => updateState(evt, 'nonAcademics', 'institutionDepartment')}></input>
+                </p>
+                <p>Location: 
+                    <input type="text" data-key={i} value={this.state.nonAcademics[i].location} onChange={(evt) => updateState(evt, 'nonAcademics', 'location')}></input>
+                </p>
+                <p>Name of collaborator: 
+                    <input type="text" data-key={i} value={this.state.nonAcademics[i].nameOfCollaborator} onChange={(evt) => updateState(evt, 'nonAcademics', 'nameOfCollaborator')}></input>
+                </p>
+                <p>Primary goal of collaboration: 
+                    <input type="text" data-key={i} value={displayFriendlyUnderscore(this.state.nonAcademics[i].goalOfCollaboration)} onChange={(evt) => updateState(evt, 'nonAcademics', 'goalOfCollaboration')}></input>
+                </p>
+                <p>Frequency of interaction: 
+                    <input type="text" data-key={i} value={this.state.nonAcademics[i].interactionFrequency} onChange={(evt) => updateState(evt, 'nonAcademics', 'interactionFrequency')}></input>
+                </p>
+                <p>Primary attribution: 
+                    <input type="text" data-key={i} value={this.state.nonAcademics[i].primaryAttribution} onChange={(evt) => updateState(evt, 'nonAcademics', 'primaryAttribution')}></input>
+                </p>
+            </>)
+        })
+
+
+
+        let sfiRatios = []
+        this.state.fundingRatio.forEach((ratio, i) => {
+            sfiRatios.push(<>
+                <p>Year: 
+                    <input type="text" data-key={i} value={this.state.fundingRatio[i].year} onChange={(evt) => updateState(evt, 'fundingRatio', 'year', true)}></input>
+                </p>
+                <p>Percentage of annual spend from SFI:
+                    <select data-key={i} onChange={(evt) => updateState(evt, 'fundingRatio', 'annualTimePercent')} value={this.state.fundingRatio[i].annualTimePercent}>
+                        <option value="PERCENT_0_20">0 - 20%</option>
+                        <option value="PERCENT_21_40">21 - 40%</option>
+                        <option value="PERCENT_41_60">41 - 60%</option>
+                        <option value="PERCENT_61_80">61 - 80%</option>
+                        <option value="PERCENT_81_100">81 - 100%</option>
+                    </select>
+                </p>
+            </>)
+        })
+
+        return (
+            <div className={[styles.root, styles.editSection]}>
                 <div className={styles.exampleClass}>
                 Users Profile Page
                 </div>
@@ -355,96 +467,52 @@ class UserProfile extends Component {
                     <form onSubmit={this.handleSubmit}>
                         <div className={styles.sectionHeading}>Distinctions/Awards</div>
                         <div className={styles.section}>
-                            <p>Year: <input type="text" name="awards_year"></input></p>
-                            <p>Awarding Body: <input type="text" name="awards_awardingBody"></input></p>
-                            <p>Details: <input type="text" name="awards_details"></input></p>
-                            <p>Team member name: <input type="text" name="awards_teamMemberName"></input></p>
+                            {awards}
+                            <input type="button" value="Add new entry" onClick={() => {this.setState({awards: this.state.awards.concat([{}])})}}></input>
                         </div>
-            
-                        <div className={styles.sectionHeading}>Funding Diversification</div>
+                        
+                        {/* <div className={styles.sectionHeading}>Funding Diversification</div>
                         <div className={styles.section}>
-                            <p>Start date: <input type="date" name="funding_startDate"></input></p>
-                            <p>End date: <input type="date" name="funding_endDate"></input></p>
-                            <p>Amount: <input type="text" name="funding_amount"></input></p>
-                            <p>Funding body: <input type="text" name="funding_fundingBody"></input></p>
-                            <p>Funding programme: <input type="text" name="funding_fundingProgramme"></input></p>
-                            <p>Status: <input type="text" name="funding_status"></input></p>
-                            <p>Primary attribution: <input type="text" name="funding_primaryAttribution"></input></p>
-                        </div>
-
-                        <div className={styles.sectionHeading}>Team Members</div>
-                        <div className={styles.section}>
-                            <p>Arrival date: <input type="date" name="team_arrivalDate"></input></p>
-                            <p>Departure date: <input type="date" name="team_departureDate"></input></p>
-                            <p>Name: <input type="text" name="team_name"></input></p>
-                            <p>Position: <input type="text" name="team_position"></input></p>
-                            <p>Primary attribution: <input type="text" name="team_primaryAttribution"></input></p>
-                        </div>
+                            
+                        </div> */}
 
                         <div className={styles.sectionHeading}>Impacts</div>
                         <div className={styles.section}>
-                            <p>Impact title: <input type="text" name="impacts_title"></input></p>
-                            <p>Impact category: <input type="text" name="impacts_category"></input></p>
-                            <p>Primary beneficiary: <input type="text" name="impacts_primaryBeneficiary"></input></p>
-                            <p>Primary attribution: <input type="text" name="impacts_primaryAttribution"></input></p>
+                            {impacts}
+                            <input type="button" value="Add new entry" onClick={() => {this.setState({impacts: this.state.impacts.concat([{}])})}}></input>
                         </div>
 
                         <div className={styles.sectionHeading}>Innovation and Commercialisation</div>
                         <div className={styles.section}>
-                            <p>Year: <input type="text" name="innovation_year"></input></p>
-                            <p>Type: <input type="text" name="innovation_type"></input></p>
-                            <p>Title: <input type="text" name="innovation_title"></input></p>
-                            <p>Primary attribution: <input type="text" name="innovation_primaryAttribution"></input></p>
+                            {innovations}
+                            <input type="button" value="Add new entry" onClick={() => {this.setState({innovations: this.state.innovations.concat([{}])})}}></input>
                         </div>
 
                         <div className={styles.sectionHeading}>Publications</div>
                         <div className={styles.section}>
-                            <p>Publication year: <input type="text" name="publications_year"></input></p>
-                            <p>Publication type: <input type="text" name="publications_type"></input></p>
-                            <p>Title: <input type="text" name="publications_title"></input></p>
-                            <p>Journal/conference name: <input type="text" name="publications_journalName"></input></p>
-                            <p>Publication status: <input type="text" name="publications_status"></input></p>
-                            <p>DOI: <input type="text" name="publications_doi"></input></p>
-                            <p>Primary attribution: <input type="text" name="publications_primaryAttribution"></input></p>
+                            {publications}
+                            <input type="button" value="Add new entry" onClick={() => {this.setState({publications: this.state.publications.concat([{}])})}}></input>
                         </div>
 
                         <div className={styles.sectionHeading}>Presentations</div>
                         <div className={styles.section}>
-                            <p>Year: <input type="text" name="presentations_year"></input></p>
-                            <p>Title: <input type="text" name="presentations_title"></input></p>
-                            <p>Event type: <input type="text" name="presentations_type"></input></p>
-                            <p>Organising body: <input type="text" name="presentations_organisingBody"></input></p>
-                            <p>Location: <input type="text" name="presentations_location"></input></p>
-                            <p>Primary attribution: <input type="text" name="presentations_primaryAttribution"></input></p>
+                            {presentations}
+                            <input type="button" value="Add new entry" onClick={() => {this.setState({presentations: this.state.presentations.concat([{}])})}}></input>
                         </div>
 
                         <div className={styles.sectionHeading}>Academic collaborations</div>
                         <div className={styles.section}>
-                            <p>Start date: <input type="date" name="academicCollabs_startDate"></input></p>
-                            <p>End date: <input type="date" name="academicCollabs_endDate"></input></p>
-                            <p>Name of institution: <input type="text" name="academicCollabs_institutionName"></input></p>
-                            <p>Department within institution: <input type="text" name="academicCollabs_institutionDepartment"></input></p>
-                            <p>Location: <input type="text" name="academicCollabs_location"></input></p>
-                            <p>Name of collaborator: <input type="text" name="academicCollabs_collaboratorName"></input></p>
-                            <p>Primary goal of collaboration: <input type="text" name="academicCollabs_primaryCollaborationGoal"></input></p>
-                            <p>Frequency of interaction: <input type="text" name="academicCollabs_interactionFrequency"></input></p>
-                            <p>Primary attribution: <input type="text" name="academicCollabs_primaryAttribution"></input></p>
+                            {academicCollaborations}
+                            <input type="button" value="Add new entry" onClick={() => {this.setState({academics: this.state.academics.concat([{}])})}}></input>
                         </div>
 
                         <div className={styles.sectionHeading}>Non-Academic collaborations</div>
                         <div className={styles.section}>
-                            <p>Start date: <input type="date" name="nonAcademicCollabs_startDate"></input></p>
-                            <p>End date: <input type="date" name="nonAcademicCollabs_endDate"></input></p>
-                            <p>Name of institution: <input type="text" name="nonAcademicCollabs_institutionName"></input></p>
-                            <p>Department within institution: <input type="text" name="nonAcademicCollabs_institutionDepartment"></input></p>
-                            <p>Location: <input type="text" name="nonAcademicCollabs_location"></input>></p>
-                            <p>Name of collaborator: <input type="text" name="nonAcademicCollabs_collaboratorName"></input></p>
-                            <p>Primary goal of collaboration: <input type="text" name="nonAcademicCollabs_primaryCollaborationGoal"></input></p>
-                            <p>Frequency of interaction: <input type="text" name="nonAcademicCollabs_interactionFrequency"></input></p>
-                            <p>Primary attribution: <input type="text" name="nonAcademicCollabs_primaryAttribution"></input></p>
+                            {nonAcademicCollaborations}
+                            <input type="button" value="Add new entry" onClick={() => {this.setState({nonAcademics: this.state.nonAcademics.concat([{}])})}}></input>
                         </div>
 
-                        <div className={styles.sectionHeading}>Conferences/workshops/seminars organised</div>
+                        {/* <div className={styles.sectionHeading}>Conferences/workshops/seminars organised</div>
                         <div className={styles.section}>
                             <p>Start date: <input type="date" name="conferences_startDate"></input></p>
                             <p>End date: <input type="date" name="conferences_endDate"></input></p>
@@ -455,27 +523,29 @@ class UserProfile extends Component {
                             <p>Primary goal of collaboration: <input type="text" name="conferences_primaryCollaborationGoal"></input></p>
                             <p>Frequency of interaction: <input type="text" name="conferences_interactionFrequency"></input></p>
                             <p>Primary attribution: <input type="text" name="conferences_primaryAttribution"></input></p>
-                        </div>
+                            <input type="button" value="Add new entry" onClick={() => {this.setState({awards: this.state.awards.concat([{}])})}}></input>
+                        </div> */}
 
-                        <div className={styles.sectionHeading}>Communications overview</div>
+                        {/* <div className={styles.sectionHeading}>Communications overview</div>
                         <div className={styles.section}>
                             <p>Year: <input type="text" name="comms_year"></input></p>
                             <p>Number of public lectures/demonstrations: <input type="text" name="comms_numberOfPublicLectures"></input></p>
                             <p>Number of visits: <input type="text" name="comms_numberOfVisits"></input></p>
                             <p>Number of media interactions: <input type="text" name="comms_numberOfMediaInteractions"></input></p>
-                        </div>
+                            <input type="button" value="Add new entry" onClick={() => {this.setState({communications: this.state.communications.concat([{}])})}}></input>
+                        </div> */}
 
                         <div className={styles.sectionHeading}>SFI funding ratio</div>
                         <div className={styles.section}>
-                            <p>Year: <input type="text" name="fundingratio_year"></input></p>
-                            <p>Percentage of annual spend from SFI: <input type="text" name="fundingratio_annualSpendPercentage"></input></p>
+                            {sfiRatios}
+                            <input type="button" value="Add new entry" onClick={() => {this.setState({fundingRatio: this.state.fundingRatio.concat([{}])})}}></input>
                         </div>
 
                         <input type="submit" value="Submit" />
                     </form>
                 </div>
             </div>
-        );	
+        );
     }
 }
 

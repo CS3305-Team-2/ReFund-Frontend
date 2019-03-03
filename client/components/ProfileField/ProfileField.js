@@ -28,19 +28,29 @@ class ProfileField extends Component {
     }
 
     dataFields(data) {
-        console.log('df', data);
+        /* console.log('df', data); */
         let dataArr = data;
         if (!Array.isArray(data)) dataArr = [data];
         const entries = [];
+        if (dataArr.length == 0) {
+            return (
+                <div className={styles.section}>
+                    <div>Nothing to see here!</div>
+                </div>
+            )
+        }
         dataArr.forEach((entry, index)=>{
             const entryFields = Object.keys(entry);
             const entryItems = [];
+            let i = 0
             entryFields.forEach((field)=> {
-                if (typeof entry[field] != "object") {
+                if (typeof entry[field] != "object" && !field.endsWith('Id') && !field.endsWith('id')) {
                     entryItems.push(
-                        <li className={styles.entryItem} key={entry[field]}>
-                            {displayFriendly(field)}: <span className={styles.entryVal}>{entry[field]}</span>
-                        </li>
+                        <>
+                            <li className={styles.entryItem} key={i++}>
+                                {displayFriendly(field)}: <span className={styles.entryVal}>{entry[field]}</span>
+                            </li>
+                        </>
                     );
                 }
             });
