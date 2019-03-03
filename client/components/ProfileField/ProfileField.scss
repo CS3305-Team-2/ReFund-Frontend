@@ -38,7 +38,8 @@ green - #00A79A, blue - #003C68
 .entry {
   display: flex;
   flex-wrap: wrap;
-  margin-bottom: 0.5rem;
+  flex-direction: column;
+  margin-bottom: 0.7rem;
   border-left: 1px solid #00A79A;
   padding: 0 0.25rem;;
 }
@@ -46,6 +47,7 @@ green - #00A79A, blue - #003C68
 .entryItem {
   padding: 0rem;
   margin-right: 0.5rem;
+  margin-top: 0.2em;
 }
 
 .entryVal {

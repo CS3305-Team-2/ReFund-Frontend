@@ -1,0 +1,102 @@
+.topBar {
+  width: 100%;
+  background: #fff;
+  border-top: 1px solid #eee;
+  z-index: 4000;
+  height: 60px;
+  text-align: left;
+}
+
+.container {
+  height: 100%;
+}
+.row {
+  height: 100%;
+}
+
+.title{
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: #003C68;
+}
+
+.icon {
+  font-size: 32px; 
+  cursor: pointer;
+  margin-left: 0.5rem;
+  color: #003C68;
+  margin-right: 0.5rem;
+}
+
+.profileIcon {
+  position: absolute;
+  right: 0;
+}
+
+.logoContainer { 
+  height: 100%;
+  padding: 0.25rem;
+}
+
+.logo {
+  height: 100%;
+  width: auto;
+  display: block;
+}
+
+
+/* green - #00A79A, blue - #003C68*/
+
+
+
+.nav {
+  display: flex;
+  float: right;
+  align-items: center;
+  height: 100%;
+}
+
+.navLink {
+  color: #003C68;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  display: flex;
+  transition: all .15s ease-in-out;
+  font-weight: 500;
+  height: 100%;
+  align-items: center;
+}
+
+.navLink:hover {
+  color: #003C68;
+  border-bottom: 2px solid #003C68;
+}
+
+.activeLink {
+  border-bottom: 2px solid #003C68;
+}
+
+.navText {
+  margin-top: 10px;
+  white-space: nowrap;
+}
+
+
+.buttonContainer {
+}
+
+.loginButton {
+  padding: 0.25rem 0.5rem;
+  background: rgb(0, 167, 154);
+  color: #fff;
+  font-weight: bold;
+  border-radius: 2px;
+  cursor: pointer;
+  margin-top:10px;
+  margin-left: 0.5rem 
+}
+
+
+.loginButton:hover {
+  background: rgba(0, 167, 154, 0.6);
+}

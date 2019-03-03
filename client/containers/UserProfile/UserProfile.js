@@ -7,36 +7,44 @@ import styles from './UserProfile.scss';
 import { apiUrl } from '../../config';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ProfileField from '../../components/ProfileField/ProfileField';
-
+import { Link } from 'react-router-dom';
 
 class UserProfile extends Component {
 	constructor(props) {
 		super(props);
-    this.state = {
-      editing: false,
-      loaded: false,
-      user: null
-      //entries: [1,1,1,1,1,1,1,1,1,1,1,1]
+        this.state = {
+            editing: false,
+            loaded: false,
+            user: null,
+            projects: [],
+        }
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.profilePage = this.profilePage.bind(this);
     }
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
 
-  componentDidMount() {
-    const id = this.props.match.params.id;
-    console.log('url', apiUrl + `/users/${id}`);
-    axios.get(apiUrl + `/users/${id}`).then(
-      res => {
-        console.log('fetched', res, res.data);
-        let loaded = true;
-        if (res.data === "") loaded = false
-        this.setState({ user: res.data, loaded });
-      }
-    ).catch(err => console.log(err));
-  }
+    componentDidMount() {
+        const id = this.props.match.params.id;
+        console.log('url', apiUrl + `/users/${id}`);
+        axios.get(apiUrl + `/users/${id}`)
+            .then(res => {
+                console.log('fetched', res, res.data.data);
+                let loaded = true;
+                if (res.data === "") loaded = false
+                this.setState({ user: res.data, loaded });
+            })
+            .catch(console.log);
 
-  expandInfo(section) {
-    this.setState(prevState => ({[section]: !prevState[section]}))
-  }
+        axios.get(apiUrl + `/project/associatedTo/${id}`)
+            .then(res => {
+                console.log('fetched', res, res.data);
+                this.setState({projects: res.data})
+            })
+            .catch(console.log)
+    }
+
+    expandInfo(section) {
+        this.setState(prevState => ({[section]: !prevState[section]}))
+    }
   
     expandIcon(section) {
         const arrowStyle = {
@@ -51,22 +59,48 @@ class UserProfile extends Component {
 
     getProfileCard(user) {
         return (
-      <>
-        <h1>General Information</h1>
-        <div className={styles.profileSections}>
-            <div className={styles.section}>
-                <li className={styles.sectionItem}>First name: {user.firstName}</li>
-                <li className={styles.sectionItem}>Last name: {user.lastName}</li>
-                <li className={styles.sectionItem}>Job title: {user.jobTitle}</li>
-                <li className={styles.sectionItem}>title: {user.title}</li>
-                <li className={styles.sectionItem}>Suffix: {user.suffix}</li>
-                <li className={styles.sectionItem}>Phone: {user.phoneNumber}</li>
-                <li className={styles.sectionItem}>Email: {user.email}</li>
-                <li className={styles.sectionItem}>ORCID: {user.orcid}</li>
-            </div>
-        </div>
-      </>
+            <>
+                <h1>General Information</h1>
+                <div className={styles.profileSections}>
+                    <div className={styles.section}>
+                        <li className={styles.sectionItem}>First name: {user.firstName}</li>
+                        <li className={styles.sectionItem}>Last name: {user.lastName}</li>
+                        <li className={styles.sectionItem}>Job title: {user.jobTitle}</li>
+                        <li className={styles.sectionItem}>title: {user.title}</li>
+                        <li className={styles.sectionItem}>Suffix: {user.suffix}</li>
+                        <li className={styles.sectionItem}>Phone: {user.phoneNumber}</li>
+                        <li className={styles.sectionItem}>Email: {user.email}</li>
+                        {user.type.type === "researcher" && 
+                            <li className={styles.sectionItem}>ORCID: {user.orcid}</li>
+                        }
+                    </div>
+                </div>
+            </>
         )
+    }
+
+    getProjects(projects) {
+        let stuff = []
+        for(var i = 0; i < projects.length; i++) {
+            stuff.push(
+                <div className={styles.profileSections} style={{padding: '2em'}}>
+                    <Link to={`/projects/${projects[i].id}`} key={i} >
+                        <div className={styles.sectionHeading} style={{marginBottom: '1.3em'}}>{projects[i].name}</div>
+                        <div>
+                            {projects[i].description.split('\n').map(val => {
+                                return (
+                                    <>
+                                        {val}
+                                        <br/>
+                                    </>
+                                )
+                            }
+                        )}</div>
+                    </Link>
+                </div>
+            )
+        }
+        return stuff
     }
 
     handleSubmit(event) {
@@ -100,272 +134,112 @@ class UserProfile extends Component {
     render() {
         const state = this.state;
         const props = this.props;
-        const { user, loaded } = state;
-
-        //let profile = {"id":1,"firstName":"John","lastName":"Joe","email":"john@ucc.ie","password":"$2a$10$bMsk0129xRwtevQt.V4SUOQxVw.0bDYmI/S2YZaQpG6Is0S4COzly","jobTitle":"Builder at Insight","title":"Mr","suffix":"Sr","phoneNumber":"123123","phoneCountryCode":"+353","orcid":"0000-0000-0000-0001","type":{"type":"researcher"},"educations":[{"educationIdentity":{"educationId":2,"userId":1},"degree":"PhD","field":"Computer Science","institution":"University College Cork","location":"Cork, Ireland","year":1998}],"employments":[{"employmentIdentity":{"employmentId":2,"userId":1},"institution":"CIT","location":"Cork","years":2008},{"employmentIdentity":{"employmentId":3,"userId":1},"institution":"NUIG","location":"Galway","years":20010},{"employmentIdentity":{"employmentId":1,"userId":1},"institution":"UCC","location":"Cork","years":2008}],"societyMemberships":[{"societyMembershipIdentity":{"societyMembershipId":1,"userId":1},"startDate":"2019-01-23 00:00:00.0","endDate":"2019-01-23 00:00:00.0","name":"Kebab","type":"Fiance","status":"Idk"},{"societyMembershipIdentity":{"societyMembershipId":2,"userId":1},"startDate":"2019-01-23 00:00:00.0","endDate":"2019-01-28 00:00:00.0","name":"Kebab man","type":"OCM","status":"Idk again"}],"awards":[{"awardsIdentity":{"awardsId":1,"userId":1},"year":2002,"awardingBody":"Yes","details":"no thank u"}]}
+        const { user, loaded, projects } = state;
 
         if (!loaded) return <div>Loading</div>;
         console.log('user', user);
 
-        if (!state.editing) return (
+        if (!state.editing) {
+            return this.profilePage(loaded, user, projects);
+        } else {
+            return this.editingPage();
+        }
+    }
+
+    profilePage(loaded, user, projects) {
+        let isUser = JSON.parse(localStorage.getItem("user")).id == this.props.match.params.id;
+        return (
             <div className={styles.root}>
-                <div className={styles.exampleClass}>
-          Users Profile Page
-                </div>
-                <div className={styles.tabs}>
-                    <button onClick={()=>this.setState({editing: true})}>
-            Edit Profile
-                    </button>
-                </div>
-                {!loaded ? <CircularProgress />:
-                    this.getProfileCard(user)
-                }
-                <div>
-                    <h1>Research Profile Information</h1>
-                    <div className={styles.profileSections}>
-
-                        <ProfileField heading="Education" data={user.educations} />
-                        <ProfileField heading="Employment" data={user.employments} />
-                        <ProfileField heading="Professional Societies" data={user.societyMemberships} />
-                        <ProfileField heading="Awards" data={user.awards} />
-
-                        <div
-                            onClick={() => this.expandInfo('awards')}
-                            className={styles.sectionHeader}
-                        >
-                            <div className={styles.sectionHeading}>Distinctions/awards</div>
-                            {this.expandIcon('awards')}
+                {!loaded ? <CircularProgress />: (
+                    <>
+                        <div className={styles.exampleClass}>
+                            {user.firstName} {user.lastName}'s Profile Page
                         </div>
-                        <Collapse in={this.state.awards} timeout="auto" unmountOnExit>
-                            <div className={styles.section}>
-                                <li className={styles.sectionItem}>Year: </li>
-                                <li className={styles.sectionItem}>Awarding Body: </li>
-                                <li className={styles.sectionItem}>Details: </li>
-                                <li className={styles.sectionItem}>Team member name: </li>
-                            </div>
-                        </Collapse>
-
-                        <div
-                            onClick={() => this.expandInfo('funding')}
-                            className={styles.sectionHeader}
-                        >
-                            <div className={styles.sectionHeading}>Funding diversification</div>
-                            {this.expandIcon('funding')}
-                        </div>
-                        <Collapse in={this.state.funding} timeout="auto" unmountOnExit>
-                            <div className={styles.section}>
-                                <li className={styles.sectionItem}>Start date: </li>
-                                <li className={styles.sectionItem}>End date: </li>
-                                <li className={styles.sectionItem}>Amount: </li>
-                                <li className={styles.sectionItem}>Funding body: </li>
-                                <li className={styles.sectionItem}>Funding programme: </li>
-                                <li className={styles.sectionItem}>Status: </li>
-                                <li className={styles.sectionItem}>Primary attribution: </li>
-                            </div>
-                        </Collapse>
-
-                        <div
-                            onClick={() => this.expandInfo('team')}
-                            className={styles.sectionHeader}
-                        >
-                            <div className={styles.sectionHeading}>Team Members</div>
-                            {this.expandIcon('team')}
-                        </div>
-                        <Collapse in={this.state.team} timeout="auto" unmountOnExit>
-                            <div className={styles.section}>
-                                <li className={styles.sectionItem}>Arrival date: </li>
-                                <li className={styles.sectionItem}>Departure date: </li>
-                                <li className={styles.sectionItem}>Name: </li>
-                                <li className={styles.sectionItem}>Position: </li>
-                                <li className={styles.sectionItem}>Primary attribution: </li>
-                            </div>
-                        </Collapse>
-
-
-                        <div
-                            onClick={() => this.expandInfo('impacts')}
-                            className={styles.sectionHeader}
-                        >
-                            <div className={styles.sectionHeading}>Impacts</div>
-                            {this.expandIcon('impacts')}
-                        </div>
-                        <Collapse in={this.state.impacts} timeout="auto" unmountOnExit>
-                            <div className={styles.section}>
-                                <li className={styles.sectionItem}>Impact title: </li>
-                                <li className={styles.sectionItem}>Impact category: </li>
-                                <li className={styles.sectionItem}>Primary beneficiary: </li>
-                                <li className={styles.sectionItem}>Primary attribution: </li>
-                            </div>
-                        </Collapse>
-
-                        <div
-                            onClick={() => this.expandInfo('innovation')}
-                            className={styles.sectionHeader}
-                        >
-                            <div className={styles.sectionHeading}>Innovation and Commercialisation</div>
-                            {this.expandIcon('innovation')}
-                        </div>
-                        <Collapse in={this.state.innovation} timeout="auto" unmountOnExit>
-                            <div className={styles.section}>
-                                <li className={styles.sectionItem}>Year: </li>
-                                <li className={styles.sectionItem}>Type: </li>
-                                <li className={styles.sectionItem}>Title: </li>
-                                <li className={styles.sectionItem}>Primary attribution: </li>
-                            </div>
-                        </Collapse>
-
-                        <div
-                            onClick={() => this.expandInfo('publications')}
-                            className={styles.sectionHeader}
-                        >
-                            <div className={styles.sectionHeading}>Publications</div>
-                            {this.expandIcon('publications')}
-                        </div>
-                        <Collapse in={this.state.publications} timeout="auto" unmountOnExit>
-                            <div className={styles.section}>
-                                <li className={styles.sectionItem}>Publication year: </li>
-                                <li className={styles.sectionItem}>Publication type: </li>
-                                <li className={styles.sectionItem}>Title: </li>
-                                <li className={styles.sectionItem}>Journal/conference name: </li>
-                                <li className={styles.sectionItem}>Publication status: </li>
-                                <li className={styles.sectionItem}>DOI: </li>
-                                <li className={styles.sectionItem}>Primary attribution: </li>
-                            </div>
-                        </Collapse>
-
-                        <div
-                            onClick={() => this.expandInfo('presentations')}
-                            className={styles.sectionHeader}
-                        >
-                            <div className={styles.sectionHeading}>Presentations</div>
-                            {this.expandIcon('presentations')}
-                        </div>
-                        <Collapse in={this.state.presentations} timeout="auto" unmountOnExit>
-                            <div className={styles.section}>
-                                <li className={styles.sectionItem}>Year: </li>
-                                <li className={styles.sectionItem}>Title: </li>
-                                <li className={styles.sectionItem}>Event type: </li>
-                                <li className={styles.sectionItem}>Organising body: </li>
-                                <li className={styles.sectionItem}>Location: </li>
-                                <li className={styles.sectionItem}>Primary attribution: </li>
-                            </div>
-                        </Collapse>
-
-                        <div
-                            onClick={() => this.expandInfo('academicCollabs')}
-                            className={styles.sectionHeader}
-                        >
-                            <div className={styles.sectionHeading}>Academic collaborations</div>
-                            {this.expandIcon('academicCollabs')}
-                        </div>
-                        <Collapse in={this.state.academicCollabs} timeout="auto" unmountOnExit>
-                            <div className={styles.section}>
-                                <li className={styles.sectionItem}>Start date: </li>
-                                <li className={styles.sectionItem}>End date: </li>
-                                <li className={styles.sectionItem}>Name of institution: </li>
-                                <li className={styles.sectionItem}>Department within institution: </li>
-                                <li className={styles.sectionItem}>Location: </li>
-                                <li className={styles.sectionItem}>Name of collaborator: </li>
-                                <li className={styles.sectionItem}>Primary goal of collaboration: </li>
-                                <li className={styles.sectionItem}>Frequency of interaction: </li>
-                                <li className={styles.sectionItem}>Primary attribution: </li>
-                            </div>
-                        </Collapse>
-
-                        <div
-                            onClick={() => this.expandInfo('nonAcademicCollabs')}
-                            className={styles.sectionHeader}
-                        >
-                            <div className={styles.sectionHeading}>Non-Academic collaborations</div>
-                            {this.expandIcon('nonAcademicCollabs')}
-                        </div>
-                        <Collapse in={this.state.nonAcademicCollabs} timeout="auto" unmountOnExit>
-                            <div className={styles.section}>
-                                <li className={styles.sectionItem}>Start date: </li>
-                                <li className={styles.sectionItem}>End date: </li>
-                                <li className={styles.sectionItem}>Name of institution: </li>
-                                <li className={styles.sectionItem}>Department within institution: </li>
-                                <li className={styles.sectionItem}>Location: </li>
-                                <li className={styles.sectionItem}>Name of collaborator: </li>
-                                <li className={styles.sectionItem}>Primary goal of collaboration: </li>
-                                <li className={styles.sectionItem}>Frequency of interaction: </li>
-                                <li className={styles.sectionItem}>Primary attribution: </li>
-                            </div>
-                        </Collapse>
-            
-
-                        <div
-                            onClick={() => this.expandInfo('conferences')}
-                            className={styles.sectionHeader}
-                        >
-                            <div className={styles.sectionHeading}>Conferences/workshops/seminars organised</div>
-                            {this.expandIcon('conferences')}
-                        </div>
-                        <Collapse in={this.state.conferences} timeout="auto" unmountOnExit>
-                            <div className={styles.section}>
-                                <li className={styles.sectionItem}>Start date: </li>
-                                <li className={styles.sectionItem}>End date: </li>
-                                <li className={styles.sectionItem}>Name of institution: </li>
-                                <li className={styles.sectionItem}>Department within institution: </li>
-                                <li className={styles.sectionItem}>Location: </li>
-                                <li className={styles.sectionItem}>Name of collaborator: </li>
-                                <li className={styles.sectionItem}>Primary goal of collaboration: </li>
-                                <li className={styles.sectionItem}>Frequency of interaction: </li>
-                                <li className={styles.sectionItem}>Primary attribution: </li>
-                            </div>
-                        </Collapse>
-
-                        <div
-                            onClick={() => this.expandInfo('comms')}
-                            className={styles.sectionHeader}
-                        >
-                            <div className={styles.sectionHeading}>Communications overview</div>
-                            {this.expandIcon('comms')}
-                        </div>
-                        <Collapse in={this.state.comms} timeout="auto" unmountOnExit>
-                            <div className={styles.section}>
-                                <li className={styles.sectionItem}>Year: </li>
-                                <li className={styles.sectionItem}>Number of public lectures/demonstrations: </li>
-                                <li className={styles.sectionItem}>Number of visits: </li>
-                                <li className={styles.sectionItem}>Number of media interactions: </li>
-                            </div>
-                        </Collapse>
-
-                        <section>
-                            <div
-                                onClick={() => this.expandInfo('fundingratio')}
-                                className={styles.sectionHeader}
-                            >
-                                <div className={styles.sectionHeading}>SFI funding ratio</div>
-                                {this.expandIcon('fundingratio')}
-                            </div>
-                            <Collapse in={this.state.fundingratio} timeout="auto" unmountOnExit>
-                                <div className={styles.section}>
-                                    <li className={styles.sectionItem}>Year: </li>
-                                    <li className={styles.sectionItem}>Percentage of annual spend from SFI: </li>
+                        { !isUser ? <></> : (
+                                <div className={styles.tabs}>
+                                    <button onClick={()=>this.setState({editing: true})}>
+                                    Edit Profile
+                                    </button>
                                 </div>
-                            </Collapse>
-                        </section>
-                    </div>
+                            )
+                        }
+                        <div id={styles.profileWrapper}>
+                            <div id={styles.profileLeft}>
+                                <div>
+                                    { this.getProfileCard(user) }
+                                </div>
+                                <div>
+                                    <h1>Research Profile Information</h1>
+                                    <div className={styles.profileSections}>
+                                        <ProfileField heading="Education" data={user.educations} />
+                                        <ProfileField heading="Employment" data={user.employments} />
+                                        <ProfileField heading="Professional Societies" data={user.societyMemberships} />
+                                        <ProfileField heading="Awards" data={user.awards} />
+                                        <ProfileField heading="Impacts" data={user.impact} />
+                                        <ProfileField heading="Innovations" data={user.innovation} />
+                                        <ProfileField heading="Presentations" data={user.presentation} />
+                                        <ProfileField heading="Academic Collaborations" data={user.academicCollaborations} />
+                                        <ProfileField heading="Non-Academic Collaborations" data={user.nonAcademicCollaborations} />
 
-                    {/* What's this?
-            <li>Education and public
-              <ul>
-                <li>Name of project: </li>
-                <li>Start date: </li>
-                <li>End date: </li>
-                <li>Activity type: </li>
-                <li>Project type: </li>P
-                <li>Target geograpical area: </li>
-                <li>Primary attribution: </li>
-              </ul>
-            </li>*/}
+                                        <div onClick={() => this.expandInfo('conferences')} className={styles.sectionHeader}>
+                                            <div className={styles.sectionHeading}>Conferences/workshops/seminars organised</div>
+                                            {this.expandIcon('conferences')}
+                                        </div>
+                                        <Collapse in={this.state.conferences} timeout="auto" unmountOnExit>
+                                            <div className={styles.section}>
+                                                <li className={styles.sectionItem}>Start date: </li>
+                                                <li className={styles.sectionItem}>End date: </li>
+                                                <li className={styles.sectionItem}>Name of institution: </li>
+                                                <li className={styles.sectionItem}>Department within institution: </li>
+                                                <li className={styles.sectionItem}>Location: </li>
+                                                <li className={styles.sectionItem}>Name of collaborator: </li>
+                                                <li className={styles.sectionItem}>Primary goal of collaboration: </li>
+                                                <li className={styles.sectionItem}>Frequency of interaction: </li>
+                                                <li className={styles.sectionItem}>Primary attribution: </li>
+                                            </div>
+                                        </Collapse>
 
-                </div>
-        
+                                        <div onClick={() => this.expandInfo('comms')} className={styles.sectionHeader}>
+                                            <div className={styles.sectionHeading}>Communications overview</div>
+                                            {this.expandIcon('comms')}
+                                        </div>
+                                        <Collapse in={this.state.comms} timeout="auto" unmountOnExit>
+                                            <div className={styles.section}>
+                                                <li className={styles.sectionItem}>Year: </li>
+                                                <li className={styles.sectionItem}>Number of public lectures/demonstrations: </li>
+                                                <li className={styles.sectionItem}>Number of visits: </li>
+                                                <li className={styles.sectionItem}>Number of media interactions: </li>
+                                            </div>
+                                        </Collapse>
+
+                                        <section>
+                                            <div onClick={() => this.expandInfo('fundingratio')} className={styles.sectionHeader}>
+                                                <div className={styles.sectionHeading}>SFI funding ratio</div>
+                                                {this.expandIcon('fundingratio')}
+                                            </div>
+                                            <Collapse in={this.state.fundingratio} timeout="auto" unmountOnExit>
+                                                <div className={styles.section}>
+                                                    <li className={styles.sectionItem}>Year: </li>
+                                                    <li className={styles.sectionItem}>Percentage of annual spend from SFI: </li>
+                                                </div>
+                                            </Collapse>
+                                        </section>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id={styles.profileRight}>
+                                <h1>Projects</h1>
+                                { this.getProjects(projects) }
+                            </div>
+                        </div>
+                    </>
+                )}
             </div>
-        )
-        else return (
+        );
+    }
+
+    editingPage() {
+        return (
             <div className={styles.root}>
                 <div className={styles.exampleClass}>
                 Users Profile Page
@@ -476,7 +350,7 @@ class UserProfile extends Component {
                             <p>End date: <input type="date" name="nonAcademicCollabs_endDate"></input></p>
                             <p>Name of institution: <input type="text" name="nonAcademicCollabs_institutionName"></input></p>
                             <p>Department within institution: <input type="text" name="nonAcademicCollabs_institutionDepartment"></input></p>
-                            <p>Location: <input type="text" name="nonAcademicCollabs_location"></input>></p>
+                            <p>Location: <input type="text" name="nonAcademicCollabs_location"></input></p>
                             <p>Name of collaborator: <input type="text" name="nonAcademicCollabs_collaboratorName"></input></p>
                             <p>Primary goal of collaboration: <input type="text" name="nonAcademicCollabs_primaryCollaborationGoal"></input></p>
                             <p>Frequency of interaction: <input type="text" name="nonAcademicCollabs_interactionFrequency"></input></p>
@@ -514,7 +388,7 @@ class UserProfile extends Component {
                     </form>
                 </div>
             </div>
-        );	
+        );
     }
 }
 

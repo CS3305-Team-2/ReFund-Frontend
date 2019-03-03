@@ -5,7 +5,7 @@ green - #00A79A, blue - #003C68
 */
 
 .root {
-  max-width: 600px;
+  /* max-width: 600px; */
   /* margin: 0 auto; */
 }
 .exampleClass {
@@ -53,6 +53,7 @@ h1 {
 .section {
   background: #f6f6f6;
   padding: 1rem;
+  margin-bottom: 1em;
 }
 
 .sectionItem {
@@ -61,4 +62,17 @@ h1 {
 
 p > input {
   float: right;
+}
+
+#profileWrapper {
+    display: flex;
+    flex-direction: row;
+}
+
+#profileLeft {
+    
+}
+
+#profileRight {
+    margin-left: 5em;
 }

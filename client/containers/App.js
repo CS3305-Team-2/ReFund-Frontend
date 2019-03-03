@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import styles from './App.scss';
 import TopBar from './TopBar/TopBar';
+import BottomBar from './BottomBar/BottomBar'
 import GrantsPage from './GrantsPage/GrantsPage';
 import UsersPage from './UsersPage/UsersPage';
 import UserProfile from './UserProfile/UserProfile';
@@ -35,7 +36,7 @@ class App extends Component {
                         <Route path="/login" component={LoginPage} />
                         <Route exact path="/" component={LoginPage} />
                     </Switch>
-                    <div className="container" style={{paddingTop: '1rem'}}>
+                    <div className="container-fluid" style={{paddingTop: '1rem', width: '70%'}}>
                         <Switch>
                             <Route path="/oauth" component={OrcidLogin} />
                             <Route path="/grants/:id" component={GrantsPage} />
@@ -52,6 +53,7 @@ class App extends Component {
                         </Switch>
                     </div>
                 </div>
+                <BottomBar/>
             </div>
         );
     }
