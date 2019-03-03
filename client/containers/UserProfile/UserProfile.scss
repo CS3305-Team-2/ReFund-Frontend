@@ -35,6 +35,20 @@ h1 {
   align-items: center;
 }
 
+.editSection {
+  width: 40%;
+}
+
+@media only screen and (max-width: 600px) {
+  .editSection {
+    width: 80%;
+  }
+}
+
+input {
+    width: 30em;
+}
+
 .sectionHeading {
   font-size: 1.2rem;
   color: #031b4e;
@@ -60,13 +74,14 @@ h1 {
   background: #f6f6f6;
   padding: 1rem;
   margin-bottom: 1em;
+  box-shadow: 0 0 11px rgba(33, 33, 33, 0.2);
 }
 
 .sectionItem {
   padding: 0.25rem 0;
 }
 
-p > input {
+p > input, p > select {
   float: right;
 }
 

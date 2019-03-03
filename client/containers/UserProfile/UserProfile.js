@@ -8,15 +8,28 @@ import { apiUrl } from '../../config';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ProfileField from '../../components/ProfileField/ProfileField';
 import { Link } from 'react-router-dom';
+import {displayFriendlyUnderscore} from '../../utils/displayFriendly';
 
 class UserProfile extends Component {
 	constructor(props) {
-		super(props);
+        super(props);
+        let user = JSON.parse(localStorage.getItem("user"))
         this.state = {
             editing: false,
             loaded: false,
             user: null,
             projects: [],
+            awards: user.awards,
+            fundings: [],
+            impacts: user.impact,
+            innovations: user.innovation,
+            publications: user.publication,
+            presentations: user.presentation,
+            academics: user.academicCollaborations,
+            nonAcademics: user.nonAcademicCollaborations,
+            /* conferences: user., */
+            communications: user.communicationOverview,
+            fundingRatio: user.sfiFundingRatio,
         }
         this.handleSubmit = this.handleSubmit.bind(this);
         this.profilePage = this.profilePage.bind(this);
@@ -108,31 +121,17 @@ class UserProfile extends Component {
     }
 
     handleSubmit(event) {
-    // alert('Submitted');
-    }
-
-    addNewEntry(index, name) {
-        /*this.state.entries[0] += 1;
-        console.log(this.state.entries);
-        */
-        var node = document.createElement("div");
-        var elt = document.createTextNode(`${this.createElement(index)}`);
-        node.appendChild(elt);
-        document.getElementById(name).appendChild(node);
-    }
-
-    createElement(index) {
-        if (index === 0) {
-            return (
-                <div className={styles.section}>
-                    <p>Year: <input type="text" name="awards_year"></input></p>
-                    <p>Awarding Body: <input type="text" name="awards_awardingBody"></input></p>
-                    <p>Details: <input type="text" name="awards_details"></input></p>
-                    <p>Team member name: <input type="text" name="awards_teamMemberName"></input></p>
-                </div>
-            );
-            //return ("<div className={styles.section}><p>Year: <input type=\"text\" name=\"awards_year\"></input></p><p>Awarding Body: <input type=\"text\" name=\"awards_awardingBody\"></input></p><p>Details: <input type=\"text\" name=\"awards_details\"></input></p><p>Team member name: <input type=\"text\" name=\"awards_teamMemberName\"></input></p></div>");
-        }
+        let user = JSON.parse(JSON.stringify(this.state.user))
+        user.awards = this.state.awards;
+        user.impact = this.state.impacts;
+        user.innovation = this.state.innovations;
+        user.publication = this.state.publications;
+        user.presentation = this.state.presentations;
+        user.academicCollaborations = this.state.academics;
+        user.nonAcademicCollaborations = this.state.nonAcademics;
+        user.communicationOverview = this.state.communications;
+        user.sfiFundingRatio = this.state.fundingRatio;
+        console.log(JSON.stringify(user, null, 2))
     }
 
     render() {
@@ -141,7 +140,6 @@ class UserProfile extends Component {
         const { user, loaded, projects } = state;
 
         if (!loaded) return <div>Loading</div>;
-        console.log('user', user);
 
         if (!state.editing) {
             return this.profilePage(loaded, user, projects);
@@ -243,8 +241,220 @@ class UserProfile extends Component {
     }
 
     editingPage() {
+        let awards = []
+        const updateState = (evt, item, field, int) => {
+            let x = this.state[item]
+            x[evt.target.getAttribute('data-key')][field] = int ? parseInt(evt.target.value) : evt.target.value
+            if (x[evt.target.getAttribute('data-key')]['userId'] == undefined) x[evt.target.getAttribute('data-key')]['userId'] = this.state.user.id;
+            this.setState({item: x})
+        }
+
+        this.state.awards.forEach((award, i) => {
+            awards.push(<>
+                <p>Year: 
+                    <input type="text" data-key={i} value={this.state.awards[i].year} onChange={(evt) => updateState(evt, 'awards', 'year', true)}></input>
+                </p>
+                <p>Awarding Body: 
+                    <input type="text" data-key={i} value={this.state.awards[i].awardingBody} onChange={(evt) => updateState(evt, 'awards', 'awardingBody')}></input>
+                </p>
+                <p>Details: 
+                    <input type="text" data-key={i} value={this.state.awards[i].details} onChange={(evt) => updateState(evt, 'awards', 'details')}></input>
+                </p>
+            </>)
+        })
+        
+        let impacts = []
+        this.state.impacts.forEach((impact, i) => {
+            impacts.push(<>
+                <p>Impact title: 
+                    <input type="text" data-key={i} value={this.state.impacts[i].title} onChange={(evt) => updateState(evt, 'impacts', 'title')}></input>
+                </p>
+                <p>Impact category: 
+                    <input type="text" data-key={i} value={this.state.impacts[i].category} onChange={(evt) => updateState(evt, 'impacts', 'category')}></input>
+                </p>
+                <p>Primary beneficiary: 
+                    <input type="text" value={this.state.impacts[i].primaryBeneficiary} onChange={(evt) => updateState(evt, 'impacts', 'primaryBeneficiary')}></input>
+                </p>
+                <p>Primary attribution: 
+                    <input type="text" value={this.state.impacts[i].primaryAttribution} onChange={(evt) => updateState(evt, 'impacts', 'primaryAttribution')}></input>
+                </p>
+            </>)
+        })
+
+        let innovations = []
+        this.state.innovations.forEach((innovation, i) => {
+            innovations.push(<>
+                <p>Year: 
+                    <input type="text" data-key={i} value={this.state.innovations[i].year} onChange={(evt) => updateState(evt, 'innovations', 'year', true)}></input>
+                </p>
+                <p>Type: 
+                    <input type="text" data-key={i} value={this.state.innovations[i].type} onChange={(evt) => updateState(evt, 'innovations', 'type')}></input>
+                </p>
+                <p>Title: 
+                    <input type="text" data-key={i} value={this.state.innovations[i].title} onChange={(evt) => updateState(evt, 'innovations', 'title')}></input>
+                </p>
+                <p>Primary attribution: 
+                    <input type="text" data-key={i} value={this.state.innovations[i].primaryAttribution} onChange={(evt) => updateState(evt, 'innovations', 'primaryAttribution')}></input>
+                </p> 
+            </>)
+        })
+
+        let publications = []
+        this.state.publications.forEach((pub, i) => {
+            publications.push(<>
+                <p>Publication type: 
+                    <select data-key={i} onChange={(evt) => updateState(evt, 'publications', 'type')} value={this.state.publications[i].type}>
+                        <option value="REFEREED_ORIGINAL_ARTICLE">Refereed Original Article</option>
+                        <option value="REFEREED_REVIEW_ARTICLE">Refereed Review Article</option>
+                        <option value="REFEREED_CONFERENCE_ARTICLE">Refereed Conference Article</option>
+                        <option value="BOOK">Book</option>
+                        <option value="TECHNICAL_REPORT">Technical Report</option>
+                    </select>
+                </p>    
+                <p>Title: 
+                    <input type="text" data-key={i} value={this.state.publications[i].title} onChange={(evt) => updateState(evt, 'publications', 'title')}></input>
+                </p>
+                <p>Journal/conference name: 
+                    <input type="text" data-key={i} value={this.state.publications[i].journalName} onChange={(evt) => updateState(evt, 'publications', 'journalName')}></input>
+                </p>
+                <p>Publication status: 
+                    <select data-key={i} onChange={(evt) => updateState(evt, 'publications', 'status')} value={this.state.publications[i].status}>
+                        <option value="PUBLISHED">Published</option>
+                        <option value="IN_PRESS">In Press</option>
+                    </select>
+                </p>
+                {/* <p>DOI: 
+                    <input type="text" data-key={i} value={this.state.publications[i].year} onChange={(evt) => updateState(evt, 'publications', 'year')}></input>
+                </p> */}
+                <p>Primary attribution: 
+                    <input type="text" data-key={i} value={this.state.publications[i].primaryAttribution}></input>
+                </p>
+            </>)
+        })
+
+        let presentations = []
+        this.state.presentations.forEach((pres, i) => {
+            presentations.push(<>
+                <p>Year: 
+                    <input type="text" data-key={i} value={this.state.presentations[i].year} onChange={(evt) => updateState(evt, 'presentations', 'year', true)}></input>
+                </p>
+                <p>Title: 
+                    <input type="text" data-key={i} value={this.state.presentations[i].title} onChange={(evt) => updateState(evt, 'presentations', 'title')}></input>
+                </p>
+                <p>Event type: 
+                    <select data-key={i} onChange={(evt) => updateState(evt, 'presentations', 'eventType')} value={this.state.presentations[i].eventType}>
+                        <option value="CONFERENCE">Conference</option>
+                        <option value="INVITED_SEMINAR">Invited Seminar</option>
+                        <option value="KEYNOTE">Keynote</option>
+                    </select>
+                </p>
+                <p>Organising body: 
+                    <input type="text" data-key={i} value={this.state.presentations[i].organisingBody} onChange={(evt) => updateState(evt, 'presentations', 'organisingBody')}></input>
+                </p>
+                <p>Location: 
+                    <input type="text" data-key={i} value={this.state.presentations[i].location} onChange={(evt) => updateState(evt, 'presentations', 'location')}></input>
+                </p>
+                <p>Primary attribution: 
+                    <input type="text" data-key={i} value={this.state.presentations[i].primaryAttribution} onChange={(evt) => updateState(evt, 'presentations', 'primaryAttribution')}></input>
+                </p>
+            </>)
+        })
+
+        let academicCollaborations = []
+        this.state.academics.forEach((acs, i) => {
+            academicCollaborations.push(<>
+                <p>Start date: 
+                    <input type="date" data-key={i} value={this.state.academics[i].startDate} onChange={(evt) => updateState(evt, 'academics', 'startDate')}></input>
+                </p>
+                <p>End date: 
+                    <input type="date" data-key={i} value={this.state.academics[i].endDate} onChange={(evt) => updateState(evt, 'academics', 'startDate')}></input>
+                </p>
+                <p>Name of institution: 
+                    <input type="text" data-key={i} value={this.state.academics[i].institutionName} onChange={(evt) => updateState(evt, 'academics', 'institutionName')}></input>
+                </p>
+                <p>Department within institution: 
+                    <input type="text" data-key={i} value={this.state.academics[i].institutionDepartment} onChange={(evt) => updateState(evt, 'academics', 'institutionDepartment')}></input>
+                </p>
+                <p>Location: 
+                    <input type="text" data-key={i} value={this.state.academics[i].location} onChange={(evt) => updateState(evt, 'academics', 'location')}></input>
+                </p>
+                <p>Name of collaborator: 
+                    <input type="text" data-key={i} value={this.state.academics[i].nameOfCollaborator} onChange={(evt) => updateState(evt, 'academics', 'nameOfCollaborator')}></input>
+                </p>
+                <p>Primary goal of collaboration: 
+                    <select data-key={i} onChange={(evt) => updateState(evt, 'academics', 'goalOfCollaboration')} value={this.state.academics[i].goalOfCollaboration}>
+                        <option value="ACCESS_TO_SOFTWARE_DATA_MATERIAL_EQUIPMENT">Access to Software Data Material Equipment</option>
+                        <option value="TRAINING_AND_CAREER_DEVELOPMENT">Training and Career Development</option>
+                        <option value="JOINT_PUBLICATION">Joint Publication</option>
+                        <option value="STARTUP_DEVELOPMENT">Startup Development</option>
+                        <option value="LICENSE_DEVELOPMENT">License Development</option>
+                        <option value="BUILDING_NETWORK_AND_RELATIONSHIPS">Building Networks and Relationships</option>
+                    </select>
+                </p>
+                <p>Frequency of interaction: 
+                    <input type="text" data-key={i} value={this.state.academics[i].interactionFrequency} onChange={(evt) => updateState(evt, 'academics', 'interactionFrequency')}></input>
+                </p>
+                <p>Primary attribution: 
+                    <input type="text" data-key={i} value={this.state.academics[i].primaryAttribution} onChange={(evt) => updateState(evt, 'academics', 'primaryAttribution')}></input>
+                </p>
+            </>)
+        })
+
+        let nonAcademicCollaborations = []
+        this.state.nonAcademics.forEach((acs, i) => {
+            nonAcademicCollaborations.push(<>
+                <p>Start date: 
+                    <input type="date" data-key={i} value={this.state.nonAcademics[i].startDate} onChange={(evt) => updateState(evt, 'nonAcademics', 'startDate')}></input>
+                </p>
+                <p>End date: 
+                    <input type="date" data-key={i} value={this.state.nonAcademics[i].endDate} onChange={(evt) => updateState(evt, 'nonAcademics', 'endDate')}></input>
+                </p>
+                <p>Name of institution: 
+                    <input type="text" data-key={i} value={this.state.nonAcademics[i].institutionName} onChange={(evt) => updateState(evt, 'nonAcademics', 'institutionName')}></input>
+                </p>
+                <p>Department within institution: 
+                    <input type="text" data-key={i} value={this.state.nonAcademics[i].institutionDepartment} onChange={(evt) => updateState(evt, 'nonAcademics', 'institutionDepartment')}></input>
+                </p>
+                <p>Location: 
+                    <input type="text" data-key={i} value={this.state.nonAcademics[i].location} onChange={(evt) => updateState(evt, 'nonAcademics', 'location')}></input>
+                </p>
+                <p>Name of collaborator: 
+                    <input type="text" data-key={i} value={this.state.nonAcademics[i].nameOfCollaborator} onChange={(evt) => updateState(evt, 'nonAcademics', 'nameOfCollaborator')}></input>
+                </p>
+                <p>Primary goal of collaboration: 
+                    <input type="text" data-key={i} value={displayFriendlyUnderscore(this.state.nonAcademics[i].goalOfCollaboration)} onChange={(evt) => updateState(evt, 'nonAcademics', 'goalOfCollaboration')}></input>
+                </p>
+                <p>Frequency of interaction: 
+                    <input type="text" data-key={i} value={this.state.nonAcademics[i].interactionFrequency} onChange={(evt) => updateState(evt, 'nonAcademics', 'interactionFrequency')}></input>
+                </p>
+                <p>Primary attribution: 
+                    <input type="text" data-key={i} value={this.state.nonAcademics[i].primaryAttribution} onChange={(evt) => updateState(evt, 'nonAcademics', 'primaryAttribution')}></input>
+                </p>
+            </>)
+        })
+
+
+
+        let sfiRatios = []
+        this.state.fundingRatio.forEach((ratio, i) => {
+            sfiRatios.push(<>
+                <p>Year: 
+                    <input type="text" data-key={i} value={this.state.fundingRatio[i].year} onChange={(evt) => updateState(evt, 'fundingRatio', 'year', true)}></input>
+                </p>
+                <p>Percentage of annual spend from SFI:
+                    <select data-key={i} onChange={(evt) => updateState(evt, 'fundingRatio', 'annualTimePercent')} value={this.state.fundingRatio[i].annualTimePercent}>
+                        <option value="PERCENT_0_20">0 - 20%</option>
+                        <option value="PERCENT_21_40">21 - 40%</option>
+                        <option value="PERCENT_41_60">41 - 60%</option>
+                        <option value="PERCENT_61_80">61 - 80%</option>
+                        <option value="PERCENT_81_100">81 - 100%</option>
+                    </select>
+                </p>
+            </>)
+        })
+
         return (
-            <div className={styles.root}>
+            <div className={[styles.root, styles.editSection]}>
                 <div className={styles.exampleClass}>
                 Users Profile Page
                 </div>
@@ -255,113 +465,54 @@ class UserProfile extends Component {
                 </div>
                 <div>
                     <form onSubmit={this.handleSubmit}>
-
-
-
-
-
                         <div className={styles.sectionHeading}>Distinctions/Awards</div>
-                        <div id="sec_awards">
-                            <div className={styles.section}>
-                                <p>Year: <input type="text" name="awards_year"></input></p>
-                                <p>Awarding Body: <input type="text" name="awards_awardingBody"></input></p>
-                                <p>Details: <input type="text" name="awards_details"></input></p>
-                                <p>Team member name: <input type="text" name="awards_teamMemberName"></input></p>
-                            </div>
+                        <div className={styles.section}>
+                            {awards}
+                            <input type="button" value="Add new entry" onClick={() => {this.setState({awards: this.state.awards.concat([{}])})}}></input>
                         </div>
-                        <input type="button" name="btn_awards" value="Add new 'Distinctions/Awards' entry" onClick={()=>this.addNewEntry(0, "sec_awards")}></input>
                         
-
-
-
-
-
-
-
-                        <div className={styles.sectionHeading}>Funding Diversification</div>
+                        {/* <div className={styles.sectionHeading}>Funding Diversification</div>
                         <div className={styles.section}>
-                            <p>Start date: <input type="date" name="funding_startDate"></input></p>
-                            <p>End date: <input type="date" name="funding_endDate"></input></p>
-                            <p>Amount: <input type="text" name="funding_amount"></input></p>
-                            <p>Funding body: <input type="text" name="funding_fundingBody"></input></p>
-                            <p>Funding programme: <input type="text" name="funding_fundingProgramme"></input></p>
-                            <p>Status: <input type="text" name="funding_status"></input></p>
-                            <p>Primary attribution: <input type="text" name="funding_primaryAttribution"></input></p>
-                        </div>
-
-                        <div className={styles.sectionHeading}>Team Members</div>
-                        <div className={styles.section}>
-                            <p>Arrival date: <input type="date" name="team_arrivalDate"></input></p>
-                            <p>Departure date: <input type="date" name="team_departureDate"></input></p>
-                            <p>Name: <input type="text" name="team_name"></input></p>
-                            <p>Position: <input type="text" name="team_position"></input></p>
-                            <p>Primary attribution: <input type="text" name="team_primaryAttribution"></input></p>
-                        </div>
+                            
+                        </div> */}
 
                         <div className={styles.sectionHeading}>Impacts</div>
                         <div className={styles.section}>
-                            <p>Impact title: <input type="text" name="impacts_title"></input></p>
-                            <p>Impact category: <input type="text" name="impacts_category"></input></p>
-                            <p>Primary beneficiary: <input type="text" name="impacts_primaryBeneficiary"></input></p>
-                            <p>Primary attribution: <input type="text" name="impacts_primaryAttribution"></input></p>
+                            {impacts}
+                            <input type="button" value="Add new entry" onClick={() => {this.setState({impacts: this.state.impacts.concat([{}])})}}></input>
                         </div>
 
                         <div className={styles.sectionHeading}>Innovation and Commercialisation</div>
                         <div className={styles.section}>
-                            <p>Year: <input type="text" name="innovation_year"></input></p>
-                            <p>Type: <input type="text" name="innovation_type"></input></p>
-                            <p>Title: <input type="text" name="innovation_title"></input></p>
-                            <p>Primary attribution: <input type="text" name="innovation_primaryAttribution"></input></p>
+                            {innovations}
+                            <input type="button" value="Add new entry" onClick={() => {this.setState({innovations: this.state.innovations.concat([{}])})}}></input>
                         </div>
 
                         <div className={styles.sectionHeading}>Publications</div>
                         <div className={styles.section}>
-                            <p>Publication year: <input type="text" name="publications_year"></input></p>
-                            <p>Publication type: <input type="text" name="publications_type"></input></p>
-                            <p>Title: <input type="text" name="publications_title"></input></p>
-                            <p>Journal/conference name: <input type="text" name="publications_journalName"></input></p>
-                            <p>Publication status: <input type="text" name="publications_status"></input></p>
-                            <p>DOI: <input type="text" name="publications_doi"></input></p>
-                            <p>Primary attribution: <input type="text" name="publications_primaryAttribution"></input></p>
+                            {publications}
+                            <input type="button" value="Add new entry" onClick={() => {this.setState({publications: this.state.publications.concat([{}])})}}></input>
                         </div>
 
                         <div className={styles.sectionHeading}>Presentations</div>
                         <div className={styles.section}>
-                            <p>Year: <input type="text" name="presentations_year"></input></p>
-                            <p>Title: <input type="text" name="presentations_title"></input></p>
-                            <p>Event type: <input type="text" name="presentations_type"></input></p>
-                            <p>Organising body: <input type="text" name="presentations_organisingBody"></input></p>
-                            <p>Location: <input type="text" name="presentations_location"></input></p>
-                            <p>Primary attribution: <input type="text" name="presentations_primaryAttribution"></input></p>
+                            {presentations}
+                            <input type="button" value="Add new entry" onClick={() => {this.setState({presentations: this.state.presentations.concat([{}])})}}></input>
                         </div>
 
                         <div className={styles.sectionHeading}>Academic collaborations</div>
                         <div className={styles.section}>
-                            <p>Start date: <input type="date" name="academicCollabs_startDate"></input></p>
-                            <p>End date: <input type="date" name="academicCollabs_endDate"></input></p>
-                            <p>Name of institution: <input type="text" name="academicCollabs_institutionName"></input></p>
-                            <p>Department within institution: <input type="text" name="academicCollabs_institutionDepartment"></input></p>
-                            <p>Location: <input type="text" name="academicCollabs_location"></input></p>
-                            <p>Name of collaborator: <input type="text" name="academicCollabs_collaboratorName"></input></p>
-                            <p>Primary goal of collaboration: <input type="text" name="academicCollabs_primaryCollaborationGoal"></input></p>
-                            <p>Frequency of interaction: <input type="text" name="academicCollabs_interactionFrequency"></input></p>
-                            <p>Primary attribution: <input type="text" name="academicCollabs_primaryAttribution"></input></p>
+                            {academicCollaborations}
+                            <input type="button" value="Add new entry" onClick={() => {this.setState({academics: this.state.academics.concat([{}])})}}></input>
                         </div>
 
                         <div className={styles.sectionHeading}>Non-Academic collaborations</div>
                         <div className={styles.section}>
-                            <p>Start date: <input type="date" name="nonAcademicCollabs_startDate"></input></p>
-                            <p>End date: <input type="date" name="nonAcademicCollabs_endDate"></input></p>
-                            <p>Name of institution: <input type="text" name="nonAcademicCollabs_institutionName"></input></p>
-                            <p>Department within institution: <input type="text" name="nonAcademicCollabs_institutionDepartment"></input></p>
-                            <p>Location: <input type="text" name="nonAcademicCollabs_location"></input></p>
-                            <p>Name of collaborator: <input type="text" name="nonAcademicCollabs_collaboratorName"></input></p>
-                            <p>Primary goal of collaboration: <input type="text" name="nonAcademicCollabs_primaryCollaborationGoal"></input></p>
-                            <p>Frequency of interaction: <input type="text" name="nonAcademicCollabs_interactionFrequency"></input></p>
-                            <p>Primary attribution: <input type="text" name="nonAcademicCollabs_primaryAttribution"></input></p>
+                            {nonAcademicCollaborations}
+                            <input type="button" value="Add new entry" onClick={() => {this.setState({nonAcademics: this.state.nonAcademics.concat([{}])})}}></input>
                         </div>
 
-                        <div className={styles.sectionHeading}>Conferences/workshops/seminars organised</div>
+                        {/* <div className={styles.sectionHeading}>Conferences/workshops/seminars organised</div>
                         <div className={styles.section}>
                             <p>Start date: <input type="date" name="conferences_startDate"></input></p>
                             <p>End date: <input type="date" name="conferences_endDate"></input></p>
@@ -372,20 +523,22 @@ class UserProfile extends Component {
                             <p>Primary goal of collaboration: <input type="text" name="conferences_primaryCollaborationGoal"></input></p>
                             <p>Frequency of interaction: <input type="text" name="conferences_interactionFrequency"></input></p>
                             <p>Primary attribution: <input type="text" name="conferences_primaryAttribution"></input></p>
-                        </div>
+                            <input type="button" value="Add new entry" onClick={() => {this.setState({awards: this.state.awards.concat([{}])})}}></input>
+                        </div> */}
 
-                        <div className={styles.sectionHeading}>Communications overview</div>
+                        {/* <div className={styles.sectionHeading}>Communications overview</div>
                         <div className={styles.section}>
                             <p>Year: <input type="text" name="comms_year"></input></p>
                             <p>Number of public lectures/demonstrations: <input type="text" name="comms_numberOfPublicLectures"></input></p>
                             <p>Number of visits: <input type="text" name="comms_numberOfVisits"></input></p>
                             <p>Number of media interactions: <input type="text" name="comms_numberOfMediaInteractions"></input></p>
-                        </div>
+                            <input type="button" value="Add new entry" onClick={() => {this.setState({communications: this.state.communications.concat([{}])})}}></input>
+                        </div> */}
 
                         <div className={styles.sectionHeading}>SFI funding ratio</div>
                         <div className={styles.section}>
-                            <p>Year: <input type="text" name="fundingratio_year"></input></p>
-                            <p>Percentage of annual spend from SFI: <input type="text" name="fundingratio_annualSpendPercentage"></input></p>
+                            {sfiRatios}
+                            <input type="button" value="Add new entry" onClick={() => {this.setState({fundingRatio: this.state.fundingRatio.concat([{}])})}}></input>
                         </div>
 
                         <input type="submit" value="Submit" />
