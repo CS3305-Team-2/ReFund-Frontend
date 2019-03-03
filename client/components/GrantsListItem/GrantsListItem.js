@@ -27,15 +27,13 @@ class GrantsListItem extends Component {
             <div className={styles.root}>
                 <div className="row mb-2">
                     <div className={cx('col flex-grow-1', styles.title)}>{grant.title}</div>
-                    {this.proposalButton()}
+                    {this.props.isResearcher ? this.proposalButton() : ''}
                 </div>
                 <div className={cx('row', styles.grant)}>
                     <div className={cx('col-12', styles.left)}>
                         <div className={styles.description}>{grant.description}</div>
                     </div>
                     <div className={cx('col-12', styles.right)}>
-                        <div className={styles.detail}><span className={styles.label}>Deadline - </span>{grant.deadline}</div>
-                        <div className={styles.detail}><span className={styles.label}>Duration - </span>{grant.duration}</div>
                         <div className={styles.detail}><span className={styles.label}>Amount - </span>€{grant.amount}</div>
                     </div>
                 </div>               

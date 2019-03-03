@@ -1,16 +1,13 @@
 /* 
 The SFI color scheme to use.
 green - #00A79A, blue - #003C68
-
-
-
-    position: fixed;
-    width: 100vw;
-    height: 100vh;
-    left: 0;
-    top: 0;
-    background: rgba(0,0,0,.6);
-    z-index: 5000;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  left: 0;
+  top: 0;
+  background: rgba(0,0,0,.6);
+  z-index: 5000;
 */
 
 .modalRoot {
@@ -79,16 +76,14 @@ green - #00A79A, blue - #003C68
 }
 
 .loginButton {
-  padding: 0.75rem 1.5rem;
+  padding: 0.25rem 0.5rem;
   background: rgb(0, 167, 154);
   color: #fff;
   font-weight: bold;
   border-radius: 2px;
   cursor: pointer;
-  border-radius: 5px;
- 
+  margin-right: 0.5rem;
 }
-
 
 .loginButton:hover {
   background: rgba(0, 167, 154, 0.6);
@@ -105,8 +100,6 @@ green - #00A79A, blue - #003C68
   display: block
 }
 
-
-
 .modalShow {
   animation: modalShow 0.35s forwards;
   animation-delay: 0s;
@@ -117,5 +110,6 @@ green - #00A79A, blue - #003C68
   to   { opacity: 1;}
 }
 
-
-
+.consentLabel {
+  font-size: 0.8rem;
+}

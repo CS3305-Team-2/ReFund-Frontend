@@ -26,7 +26,7 @@ class TopBar extends Component {
                 { value: 'Users', path: '/users' },
                 { value: 'Grants', path: '/grants' },
                 { value: 'Projects', path: '/projects' },
-                { value: 'Host Institutions', path: '/hostInstitutions' },
+                // { value: 'Host Institutions', path: '/hostInstitutions' },
             ];
         }
 
@@ -48,12 +48,11 @@ class TopBar extends Component {
     }
 
     logout() {
-        localStorage.removeItem("user");
+        localStorage.removeItem("authData");
         this.props.history.push("/login");
     }
 	
     render() {
-        console.log('topbar', this.props);
         return (
             <div className={styles.topBar}>
                 <div className={cx('container', styles.container)}>
@@ -61,7 +60,7 @@ class TopBar extends Component {
                         <div className={styles.logoContainer}>
                             <img src={logo} className={styles.logo} />
                         </div>
-                        {localStorage.getItem("user") ?
+                        {localStorage.getItem("authData") ?
                             <div className="flex-grow-1 h-100">
                                 <div className={cx(styles.nav)}>
                                     {this.getLinks()}

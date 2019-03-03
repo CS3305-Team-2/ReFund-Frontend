@@ -45,6 +45,8 @@ green - #00A79A, blue - #003C68
   opacity: 0;
   transform: translateY(-100%);
   transition: transform 1s ease, opacity 0.5s ease;
+  overflow-y: scroll;
+  max-height: calc(100vh - 3rem);
 }
 
 .title {

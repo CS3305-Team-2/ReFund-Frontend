@@ -17,10 +17,10 @@ class LoginPage extends Component {
     }
   
     submitLogin() {
-        const {
-            email,
-            password
-        } = this.state;
+    const {
+        email,
+        password
+    } = this.state;
 
     
     const formData = new FormData();

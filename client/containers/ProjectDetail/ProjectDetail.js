@@ -1,87 +1,175 @@
 import React, { Component} from 'react';
 import styles from './ProjectDetail.scss';
 import cx from 'classnames';
-
-const project = {
-    title: 'Sample Title',
-    desc:"sample text",
-    startDate: "sample",
-    endDate:"sample",
-    budget:"sample",
-    staff:[],
-    fundedRes:[],
-    status:"sample",
-    extra: 'email@email.com'
-}
+import axios from 'axios';
+import { apiUrl } from '../../config';
+import displayFriendly from '../../utils/displayFriendly';
+import { codeToArea } from '../../utils/nrpAreas';
+import toggleModal from '../../utils/toggleModal';
+import SubmitProposalModal from '../../components/SubmitProposalModal/SubmitProposalModal';
 
 class ProjectDetail extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-        }
+  constructor(props) {
+    super(props);
+    this.state = {
+      staffState:0,
+      projectState:0,
+      loaded: false,
+      proposalModalOpen: false,
     }
+    this.toggleModal = this.toggleModal.bind(this);
+  }
+
+  componentDidMount() {
+    const id = this.props.match.params.id;      
+    axios.get(apiUrl + `/project/${id}`).then(
+      res => {
+        console.log('project', res.data);
+        this.setState({ project: res.data, loaded: true });
+      }
+    ).catch(e => console.log(e.response));
+  }
+
+  getProposalControls() {
+    return (
+      <div className="d-flex">
+        <div 
+          className={styles.proposalApprove} 
+          onClick={() => this.toggleModal('proposalModalOpen')}
+        >
+          Edit
+        </div>
+        {/*<div 
+          className={styles.proposalDelete} 
+          onClick={() => this.updateProposal(proposal, 'delete', index)}
+        >
+          Delete
+        </div>*/}
+      </div>
+    );
+  }
+
+  toggleModal(modalType) {
+    const bodyClass = document.body.className;
+    if (bodyClass.includes(' modal-open')) {
+      document.body.className = bodyClass.replace(' modal-open', '');
+      this.setState({[modalType]: false });
+    } else {
+      document.body.className += ' modal-open';
+      this.setState({[modalType]: true});
+    }
+  }
   
-    render() {
-        const state = this.state;
-        const props = this.props;
 
-        const project = {
-            title: 'ERA-Net on the Blue Bioeconomy (BlueBio) – Unlocking the Potential of Aquatic Bioresources',
-            Desc: "The 1st Transnational Call for research proposals under the ERA-NET Bluebio is now open. BlueBio aims at achieving a sustainable and competitive Blue Bioeconomy in Europe. The goal is to generate knowledge for Blue Bioeconomy value chains and improve the transfer of bio-based products and services from research, innovation and demonstrations to production scale implementing the multi-actor-approach. BlueBio contributes to the production of safe, nutritious and valuable bio-products and services, while applying the food first principle. BlueBio launches calls to attract projects that work on the use and value-added of aquatic biomass in integrated value chains from primary production to processing, generating innovative products and services within the bioeconomy.",
-            extra: ['email@email.com'],
-            startDate: "1st January 2018",
-            endDate:"17th March 2019",
-            budget:"1,500,000 Euro",
-            staff:[],
-            fundedRes:"The Cofund is being coordinated by Norway and consists of 28 partners from 16 countries with an estimated fund of €29.25m. The main objective of the Cofund is to establish a coordinated Research and Development funding scheme that will strengthen Europe’s position in the blue bioeconomy.",
-            status:"Open",
-        }
-        const extraItems = project.extra.map((extra) => <li>{extra}</li>);
-        const staffItems = project.staff.map((staff) => <li>{staff}</li>);
-        const exampleData = {
-            stuff: 'example stuff'
-        }
-		
-        return (
-            <div>
-                {/* 
-          CSS Example. When adding a class remember to use "className" not "class".
-          e.g <div className={styles.exampleClass}> </div>
-          Then in the .scss file. write the css class exampleClass
+  getProposal(proposal) {
+    return (
+      <>
+        <div className={styles.headingContainer}>
+          <div className={styles.heading}>{proposal.title}</div>
+          {this.getProposalControls()}
+        </div>
+        <div className={styles.detail}><span className={styles.label}>Status - </span>{displayFriendly(proposal.status.toLowerCase())}</div>
+        <div className={styles.detail}><span className={styles.label}>Duration (months) - </span>{proposal.duration}</div>
+        <div className={styles.detail}><span className={styles.label}>Ethical Issues - </span>{proposal.ethicalIssues}</div>
+        <div className={styles.detail}><span className={styles.label}>Lay Abstract - </span>{proposal.layAbstract}</div>
+        <div className={styles.detail}><span className={styles.label}>Scientific Abstract - </span>{proposal.scientificAbstract}</div>
+        <div className={styles.detail}><span className={styles.label}>Alignment to legal remit - </span>{proposal.legalRemitAlignment}</div>
+        <div className={styles.detail}><span className={styles.label}>NRP Area - </span>{codeToArea(proposal.nrpArea)}</div>
+        <div className={styles.detail}><span className={styles.label}>Status - </span>{proposal.status}</div>
+      </>
+    );
+  }
 
-          If you want to use multiple classes. use the 'cx' library I've imported at the top
-          how to use: 'https://github.com/JedWatson/classnames'
-          <div className={cx(styles.exampleClass, styles.exampleClass2)}> </div>
-        */}
-                <div className={styles.title}>
-                    {project.title}
+  getReports() {
+    /*
+      challenges: "A lot of em"
+      id: 1
+      planDeviation: "No deviation"
+      plannedActivities: "yes"
+      projectId: 1
+      threeHighlights: "No highlights"
+      year: 2018
+    */
+    return this.state.project.annualReport.map((report) => {
+      return (
+        <div className={styles.profileSections}>
+          <div className={styles.section}>
+            <div className={styles.detail}>
+              <span className={styles.label}>Year - </span>
+              {report.year}
+            </div>
+            <div className={styles.detail}>
+              <span className={styles.label}>Challenges - </span>
+              {report.challenges}
+            </div>
+            <div className={styles.detail}>
+              <span className={styles.label}>Plan Deviation - </span>
+              {report.planDeviation}
+            </div>
+            <div className={styles.detail}>
+              <span className={styles.label}>Highlights - </span>
+              {report.threeHighlights}
+            </div>
+            <div className={styles.detail}>
+              <span className={styles.label}>Planned Activities - </span>
+              {report.plannedActivities}
+            </div>
+          </div>
+        </div>
+      );
+    });
+  }
+
+  render() {
+    const state = this.state;
+    const props = this.props;
+
+    if (!state.loaded) return <div>Loading...</div>;
+
+    const project = state.project;
+    const proposal = project.proposal;
+
+    return (
+      <div>
+        <div className={styles.sectionHeading}>Project</div>
+        <div className={styles.profileSections}>
+            <div className={styles.section}>
+                <div className={styles.headingContainer}>
+                  <div className={styles.heading}>{project.name}</div>
                 </div>
-                <div className={styles.cols}>
-                    <div className={styles.Main}>
-                        <div className={styles.mainCol}>
-                            {/* Add in data like so. e.g for a user: add in their name with {user.name} into a div */}
-                            <h1>Description:</h1>
-                            {project.Desc}
-                            <h1>Budget:</h1>
-                            {project.budget}
-                            <h1>Staff:</h1>
-                            {staffItems}
-                            <h1>Funding:</h1>
-                            {project.fundedRes}
-                        </div>
-			    </div>
-                    <div className={styles.sideCol}>
-                        <h1>Start Date</h1>
-                        {project.startDate}
-                        <h1>End Date</h1>
-                        {project.endDate}
-                        <h1>Status</h1>
-                        {project.status}
-                    </div>
+                <div className={styles.detail}>{project.description}</div>
+                <div className={styles.detail}><span className={styles.label}>Budget - </span>€{project.budget}</div>
+                <div className={styles.detail}>
+                  <div className={styles.label}>Project Members</div>
+                  {project.teamMembers.map((member) => {
+                    return (<div>{member.name} - {member.role}</div>);
+                  })}
                 </div>
             </div>
-        );	
-    }
+        </div>
+        <div className={styles.sectionHeading}>Grant Proposal</div>
+        <div className={styles.profileSections}>
+          <div className={styles.section}>
+          { proposal ? 
+            <>
+            {this.getProposal(proposal)}
+            <SubmitProposalModal 
+              open={this.state.proposalModalOpen}
+              onClose={() => this.toggleModal('proposalModalOpen')}
+              proposal={proposal}
+              fileNotRequired
+            />
+            </>
+          : <div >No Proposal Created</div>}
+          </div>
+
+        </div>
+
+        <div className={styles.sectionHeading}>Reports</div>
+        {this.getReports()}
+      </div>
+    );	
+  }
 }
 
 export default ProjectDetail;

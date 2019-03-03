@@ -8,36 +8,6 @@ import ProjectListItem from '../../components/ProjectListItem/ProjectListItem';
 import CreateProjectModal from '../../components/CreateProjectModal/CreateProjectModal';
 import getCurrentUser from '../../utils/getCurrentUser';
 
-// Create mock data to use
-
-/*const projects = [
-  {
-    title: 'Project Name',
-    description: 'Project Desc'
-    // Etc add all the fields
-    },  
-    {
-        title: 'Project Name 2',
-        description: 'Project Desc'
-    // Etc add all the fields
-    },
-    {
-        title: 'Project Name 3',
-        description: 'Project Desc'
-    // Etc add all the fields
-    },
-    {
-        title: 'Project Name',
-        description: 'Project Desc'
-    // Etc add all the fields
-    },
-    {
-        title: 'Project Name',
-        description: 'Project Desc'
-    // Etc add all the fields
-  }
-]*/
-
 class ProjectListPage extends Component {
 	constructor(props) {
 		super(props);
@@ -59,10 +29,9 @@ class ProjectListPage extends Component {
   }
 
   fetchProjects() {
-    console.log('fetcing')
     axios.get(apiUrl + '/project/associatedTo/1').then(
       res => {
-        console.log('fetched', res.data);
+        console.log('projects', res.data);
         this.setState({ projects: res.data });
       }
     );
@@ -80,22 +49,18 @@ class ProjectListPage extends Component {
   }
 
   getProjects(projects) {
-    // This will return a list of ProjectListItem components for each 'project' in the list at the top
+    return projects.map((project)=>{
+      return <Link to={`/project/${project.id}`} className={styles.userLink}><ProjectListItem project={project} /></Link> // Each <ProjectListItem shows an user in the list of users this page shows.
+    });
+  }
 
-        // projects is the project list at the top of this page
-        return projects.map((project)=>{
-            // Finish the <ProjectListItem />  component. Found in /components. 
-            return <Link to={`/project/`} className={styles.userLink}><ProjectListItem project={project} /></Link> // Each <ProjectListItem shows an user in the list of users this page shows.
-        });
-    }
+  search() {
+    this.setState({})
+  }
 
-    search() {
-        this.setState({})
-    }
-
-    searchFilter(users, searchType, searchTerm) {
-        let type = searchType.toLowerCase();
-        let term = searchTerm.toLowerCase();
+  searchFilter(users, searchType, searchTerm) {
+    let type = searchType.toLowerCase();
+    let term = searchTerm.toLowerCase();
 
     let results = [];
     users.slice().forEach(user => {
@@ -122,8 +87,7 @@ class ProjectListPage extends Component {
     let projectListItems = this.getProjects(projectList);
 
     const currentUser = getCurrentUser();
-    console.log('projectlist', state);
-  
+
 		return (
 			<div>
         <div className={styles.header}>
