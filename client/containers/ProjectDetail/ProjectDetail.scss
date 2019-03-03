@@ -198,3 +198,28 @@ h1 {
   display: block;
   width: 100%;
 }
+
+.sectionHeader {
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid #00A79A;
+  cursor: pointer;
+  background: #f6f6f6;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sectionHeading {
+  font-size: 1.2rem;
+  color: #031b4e;
+  font-weight: 500;
+}
+
+
+.sectionHeader:hover {
+  background: #eee;
+}
+
+.grantContainer {
+  border-bottom: 1px solid #00A79A;
+}
