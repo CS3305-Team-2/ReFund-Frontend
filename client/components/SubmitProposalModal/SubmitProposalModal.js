@@ -17,7 +17,7 @@ const emptyForm = {
   scientificAbstract: '',
   legalRemitAlignment: '',
   applicantLocationStatement: '',
-  nrpArea: Object.keys(areaToCode)[0],  
+  nrpArea: areaToCode[Object.keys(areaToCode)[0]],  
 }
 
 class SubmitProposalModal extends Component {
@@ -25,6 +25,7 @@ class SubmitProposalModal extends Component {
     super(props);
     let form = emptyForm;
     if (props.proposal) form = props.proposal
+    console.log('PRO EDIT', props.proposal);
 		this.state = {
       form,
       loaded: false,
@@ -43,8 +44,9 @@ class SubmitProposalModal extends Component {
       res => {
         console.log('fetched', res.data);
         const projects = res.data.filter((project) => project.proposal == null);
-        if (projects.length < 1) return;
-        this.updateForm('projectId', projects[0].id);
+        if (projects.length > 0) {
+          this.updateForm('projectId', projects[0].id);
+        } 
         this.setState({ projects, loaded: true });
       }
     ).catch(e => console.log(e.response));
@@ -94,6 +96,7 @@ class SubmitProposalModal extends Component {
       selectedFile: event.target.files[0],
     })
   }
+
   postProposal(file, proposal) {
     const formData = new FormData();
     formData.append("file", file);
@@ -103,24 +106,32 @@ class SubmitProposalModal extends Component {
     
     console.log('submitting', file, proposal);
     // return ;
-    axios.post(apiUrl + '/proposal', formData, { headers: { 'Content-Type': 'multipart/form-data' }})
-    .then((res) => console.log(res.data))
-    .catch((e) => console.log(e.response));
+    if (this.props.editMode) {
+      axios.post(apiUrl + '/proposal/update', formData, { headers: { 'Content-Type': 'multipart/form-data' }})
+      .then((res) => console.log(res.data))
+      .catch((e) => console.log(e.response));
+    } else {
+      axios.post(apiUrl + '/proposal', formData, { headers: { 'Content-Type': 'multipart/form-data' }})
+      .then((res) => console.log(res.data))
+      .catch((e) => console.log(e.response));      
+    }
   }
 
   submitProposal(status) {
     const form = Object.assign({}, this.state.form);
-    form.nrpArea = areaToCode[form.nrpArea];
-    form.status = status;
-    form.primaryAttribution = this.props.grant.id;
-    const selectedFile = this.state.selectedFile;
 
+    form.status = status;
+    if (!this.props.editMode) {
+      form.primaryAttribution = this.props.grant.id;
+    }
+    const selectedFile = this.state.selectedFile;
     
     const isValid = this.validate(form, selectedFile);
     console.log('isValid', isValid, form, selectedFile);
     if (isValid) {
       this.postProposal(selectedFile, form);
       this.props.onClose();
+      if(this.props.editMode) this.props.proposalEdited();
     }
   }
   
@@ -132,7 +143,7 @@ class SubmitProposalModal extends Component {
         rootStyle.transform = 'translateY(0%)';
         rootStyle.opacity = '1';
     }
-    if(!state.loaded) return <div>loading...</div>;
+    if(!state.loaded) return <div></div>;
     const form = state.form;
 
     return (
@@ -155,15 +166,20 @@ class SubmitProposalModal extends Component {
             />
           </div>
           <div className={styles.inputContainer}>
-            <label className={styles.inputLabel}>For Project</label>
-            <select 
-              type="text" 
-              className={styles.textInput} 
-              value={this.idToProjectName(state.form.projectId)}
-              onChange={this.selectProject}
-            >
-              {this.state.projects.map((project)=> <option key={project.name}>{project.name}</option>)}
-            </select> 
+            { this.props.editMode ? 
+              <label className={styles.inputLabel}>Project Already Set</label> :           
+              <>
+              <label className={styles.inputLabel}>For Project</label>
+              <select 
+                type="text" 
+                className={styles.textInput} 
+                value={this.idToProjectName(state.form.projectId)}
+                onChange={this.selectProject}
+              >
+                {this.state.projects.map((project)=> <option key={project.name}>{project.name}</option>)}
+              </select>
+              </>
+            }
           </div>
 
           <div className={styles.inputContainer}>
@@ -199,7 +215,7 @@ class SubmitProposalModal extends Component {
 
           <div className={styles.inputContainer}>
             <label className={styles.inputLabel}>Lay Abstract</label>
-            <input 
+            <textarea 
               type="text" 
               value={form.layAbstract}
               className={styles.textInput} 
@@ -209,7 +225,7 @@ class SubmitProposalModal extends Component {
 
           <div className={styles.inputContainer}>
             <label className={styles.inputLabel}>Scientific Abstract</label>
-            <input 
+            <textarea 
               type="text" 
               value={form.scientificAbstract}
               className={styles.textInput} 
@@ -234,7 +250,7 @@ class SubmitProposalModal extends Component {
             <select 
               type="text" 
               className={styles.textInput} 
-              onChange={(evt)=>this.updateForm('nrpArea', evt.target.value)}
+              onChange={(evt)=>this.updateForm('nrpArea', areaToCode[evt.target.value])}
             >
               {Object.keys(areaToCode).map((area) => <option key={area}>{area}</option>)} 
             </select>
