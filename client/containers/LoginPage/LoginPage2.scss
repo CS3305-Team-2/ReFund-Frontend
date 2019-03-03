@@ -84,7 +84,12 @@ green - #00A79A, blue - #003C68
 /* green - #00A79A, blue - #003C68  - dark 031b4e*/
 
 
-
+.errorBox {
+  background: #800;
+  padding: 0.6em;
+  border-radius: 0.5em;
+  margin-bottom: 1em;
+}
 
 .toAnimate {
   transform: scale(0);
