@@ -41,7 +41,7 @@ class GrantsPage extends Component {
     const grantsType = this.state.activeTab;
     grants = grants.filter((grant) => grant.status.toLowerCase() == grantsType);
     return grants.map((grant)=>{
-        return <GrantsListItem grant={grant} isResearcher={isResearcher} onApply={() => this.onApply(grant)}/>
+        return <div className="mb-2"><GrantsListItem grant={grant} isResearcher={isResearcher} onApply={() => this.onApply(grant)}/></div>
     });
   }
 

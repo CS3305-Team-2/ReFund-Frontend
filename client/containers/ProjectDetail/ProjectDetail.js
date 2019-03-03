@@ -8,6 +8,9 @@ import { codeToArea } from '../../utils/nrpAreas';
 import toggleModal from '../../utils/toggleModal';
 import SubmitProposalModal from '../../components/SubmitProposalModal/SubmitProposalModal';
 import getCurrentUser from '../../utils/getCurrentUser';
+import ExpandIcon from '@material-ui/icons/KeyboardArrowRight';
+import Collapse from '@material-ui/core/Collapse';
+import GrantsListItem from '../../components/GrantsListItem/GrantsListItem';
 
 class ProjectDetail extends Component {
   constructor(props) {
@@ -39,7 +42,21 @@ class ProjectDetail extends Component {
     axios.get(apiUrl + `/project/${id}`).then(
       res => {
         console.log('project', res.data);
-        this.setState({ project: res.data, loaded: true });
+        const project = res.data;
+        if (project.proposal) {
+          const grantId = project.proposal.primaryAttribution;
+          this.fetchGrant(grantId);
+        }
+        this.setState({ project, loaded: true });
+      }
+    ).catch(e => console.log(e.response));
+  }
+
+  fetchGrant(grantId) {
+    axios.get(apiUrl + `/grants/${grantId}`).then(
+      res => {
+        console.log('grant', res.data);
+        this.setState({ grant: res.data, grantLoaded: true });
       }
     ).catch(e => console.log(e.response));
   }
@@ -136,6 +153,21 @@ class ProjectDetail extends Component {
     return false;
   }
 
+  expandInfo(section) {
+    this.setState(prevState => ({[section]: !prevState[section]}))
+  }
+  
+  expandIcon(section) {
+    const arrowStyle = {
+      fontSize:'24px', 
+      cursor:'pointer',
+      color: '#00A79A',
+      transition: 'transform 0.3s'
+    }
+    if (this.state[section]) arrowStyle.transform = 'rotate(90deg)';
+    return <ExpandIcon style={arrowStyle} />;
+  }
+
   postReport() {
     const form = Object.assign({}, this.state.form);
     form.projectId = this.state.project.id;
@@ -223,7 +255,7 @@ class ProjectDetail extends Component {
     
     const currentUser = getCurrentUser().user;
     const isProjectMember = this.isProjectMember(currentUser, project)
-
+    console.log('pr', project);
     return (
       <div>
         <div className={styles.sectionHeading}>Project</div>
@@ -242,7 +274,23 @@ class ProjectDetail extends Component {
                 </div>
             </div>
         </div>
-        <div className={styles.sectionHeading}>Grant Proposal</div>
+        <div className={styles.sectionHeading}>{proposal.status === 'SFI_APPROVED' ? 'Received Grant' : 'Grant Proposal'}</div>
+        { proposal && this.state.grant ?
+          <div className={styles.grantContainer}>
+            <div
+              onClick={() => this.expandInfo('viewgrant')}
+              className={styles.sectionHeader}
+            >
+              <div className={styles.sectionHeading}>View Grant</div>
+              {this.expandIcon('viewgrant')}
+            </div>
+            <Collapse in={this.state.viewgrant} timeout="auto" unmountOnExit>
+                <div className={styles.grant}>
+                    <GrantsListItem grant={this.state.grant} />
+                </div>
+            </Collapse> 
+          </div>: ''
+        }
         <div className={styles.profileSections}>
           <div className={styles.section}>
           { proposal ? 
@@ -255,7 +303,7 @@ class ProjectDetail extends Component {
               proposal={proposal}
               fileNotRequired
               editMode
-            />
+            />          
             </>
           : <div >No Proposal Created</div>}
           </div>
