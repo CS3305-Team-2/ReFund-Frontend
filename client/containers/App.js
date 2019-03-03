@@ -36,7 +36,7 @@ class App extends Component {
                         <Route path="/login" component={LoginPage} />
                         <Route exact path="/" component={LoginPage} />
                     </Switch>
-                    <div className="container-fluid" style={{paddingTop: '1rem', width: '60%'}}>
+                    <div className="container" style={{paddingTop: '1rem'}}>
                         <Switch>
                             <Route path="/oauth" component={OrcidLogin} />
                             <Route path="/grants/:id" component={GrantsPage} />

@@ -37,6 +37,7 @@ class LoginPage extends Component {
             this.setState({error: false})
             // console.log(res.status, res.body, res.data, res.headers)
             console.log(res);
+            const user = res.data;
             const token = res.headers['jwt-token'];
             const authData = JSON.stringify({ user, token });
             localStorage.setItem("authData", authData);

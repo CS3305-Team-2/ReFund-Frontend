@@ -4,6 +4,7 @@ import cx from 'classnames';
 import { Link } from 'react-router-dom';
 import logo from '../../img/sfi_logo.svg';
 import { withRouter } from 'react-router-dom';
+import getCurrentUser from '../../utils/getCurrentUser';
 
 class TopBar extends Component {
     constructor(props) {
@@ -19,14 +20,14 @@ class TopBar extends Component {
             { value: 'Search', path: '/search' },
             { value: 'Sign In', path: '/login' },
         ];
-
+        const currentUserId = getCurrentUser().user.id;
         if (true) {
             links = [
                 { value: 'Home', path: '/home' },
                 { value: 'Users', path: '/users' },
                 { value: 'Grants', path: '/grants' },
                 { value: 'Projects', path: '/projects' },
-                { value: 'My Profile', path: `/user/${JSON.parse(localStorage.getItem("user")).id}`},
+                { value: 'My Profile', path: `/user/${currentUserId}`},
             ];
         }
 
