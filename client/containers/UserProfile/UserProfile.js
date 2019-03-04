@@ -98,13 +98,17 @@ class UserProfile extends Component {
         let stuff = []
         for(var i = 0; i < projects.length; i++) {
             stuff.push(
-                <div className={styles.profileSections} style={{padding: '2em'}}>
-                    <Link to={`/projects/${projects[i].id}`} key={i} >
+                <div className={styles.profileSections}>
+                    <Link to={`/project/${projects[i].id}`} key={i} >
+                        <div className={styles.section}>
                         <div style={{display: 'flex', justifyContent: 'space-between'}}>
                             <div className={styles.projectHeading} style={{marginBottom: '0.7em'}}>{projects[i].name}</div>
-                            <div style={{fontWeight: 'bold'}}>Status: {projects[i].status}</div>
+                            <div style={{fontWeight: '500', color: '#031b4e'}}>Status: {projects[i].status}</div>
                         </div>
-                        <div className={styles.projectBudget}>Budget: &euro;{projects[i].budget}</div>
+                        <div className={styles.detail}>
+                        <span className={styles.label}>Budget: </span>
+                          &euro;{projects[i].budget}
+                        </div>
                         <div>
                             {projects[i].description.split('\n').map(val => {
                                 return (
@@ -114,7 +118,7 @@ class UserProfile extends Component {
                                     </>
                                 )
                             }
-                        )}</div>
+                        )}</div></div>
                     </Link>
                 </div>
             )
