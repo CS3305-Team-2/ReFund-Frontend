@@ -14,6 +14,7 @@ class CreateProjectModal extends Component {
       form: {
         name: '',
         budget: null,
+        description: '',
       },
       members: [],
       users: [],
@@ -51,7 +52,7 @@ class CreateProjectModal extends Component {
   }
 
   createProject() {
-    const { budget, name } = this.state.form;
+    const { budget, name, description } = this.state.form;
     const members = this.state.members;
     const currentUser = this.props.currentUser;
 
@@ -59,6 +60,7 @@ class CreateProjectModal extends Component {
     const data = {
       budget,
       name,
+      description,
       teamMembers: [{ 
         startDate: todayDate, endDate: todayDate,
         userId: currentUser.id, role: 'PI'
@@ -73,7 +75,7 @@ class CreateProjectModal extends Component {
     });
 
     console.log(data);
-    axios.post(apiUrl + '/project',data)
+    axios.post(apiUrl + '/project', data)
     .then((res) => {
       console.log('created', res.data);
       this.props.onCreateProject();
@@ -115,6 +117,14 @@ class CreateProjectModal extends Component {
             type="number" 
             className={styles.textInput} 
             onChange={(evt)=> this.updateForm('budget', evt.target.value)}
+          />
+        </div>
+        <div className={styles.inputContainer}>
+          <label className={styles.inputLabel}>Description</label>
+          <textarea 
+            type="text" 
+            className={styles.textInput} 
+            onChange={(evt)=> this.updateForm('description', evt.target.value)}
           />
         </div>
         <AddTeamMember 
