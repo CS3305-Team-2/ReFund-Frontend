@@ -302,7 +302,6 @@ class ProjectDetail extends Component {
               proposal={proposal}
               fileNotRequired
               editMode
-              currentUser={currentUser}
             />          
             </>
           : <div >No Proposal Created</div>}
