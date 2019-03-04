@@ -86,7 +86,7 @@ class ProjectListPage extends Component {
 
     let projectListItems = this.getProjects(projectList);
 
-    const currentUser = getCurrentUser();
+    const currentUser = getCurrentUser().user;
 
 		return (
 			<div>
