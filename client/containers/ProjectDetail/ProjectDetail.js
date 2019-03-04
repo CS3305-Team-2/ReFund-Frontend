@@ -98,7 +98,7 @@ class ProjectDetail extends Component {
       <>
         <div className={styles.headingContainer}>
           <div className={styles.heading}>{proposal.title}</div>
-          {isProjectMember && project.status == 'DRAFT' ? this.getProposalControls() : ''}
+          {isProjectMember && proposal.status == 'DRAFT' ? this.getProposalControls() : ''}
         </div>
         <div className={styles.detail}><span className={styles.label}>Status - </span>{displayFriendly(proposal.status.toLowerCase())}</div>
         <div className={styles.detail}><span className={styles.label}>Duration (months) - </span>{proposal.duration}</div>
@@ -255,7 +255,6 @@ class ProjectDetail extends Component {
     
     const currentUser = getCurrentUser().user;
     const isProjectMember = this.isProjectMember(currentUser, project)
-    console.log('pr', project);
     return (
       <div>
         <div className={styles.sectionHeading}>Project</div>
