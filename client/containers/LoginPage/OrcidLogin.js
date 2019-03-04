@@ -23,7 +23,9 @@ class OrcidLogin extends Component {
             if (res.status == 201) {
                 localStorage.setItem("is-orcid-login", "true")
             }
-            localStorage.setItem("user", JSON.stringify(res.data));
+            let data = JSON.stringify(localStorage.getItem("authData"));
+            data.user = res.data;
+            localStorage.setItem("authData", data);
             window.location = baseUrl + '#/home'
         })
     }
