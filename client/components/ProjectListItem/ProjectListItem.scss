@@ -9,23 +9,12 @@
   padding: 0.5rem;
   box-shadow: 0 0 11px rgba(33, 33, 33, 0.2);
   cursor: pointer;
+
 }
 
 .details {
   display: flex;
   color: #444;
-}
-
-.left {
-
-}
-
-.label {
-
-}
-
-.right {
-
 }
 
 .title {
@@ -48,3 +37,15 @@
   padding: 0.25rem 0rem;
   line-height: 1.2;
 }
+
+.detail {
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+.label {
+  color: #00A79A;
+  font-weight: 500;
+  font-size: 1.1rem;
+}
+
