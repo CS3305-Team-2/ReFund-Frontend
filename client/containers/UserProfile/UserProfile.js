@@ -9,11 +9,13 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import ProfileField from '../../components/ProfileField/ProfileField';
 import { Link } from 'react-router-dom';
 import {displayFriendlyUnderscore} from '../../utils/displayFriendly';
+import getCurrentUser from '../../utils/getCurrentUser';
+
 
 class UserProfile extends Component {
 	constructor(props) {
         super(props);
-        let user = JSON.parse(localStorage.getItem("user"))
+        let user = getCurrentUser().user;
         this.state = {
             editing: false,
             loaded: false,
@@ -149,7 +151,7 @@ class UserProfile extends Component {
     }
 
     profilePage(loaded, user, projects) {
-        let isUser = JSON.parse(localStorage.getItem("user")).id == this.props.match.params.id;
+        let isUser = getCurrentUser().user.id == this.props.match.params.id;
         return (
             <div className={styles.root}>
                 {!loaded ? <CircularProgress />: (

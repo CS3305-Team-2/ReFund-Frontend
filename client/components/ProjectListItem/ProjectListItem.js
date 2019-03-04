@@ -1,39 +1,36 @@
-import React, { Component} from 'react';
+import React from 'react';
 import styles from './ProjectListItem.scss';
-import cx from 'classnames';
 
-
-class ProjectListItem extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-     
-        }
-    }
-	
-    render() {
-        const state = this.state;
-        const props = this.props;
-
-        // The user data passed down from UsersPage component
-        const user = props.project;
-        // console.log(user); // Will print out the user. Delete when finished.
-
-    
-		return (
-			<div className={styles.root}>
-				<div className={styles.container}>
-					<div className={styles.title}>{user.name}</div>
-					{/*<div className={styles.details}>
-						<div className={styles.left}>
-							<div className={styles.description}>{user.description}</div>
-						</div>
-					</div>*/}
-				</div>
-
-            </div>
-        );	
-    }
+const friendlyStatus = status => {
+  const map = {
+    "DRAFT": 'Draft',
+    'SFI_APPROVED': 'Approved',
+    'RO_SUBMITTED': 'Awaiting RO Approval',
+    'RO_APPROVED': 'Awaiting SFI Approval',
+    'REJECTED': 'Rejected',
+  }
+  return map[status];
 }
+
+const ProjectListItem = (props) => {
+  const project = props.project;
+  const proposal = project.proposal;
+
+  const proposalStatus = (
+    <div className={styles.detail}>
+      <span className={styles.label}>Proposal Status - </span>
+      {proposal ? friendlyStatus(proposal.status) : 'No Proposal'} 
+    </div>
+  )
+  
+  return (
+    <div className={styles.root}>
+      <div className={styles.container}>
+        <div className={styles.title}>{project.name}</div>
+        {proposalStatus}
+      </div>
+    </div>
+  );	
+};
 
 export default ProjectListItem;
