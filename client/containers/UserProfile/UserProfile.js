@@ -138,6 +138,9 @@ class UserProfile extends Component {
         user.communicationOverview = this.state.communications;
         user.sfiFundingRatio = this.state.fundingRatio;
         console.log(JSON.stringify(user, null, 2))
+        axios.post(`${apiUrl}/users/update`, user, res => {
+            console.log(res)
+        })
     }
 
     render() {
