@@ -19,6 +19,8 @@ class UserProfile extends Component {
         this.state = {
             editing: false,
             loaded: false,
+            editSuccess: false,
+            editFail: false,
             user: null,
             projects: [],
             awards: user.awards,
@@ -137,10 +139,14 @@ class UserProfile extends Component {
         user.nonAcademicCollaborations = this.state.nonAcademics;
         user.communicationOverview = this.state.communications;
         user.sfiFundingRatio = this.state.fundingRatio;
-        console.log(JSON.stringify(user, null, 2))
-        axios.post(`${apiUrl}/users/update`, user, res => {
-            console.log(res)
-        })
+        console.log(user)
+        axios.post(`${apiUrl}/users/update`, user)
+            .then(res => {
+                this.setState({editSuccess: true, editFail: false})
+            })
+            .catch(res => {
+                this.setState({editFail: true, editSuccess: false})
+            })
     }
 
     render() {
@@ -426,11 +432,21 @@ class UserProfile extends Component {
                 <div className={styles.exampleClass}>
                 Users Profile Page
                 </div>
-                <div className={styles.tabs}>
+                <div className={styles.tabs} style={{marginBottom: '2em'}}>
                     <button onClick={()=>this.setState({editing: false})}>
                     Profile
                     </button>
                 </div>
+                { !this.state.editSuccess ? <></> : (
+                    <div style={{background: '#0a0', borderRadius: '0.5em', color: 'white', padding: '1em', maxWidth: '30%', marginBottom: '1em'}}>
+                        Profile successfully updated
+                    </div>
+                )}
+                { !this.state.editFail ? <></> : (
+                    <div style={{background: '#a00', borderRadius: '0.5em', color: 'white', padding: '1em', maxWidth: '30%', marginBottom: '1em'}}>
+                        Profile failed to update
+                    </div>
+                )}
                 <div className={styles.editContainer}>
                     <form onSubmit={this.handleSubmit}>
                         <div className={styles.sectionHeading}>Distinctions/Awards</div>
@@ -439,11 +455,6 @@ class UserProfile extends Component {
                             <input type="button" value="Add New Entry" onClick={() => {this.setState({awards: this.state.awards.concat([{}])})}}></input>
                         </div>
                         
-                        {/* <div className={styles.sectionHeading}>Funding Diversification</div>
-                        <div className={styles.section}>
-                            
-                        </div> */}
-
                         <div className={styles.sectionHeading}>Impacts</div>
                         <div className={styles.section}>
                             {impacts}
