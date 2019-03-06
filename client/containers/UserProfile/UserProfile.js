@@ -19,6 +19,10 @@ class UserProfile extends Component {
         this.state = {
             editing: false,
             loaded: false,
+            oldPassword: '',
+            password: '',
+            verifyPassword: '',
+            passNotEqual: false,
             editSuccess: false,
             editFail: false,
             user: null,
@@ -37,6 +41,7 @@ class UserProfile extends Component {
         }
         this.handleSubmit = this.handleSubmit.bind(this);
         this.profilePage = this.profilePage.bind(this);
+        this.updatePassword = this.updatePassword.bind(this);
     }
 
     componentDidMount() {
@@ -142,11 +147,35 @@ class UserProfile extends Component {
         console.log(user)
         axios.post(`${apiUrl}/users/update`, user)
             .then(res => {
+                let user = res.data
+                let token = JSON.parse(localStorage.getItem("authData").token)
+                localStorage.setItem("authData", JSON.stringify({user, token}))
                 this.setState({editSuccess: true, editFail: false})
             })
             .catch(res => {
                 this.setState({editFail: true, editSuccess: false})
             })
+    }
+
+    updatePassword(event) {
+        if (this.state.password !== this.state.verifyPassword) {
+            this.setState({passNotEqual: true});
+            return;
+        }
+        axios.post(`${apiUrl}/users/${this.state.user.id}/password`, {
+            oldPassword: this.state.oldPassword,
+            newPassword: this.state.password,
+        }).then(res => {
+            this.setState({
+                editSuccess: true, editFail: false, passNotEqual: false,
+                password: '', oldPassword: '', verifyPassword: ''
+            })
+        }).catch(res => {
+            this.setState({
+                editSuccess: false, editFail: true, passNotEqual: false,
+                password: '', oldPassword: '', verifyPassword: ''
+            })
+        })
     }
 
     render() {
@@ -447,7 +476,21 @@ class UserProfile extends Component {
                         Profile failed to update
                     </div>
                 )}
+                { !this.state.passNotEqual ? <></> : (
+                    <div style={{background: '#a00', borderRadius: '0.5em', color: 'white', padding: '1em', maxWidth: '30%', marginBottom: '1em'}}>
+                        Passwords not equal
+                    </div>
+                )}
                 <div className={styles.editContainer}>
+                    <form onSubmit={this.updatePassword} className={styles.section}>
+                        Old Password:
+                        <input type="password" onChange={e => this.setState({oldPassword: e.target.value})}/>
+                        New Password:
+                        <input type="password" onChange={e => this.setState({password: e.target.value})}/>
+                        Verify New Password:
+                        <input type="password" onChange={e => this.setState({verifyPassword: e.target.value})}/>
+                        <input type="submit" value="Submit"/>
+                    </form>
                     <form onSubmit={this.handleSubmit}>
                         <div className={styles.sectionHeading}>Distinctions/Awards</div>
                         <div className={styles.section}>
