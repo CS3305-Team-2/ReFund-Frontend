@@ -21,7 +21,7 @@ class HostInstitutionStaff extends Component {
         return (
             <div className={styles.root}>
                 <div className={styles.container}>
-                    <div className={styles.title}>{staff.title}</div>
+                    <div className={styles.title}>{staff.title || staff.name}</div>
                 </div>
             </div>
         );	

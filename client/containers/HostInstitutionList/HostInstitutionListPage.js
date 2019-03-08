@@ -3,53 +3,30 @@ import styles from './HostInstitutionListPage.scss';
 import cx from 'classnames';
 import HostInstitutionListItem from '../../components/HostInstitutionListItem/HostInstitutionListItem';
 import { Link } from 'react-router-dom';
-
-// Create mock data to use
-const hostInstitutions = [
-    {
-        title: 'University college Cork',
-        location: 'Cork'
-    // Etc add all the fields
-    },  
-    {
-        title: 'UCD',
-        location: 'Dublin'
-    // Etc add all the fields
-    },
-    {
-        title: 'NUIG',
-        location: 'Galway'
-    // Etc add all the fields
-    },
-    {
-        title: 'Cork institute of technology',
-        location: 'Cork'
-    // Etc add all the fields
-    },
-    {
-        title: 'Queens university',
-        location: 'Belfast'
-    // Etc add all the fields
-    }
-]
+import axios from 'axios'
+import { apiUrl } from '../../config';
 
 class HostInstitutionListPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
             searchVal: '',
-            searchType: 'Title',
+            searchType: 'Name',
             searchTerm: null,
+            hosts: [],
         }
-
         this.search = this.search.bind(this);
+    }
+
+    componentDidMount() {
+        axios.get(`${apiUrl}/hostInstitution/`).then(res => {
+            this.setState({hosts: res.data})
+        })
     }
   
     getHostInstitutions(hostInstitutions) {
-
-        // projects is the project list at the top of this page
-        return hostInstitutions.map((hostInstitution)=>{
-            return <Link to={`/hostInstitution/`} className={styles.userLink}><HostInstitutionListItem project={hostInstitution} /></Link> 
+        return hostInstitutions.map(hostInstitution => {
+            return <Link to={`/hostInstitution/${hostInstitution.id}`} className={styles.userLink}><HostInstitutionListItem project={hostInstitution} /></Link> 
         });
     }
 
@@ -63,7 +40,7 @@ class HostInstitutionListPage extends Component {
 
         let results = [];
         users.slice().forEach(user => {
-            console.log(user[type], term);
+            console.log(type, user[type], term);
             if (user[type].toLowerCase().includes(term)) results.push(user);
         });
 
@@ -72,18 +49,13 @@ class HostInstitutionListPage extends Component {
 	
     render() {
         const state = this.state;
-        console.log(state);
         const activeTab = styles.activeTab;
-        let userList = hostInstitutions.slice();
+        let hostInstitutions = this.state.hosts.slice();
 
         const { searchType, searchTerm } = state;
-        if (searchTerm != null && searchTerm.length > 1) userList = this.searchFilter(userList, searchType, searchTerm);
+        if (searchTerm != null && searchTerm.length > 1) hostInstitutions = this.searchFilter(hostInstitutions, searchType, searchTerm);
     
-        let HostInstitutionListItems = this.getHostInstitutions(userList);
-
-        const exampleData = {
-            stuff: 'example stuff'
-        }
+        let hostInstitutionListItems = this.getHostInstitutions(hostInstitutions);
   
         return (
             <div>
@@ -92,14 +64,14 @@ class HostInstitutionListPage extends Component {
                     <div className={styles.desc}></div>
                 </div>
 
-                <div className={styles.search}>
+                <div className={styles.search} style={{marginBottom: '5em'}}>
                     <select 
                         className={styles.select} 
                         value={this.state.searchType}
                         onChange={(evt) => this.setState({searchType: evt.target.value})}
                     >
 
-                        <option>Title</option>
+                        <option>Name</option>
                     </select>
                     <input 
                         className={styles.searchInput}
@@ -113,7 +85,7 @@ class HostInstitutionListPage extends Component {
                 </div>
 
                 <div className={styles.users}>
-                    {HostInstitutionListItems}
+                    {hostInstitutionListItems}
                 </div>
             </div>
         );	

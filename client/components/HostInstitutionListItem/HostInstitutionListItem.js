@@ -22,10 +22,10 @@ class HostInstitutionListItem extends Component {
         return (
             <div className={styles.root}>
                 <div className={styles.container}>
-                    <div className={styles.title}>{rs.title}</div>
+                    <div className={styles.title}>{rs.name}</div>
                     <div className={styles.details}>
                         <div className={styles.left}>
-                            <div className={styles.description}>{rs.location}</div>
+                            <div className={styles.description}>{rs.address3}</div>
                         </div>
                     </div>
                 </div>

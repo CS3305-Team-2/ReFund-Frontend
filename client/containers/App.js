@@ -46,7 +46,7 @@ class App extends Component {
                             <Route path="/projects" component={ProjectListPage} />
                             <Route path="/grant" component={GrantDetail} />
                             <Route path="/grants" component={GrantsPage} />
-                            <Route path="/hostInstitution" component={HostInstitutionPage} />
+                            <Route path="/hostInstitution/:id" component={HostInstitutionPage} />
                             <Route path="/hostInstitutions" component={HostInstitutionList} />
                             <Route path="/group" component={GroupPage} />
                             <PrivateRoute exact path="/home" component={HomePage} />

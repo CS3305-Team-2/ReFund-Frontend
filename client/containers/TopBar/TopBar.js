@@ -27,6 +27,7 @@ class TopBar extends Component {
                 { value: 'Users', path: '/users' },
                 { value: 'Grants', path: '/grants' },
                 { value: 'Projects', path: '/projects' },
+                { value: 'Host Institutions', path: '/hostInstitutions'},
                 { value: 'My Profile', path: `/user/${currentUserId}`},
             ];
         }
