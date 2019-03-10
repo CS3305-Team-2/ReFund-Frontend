@@ -6,6 +6,7 @@ import getCurrentUser from '../../utils/getCurrentUser';
 import { Link } from 'react-router-dom';
 import styles from './Notifications.scss';
 import jwtHeader from '../../utils/jwtHeader';
+import {displayFriendlyUnderscore, toAllCapsSpace} from '../../utils/displayFriendly'
 
 class Notifications extends Component {
   constructor(props) {
@@ -99,7 +100,7 @@ class Notifications extends Component {
       return (
         <div className={styles.proposalNotification}>
           <Link to={`/project/${proposal.projectId}`} className={styles.proposalLink}><div className={styles.proposalName}>{proposal.title}</div></Link>
-          {isResearcher ? <div className={styles.proposalApprove} >{proposal.status}</div> :
+          {isResearcher ? <div className={styles.proposalApprove} >{toAllCapsSpace(proposal.status)}</div> :
     
             actionResult[index] ? <div className={styles.resultLabel}>{actionResult[index]}</div> : 
             this.getProposalControls(proposal, index)
@@ -131,7 +132,9 @@ class Notifications extends Component {
         </div>
 
         <div className={cx(styles.notificationsContainer)}>
-          {this.state.loaded ? this.getProposals(isResearcher) : ''}
+          {this.state.loaded ? this.getProposals(isResearcher) : (
+            <div className={styles.title}>Nothing to see here!</div>
+          )}
         </div>
       </div>
     );

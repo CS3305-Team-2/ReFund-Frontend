@@ -27,6 +27,13 @@ class LoginPage extends Component {
         this.setState({ [animation]: true });
     }
 
+    componentDidMount() {
+        // redirect to home if already logged in
+        if(localStorage.getItem("authData") != null) {
+            this.props.history.push("/home")
+        }
+    }
+
 
     submitLogin(email, password) {    
         const formData = new FormData();

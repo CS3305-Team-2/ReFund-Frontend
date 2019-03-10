@@ -11,5 +11,9 @@ function toAllCaps(s) {
     return s.toUpperCase().replace(' ', '_');
 }
 
+function toAllCapsSpace(s) {
+    return s.toUpperCase().replace('_', ' ');
+}
+
 export default displayFriendly;
-export {displayFriendlyUnderscore, toAllCaps};
+export {displayFriendlyUnderscore, toAllCaps, toAllCapsSpace};

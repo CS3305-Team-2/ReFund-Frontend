@@ -6,66 +6,6 @@ import axios from 'axios';
 import { apiUrl } from '../../config';
 import displayFriendly from '../../utils/displayFriendly'
 
-// Create mock data to use
-const users = [
-    {
-        name: 'John Doe',
-        institution: 'University College Cork',
-        jobTitle: 'Professor of Mathematics',
-        researchCenter: 'Fire'
-    // Etc etc, add all the necessary fields.
-    },
-    {
-        name: 'Jane Doe',
-        institution: 'Trinity College Dublin',
-        jobTitle: 'Professor of Computer Science',
-        researchCenter: 'Wind',
-    // Etc etc, add all the necessary fields.
-    },
-    {
-        name: 'John Doe',
-        institution: 'UCC',
-        jobTitle: 'Professor of Mathematics',
-        researchCenter: 'Fire'
-    // Etc etc, add all the necessary fields.
-    },
-    {
-        name: 'Jane Doe',
-        institution: 'University of Limerick',
-        jobTitle: 'Professor of Computer Science',
-        researchCenter: 'Wind',
-    // Etc etc, add all the necessary fields.
-    },
-    {
-        name: 'John Doe',
-        institution: 'NUI Galway',
-        jobTitle: 'Professor of Mathematics',
-        researchCenter: 'Fire'
-    // Etc etc, add all the necessary fields.
-    },
-    {
-        name: 'Jane Doe',
-        institution: 'Trinity College Dublin',
-        jobTitle: 'Professor of Computer Science',
-        researchCenter: 'Wind',
-    // Etc etc, add all the necessary fields.
-    },
-    {
-        name: 'John Doe',
-        institution: 'UCC',
-        jobTitle: 'Professor of Mathematics',
-        researchCenter: 'Fire'
-    // Etc etc, add all the necessary fields.
-    },
-    {
-        name: 'Jane Doe',
-        institution: 'Trinity College Dublin',
-        jobTitle: 'Professor of Computer Science',
-        researchCenter: 'Wind',
-    // Etc etc, add all the necessary fields.
-    },
-]
-
 class UsersPage extends Component {
     constructor(props) {
         super(props);
@@ -167,7 +107,7 @@ class UsersPage extends Component {
                 </div>
 
                 <div className={styles.users}>
-                    {userListItems}
+                    {userListItems.length > 0 ? userListItems : 'Loading...'}
                 </div>
             </div>
         );	

@@ -124,7 +124,7 @@ class ProjectListPage extends Component {
                 </div>
 
                 <div className={styles.users}>
-                    {projectListItems}
+                    {projectListItems.length > 0 ? projectListItems : 'Loading...'}
                 </div>
             </div>
         );	

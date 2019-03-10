@@ -8,7 +8,7 @@ import { apiUrl } from '../../config';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ProfileField from '../../components/ProfileField/ProfileField';
 import { Link } from 'react-router-dom';
-import {displayFriendlyUnderscore} from '../../utils/displayFriendly';
+import {displayFriendlyUnderscore, toAllCaps} from '../../utils/displayFriendly';
 import getCurrentUser from '../../utils/getCurrentUser';
 
 
