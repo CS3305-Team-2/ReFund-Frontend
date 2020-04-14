@@ -6,7 +6,7 @@ class LoginForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        email: 'noah@santschi-cooney.ch',
+        email: 'sample@text.ru',
         password: 'hihowareyou'
     }
     this.submitLogin = this.submitLogin.bind(this);
